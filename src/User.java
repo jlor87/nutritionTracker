@@ -16,7 +16,7 @@ public class User {
     	return this.userWeight;
     }
     
-    public void weightSetter(int weight) {
+    public void weightSetter(double weight) {
     	this.userWeight = weight;
     }
     
