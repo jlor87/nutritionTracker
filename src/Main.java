@@ -1,9 +1,25 @@
+import java.io.IOException;
 import java.math.*;
 import java.util.Scanner; 
-// need external JSON parser
+
+//api related imports
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+
+import com.google.gson.Gson;     //have to download and add json jar file gson-2.8.8.jar to the project build path to use
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+
 
 public class Main {
 	static String userChoice = "dummyValue";
+	
+	
+	
+	
 	
     public static void main(String[] args) {
     	Main mainInstance = new Main();
@@ -26,7 +42,7 @@ public class Main {
 
             if (userChoice.equals("1")) {
                 // User wants to search for food/drink item
-                mainInstance.getFoodInput(newUser);
+                mainInstance.getFoodInput(newUser, scanner);
             } else if (userChoice.equals("2")) {
                 // User wants to set caloric/nutritional goals for the day
                 mainInstance.setGoalData(newUser);
@@ -163,14 +179,65 @@ public class Main {
     
     }
     
-    public void getFoodInput(User user){
-    	System.out.println("\nTo be implemented");
-    	// User enters "apple"
+    public void getFoodInput(User user, Scanner scanner){
+    	System.out.println("\nInput food item:");
+    	String userInput;
+    	userInput = scanner.nextLine();
+    	sendAPIRequest(userInput); //calling api with user input
     }
 
-    public void sendAPIRequest(){
-        // System sends API request for "apple" to X API
-        // Which API??
+    public void sendAPIRequest(String query) {
+        // API key and base URL
+        final String API_KEY = "OUhmaL4b1NLdkO286efEMTYDBHWw7jfj8TIoyxNm";  
+        final String BASE_URL = "https://api.nal.usda.gov/fdc/v1/foods/search";
+
+        // Construct the full URL with the query and API key
+        String url = BASE_URL + "?api_key=" + API_KEY + "&query=" + query.replace(" ", "%20");
+
+        // Create an HttpClient
+        HttpClient client = HttpClient.newHttpClient();
+
+        // Create a GET request with the constructed URL
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        // Send the request and get the response
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Parse the response JSON using Gson
+            Gson gson = new Gson();
+            JsonObject responseObject = gson.fromJson(response.body(), JsonObject.class);
+            JsonArray foods = responseObject.getAsJsonArray("foods");
+
+            // Check if we have results
+            if (foods.size() > 0) {
+                // Extract details of the first food item
+                JsonObject firstFood = foods.get(0).getAsJsonObject();
+                String description = firstFood.get("description").getAsString();
+                JsonArray nutrients = firstFood.getAsJsonArray("foodNutrients");
+
+                // Print the food description
+                System.out.println("Food: " + description);
+
+                // Loop through and print nutrients
+                for (int i = 0; i < nutrients.size(); i++) {
+                    JsonObject nutrient = nutrients.get(i).getAsJsonObject();
+                    String nutrientName = nutrient.get("nutrientName").getAsString();
+                    double amount = nutrient.get("value").getAsDouble();
+                    String unitName = nutrient.get("unitName").getAsString();
+                    System.out.println(nutrientName + ": " + amount + " " + unitName);
+                }
+            } else {
+                System.out.println("No foods found for the query: " + query);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void parseData(){
