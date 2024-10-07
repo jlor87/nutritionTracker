@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.math.*;
+import java.lang.reflect.*;
 import java.util.Scanner; 
 
 //api related imports
@@ -15,50 +15,53 @@ import com.google.gson.JsonArray;
 
 
 public class Main {
-	static String userChoice = "dummyValue";
+    static String userChoice = "dummyValue";
 	
-	
+
 	
 	
 	
     public static void main(String[] args) {
     	Main mainInstance = new Main();
     	User newUser = new User();
-    	
+
     	System.out.println("Welcome to the nutrition app.");
         System.out.println("Skipping existing user login or new user creation functionality...\n");
-        
-        
-        Scanner scanner = new Scanner(System.in);  
+
+
+        Scanner scanner = new Scanner(System.in);
 
         do {
             System.out.println("\nSelect an action for the system to perform from the list below.");
             System.out.println("0. Exit the application.");
             System.out.println("1. Search for food/drink item.");
             System.out.println("2. Set caloric/nutritional intake goals for the day.");
-            System.out.println("3. Alter or set user data (height, weight, sex, average daily exercise).\n");
+            System.out.println("3. Alter or set user data (height, weight, sex, average daily exercise).");
+            System.out.println("4. Display status of current nutrient consumption for the day.\n");
 
             userChoice = scanner.nextLine();  // Get user input
 
-            if (userChoice.equals("1")) {
-                // User wants to search for food/drink item
-                mainInstance.getFoodInput(newUser, scanner);
-            } else if (userChoice.equals("2")) {
-                // User wants to set caloric/nutritional goals for the day
-                mainInstance.setGoalData(newUser);
-            } else if (userChoice.equals("3")) {
-                // User wants to alter user data
-                mainInstance.alterUserData(newUser, scanner);
-            } else if (userChoice.equals("0")) {
-                // User closing app
-                System.out.println("\nClosing the application");
-            } else {
-                System.out.println("Not a valid option");
+            switch (userChoice) {
+                case "1" ->
+                    // User wants to search for food/drink item
+                        mainInstance.getFoodInput(newUser, scanner);
+                case "2" ->
+                    // User wants to set caloric/nutritional goals for the day
+                        mainInstance.setGoalData(newUser);
+                case "3" ->
+                    // User wants to alter user data
+                        mainInstance.alterUserData(newUser, scanner);
+                case "4" ->
+                        mainInstance.outputCurrentConsumption(newUser);
+                case "0" ->
+                    // User closing app
+                        System.out.println("\nClosing the application");
+                default -> System.out.println("Not a valid option");
             }
 
-        } while (!userChoice.equals("0"));  
+        } while (!userChoice.equals("0"));
 
-        scanner.close();  
+        scanner.close();
     }
     
     
@@ -183,10 +186,10 @@ public class Main {
     	System.out.println("\nInput food item:");
     	String userInput;
     	userInput = scanner.nextLine();
-    	sendAPIRequest(userInput); //calling api with user input
+    	sendAPIRequest(user, userInput); //calling api with user input
     }
 
-    public void sendAPIRequest(String query) {
+    public void sendAPIRequest(User user, String query) {
         // API key and base URL
         final String API_KEY = "OUhmaL4b1NLdkO286efEMTYDBHWw7jfj8TIoyxNm";  
         final String BASE_URL = "https://api.nal.usda.gov/fdc/v1/foods/search";
@@ -231,6 +234,9 @@ public class Main {
                     String unitName = nutrient.get("unitName").getAsString();
                     System.out.println(nutrientName + ": " + amount + " " + unitName);
                 }
+
+                // Assuming the user has eaten the food, now update their daily consumption
+                updateUserConsumption(nutrients, user);
             } else {
                 System.out.println("No foods found for the query: " + query);
             }
@@ -240,9 +246,32 @@ public class Main {
         }
     }
 
-    public void parseData(){
-        // Retrieve data from the API request, parse it, and then put that data into the User object
-        // Use a Java library to help with parsing the data?
+    public void updateUserConsumption(JsonArray nutrients, User currentUser){
+        Method[] userMethods = Utility.getMethods();
+        int length = userMethods.length;
+
+        for (int i = 0; i < nutrients.size(); i++) {
+            JsonObject nutrient = nutrients.get(i).getAsJsonObject();
+            String nutrientName = nutrient.get("nutrientName").getAsString();
+            nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
+            double amount = nutrient.get("value").getAsDouble();
+
+            // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
+            for(int j = 0; j < length; j++){
+                if(userMethods[j].getName().toLowerCase().contains("set" + nutrientName)){
+                    try{
+                        userMethods[j].invoke(currentUser, 1, amount); // Update user's consumed nutrients
+                        break;
+                    } catch(Exception e){
+                        System.out.println(e);
+                    }
+                }
+            }
+        }
+    }
+
+    public void outputCurrentConsumption(User user){
+        user.printCurrentConsumption();
     }
 
     public void computeRemainingDietaryNeeds(){

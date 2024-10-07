@@ -40,6 +40,52 @@ public class User {
     	this.exerciseLevel = exercise;
     }
 
+    public void printCurrentConsumption(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Total Consumption Today:").
+                append("\nWater: ").append(water[1]).append("L").
+                append("\nCarbohydrates: ").append(carbohyrate[1]).append("g").
+                append("\nProtein: ").append(protein[1]).append("g").
+                append("\nMonosaturated Fat: ").append(monounsaturatedFat[1]).append("g").
+                append("\nPolyunsaturated Fat: ").append(polyunsaturatedFat[1]).append("g").
+                append("\nSaturated Fat: ").append(saturatedFat[1]).append("g").
+                append("\nFiber: ").append(fiber[1]).append("g").
+
+                append("\nVitamin A: ").append(vitaminA[1]).append("ug RAE").
+                append("\nVitamin B1: ").append(vitaminB1Thiamine[1]).append("mg").
+                append("\nVitamin B2: ").append(vitaminB2Riboflavin[1]).append("mg").
+                append("\nVitamin B3: ").append(vitaminB3Niacin[1]).append("mg").
+                append("\nVitamin B5: ").append(vitaminB5PantothenicAcid[1]).append("mg").
+                append("\nVitamin B6: ").append(vitaminB6Pyridoxine[1]).append("mg").
+                append("\nVitamin B7: ").append(vitaminB7Biotin[1]).append("ug").
+                append("\nVitamin B9: ").append(vitaminB9Folate[1]).append("ug").
+                append("\nVitamin B12: ").append(vitaminB12Cyanocobalamin[1]).append("ug").
+                append("\nVitamin C: ").append(vitaminC[1]).append("mg").
+                append("\nVitamin D: ").append(vitaminD[1]).append("ng/mL").
+                append("\nVitamin E: ").append(vitaminE[1]).append("mg").
+                append("\nVitamin K: ").append(vitaminK[1]).append("ug").
+
+                append("\nCalcium: ").append(calcium[1]).append("mg").
+                append("\nChloride: ").append(chloride[1]).append("g").
+                append("\nCholine: ").append(choline[1]).append("mg").
+                append("\nChromium: ").append(chromium[1]).append("ug").
+                append("\nCopper: ").append(copper[1]).append("ug").
+                append("\nFluoride: ").append(flouride[1]).append("mg").
+                append("\nIodine: ").append(iodine[1]).append("ug").
+                append("\nIron: ").append(iron[1]).append("mg").
+                append("\nMagnesium: ").append(magnesium[1]).append("mg").
+                append("\nManganese: ").append(manganese[1]).append("mg").
+                append("\nMolybdenum: ").append(molybdenum[1]).append("ug").
+                append("\nPhosphorus: ").append(phosphorus[1]).append("mg").
+                append("\nPotassium: ").append(potassium[1]).append("mg").
+                append("\nSelenium: ").append(selenium[1]).append("ug").
+                append("\nSodium: ").append(sodium[1]).append("mg").
+                append("\nZinc: ").append(zinc[1]).append("mg");
+
+
+
+        System.out.println(sb);
+    }
 
     // Although standard protocol is to have private variables at the top of the class,
     // there were simply too many private variables, making it hard to find the class's functional methods.
@@ -48,14 +94,12 @@ public class User {
 
     // ***** Macros *****
     private double[] water = new double[2]; // liters
-    private double[] calories = new double[2]; // kCal
-    private double[] carbs = new double[2]; // grams
+    private double[] energy = new double[2]; // kCal
+    private double[] carbohyrate = new double[2]; // grams
     private double[] fiber = new double[2]; // grams
     private double[] monounsaturatedFat = new double[2]; // grams
     private double[] saturatedFat = new double[2]; // grams
     private double[] polyunsaturatedFat = new double[2]; // grams
-    private double[] linoleicAcid = new double[2]; //grams
-    private double[] alinoleicAcid = new double[2]; // grams
     private double[] protein = new double[2]; // grams
 
 
@@ -107,26 +151,26 @@ public class User {
             water[option] = water[option] + value;
         }
     }
-    public double getCalories(int option){
-        return calories[option];
+    public double getEnergy(int option){
+        return energy[option];
     }
-    public void setCalories(int option, double value){
+    public void setEnergy(int option, double value){
         if(option == 0){ // Change daily goal
-            calories[option] = value;
+            energy[option] = value;
         }
         else if(option == 1){ // Update amount consumed
-            calories[option] = calories[option] + value;
+            energy[option] = energy[option] + value;
         }
     }
     public double getCarbs(int option){
-        return carbs[option];
+        return carbohyrate[option];
     }
     public void setCarbs(int option, double value){
         if(option == 0){ // Change daily goal
-            carbs[option] = value;
+            carbohyrate[option] = value;
         }
         else if(option == 1){ // Update amount consumed
-            carbs[option] = carbs[option] + value;
+            carbohyrate[option] = carbohyrate[option] + value;
         }
     }
     public double getFiber(int option){
@@ -171,28 +215,6 @@ public class User {
         }
         else if(option == 1){ // Update amount consumed
             polyunsaturatedFat[option] = polyunsaturatedFat[option] + value;
-        }
-    }
-    public double getLinolenicAcid(int option){
-        return linoleicAcid[option];
-    }
-    public void setLinoleicAcid(int option, double value){
-        if(option == 0){ // Change daily goal
-            linoleicAcid[option] = value;
-        }
-        else if(option == 1){ // Update amount consumed
-            linoleicAcid[option] = linoleicAcid[option] + value;
-        }
-    }
-    public double getALinolenicAcid(int option){
-        return alinoleicAcid[option];
-    }
-    public void setALinoleicAcid(int option, double value){
-        if(option == 0){ // Change daily goal
-            alinoleicAcid[option] = value;
-        }
-        else if(option == 1){ // Update amount consumed
-            alinoleicAcid[option] = alinoleicAcid[option] + value;
         }
     }
     public double getProtein(int option){
