@@ -288,7 +288,7 @@ public class Main {
     }
 
     public void outputCurrentConsumption(User user){
-        user.printCurrentConsumption();
+        user.printProgress();
     }
 
     public void computeRemainingDietaryNeeds(){

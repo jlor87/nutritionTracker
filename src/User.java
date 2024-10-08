@@ -6,6 +6,46 @@ public class User {
     private char userSex = '0'; //m or f
     private String exerciseLevel = "not set"; //none, light, moderate, hard, extreme (different levels to be defined in readME)
 
+    public User (){
+        // Default daily goals are set for an 18-30 year old male
+        setWater(0, 3.7);
+        setCarbohyrate(0, 130);
+        setFiber(0, 38);
+        setMonounsaturatedFat(0, 22);
+        setSaturatedFat(0, 22);
+        setPolyunsaturatedFat(0, 17);
+        setProtein(0, 56);
+        setVitaminA(0, 900);
+        setVitaminB1Thiamine(0, 1.2);
+        setVitaminB2Riboflavin(0, 1.3);
+        setVitaminB3Niacin(0, 16);
+        setVitaminB5PantothenicAcid(0, 5);
+        setVitaminB6Pyridoxine(0, 1.3);
+        setVitaminB7Biotin(0, 30);
+        setVitaminB9Folate(0, 400);
+        setVitaminB12Cyanocobalamin(0, 2.4);
+        setVitaminC(0, 90);
+        setVitaminD(0, 15);
+        setVitaminE(0, 15);
+        setVitaminK(0, 120);
+        setCalcium(0, 1000);
+        setChloride(0, 2.3);
+        setCholine(0, 550);
+        setChromium(0, 35);
+        setCopper(0, 900);
+        setFlouride(0, 4);
+        setIodine(0, 150);
+        setIron(0, 8);
+        setMagnesium(0, 400);
+        setManganese(0, 2.3);
+        setMolybdenum(0, 45);
+        setPhosphorus(0, 700);
+        setPotassium(0, 3400);
+        setSelenium(0, 55);
+        setSodium(0, 1500);
+        setZinc(0, 11);
+    }
+
 
     // Getters and setters for user data (weight, height, sex, exercise level)
     public double weightGetter() {
@@ -40,52 +80,121 @@ public class User {
     	this.exerciseLevel = exercise;
     }
 
-    public void printCurrentConsumption(){
+    public void printProgress() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Total Consumption Today:").
-                append("\nWater: ").append(water[1]).append("L").
-                append("\nCarbohydrates: ").append(carbohyrate[1]).append("g").
-                append("\nProtein: ").append(protein[1]).append("g").
-                append("\nMonosaturated Fat: ").append(monounsaturatedFat[1]).append("g").
-                append("\nPolyunsaturated Fat: ").append(polyunsaturatedFat[1]).append("g").
-                append("\nSaturated Fat: ").append(saturatedFat[1]).append("g").
-                append("\nFiber: ").append(fiber[1]).append("g").
+        sb.append("Progress:");
 
-                append("\nVitamin A: ").append(vitaminA[1]).append("ug RAE").
-                append("\nVitamin B1: ").append(vitaminB1Thiamine[1]).append("mg").
-                append("\nVitamin B2: ").append(vitaminB2Riboflavin[1]).append("mg").
-                append("\nVitamin B3: ").append(vitaminB3Niacin[1]).append("mg").
-                append("\nVitamin B5: ").append(vitaminB5PantothenicAcid[1]).append("mg").
-                append("\nVitamin B6: ").append(vitaminB6Pyridoxine[1]).append("mg").
-                append("\nVitamin B7: ").append(vitaminB7Biotin[1]).append("ug").
-                append("\nVitamin B9: ").append(vitaminB9Folate[1]).append("ug").
-                append("\nVitamin B12: ").append(vitaminB12Cyanocobalamin[1]).append("ug").
-                append("\nVitamin C: ").append(vitaminC[1]).append("mg").
-                append("\nVitamin D: ").append(vitaminD[1]).append("ng/mL").
-                append("\nVitamin E: ").append(vitaminE[1]).append("mg").
-                append("\nVitamin K: ").append(vitaminK[1]).append("ug").
+        sb.append("\nWater: ").append(water[1]).append("/").append(water[0]).append("L, ")
+                .append((int)((water[1] / water[0]) * 100)).append("%");
 
-                append("\nCalcium: ").append(calcium[1]).append("mg").
-                append("\nChloride: ").append(chloride[1]).append("g").
-                append("\nCholine: ").append(choline[1]).append("mg").
-                append("\nChromium: ").append(chromium[1]).append("ug").
-                append("\nCopper: ").append(copper[1]).append("ug").
-                append("\nFluoride: ").append(flouride[1]).append("mg").
-                append("\nIodine: ").append(iodine[1]).append("ug").
-                append("\nIron: ").append(iron[1]).append("mg").
-                append("\nMagnesium: ").append(magnesium[1]).append("mg").
-                append("\nManganese: ").append(manganese[1]).append("mg").
-                append("\nMolybdenum: ").append(molybdenum[1]).append("ug").
-                append("\nPhosphorus: ").append(phosphorus[1]).append("mg").
-                append("\nPotassium: ").append(potassium[1]).append("mg").
-                append("\nSelenium: ").append(selenium[1]).append("ug").
-                append("\nSodium: ").append(sodium[1]).append("mg").
-                append("\nZinc: ").append(zinc[1]).append("mg");
+        sb.append("\nCarbohydrates: ").append(carbohyrate[1]).append("/").append(carbohyrate[0]).append("g, ")
+                .append((int)((carbohyrate[1] / carbohyrate[0]) * 100)).append("%");
 
+        sb.append("\nProtein: ").append(protein[1]).append("/").append(protein[0]).append("g, ")
+                .append((int)((protein[1] / protein[0]) * 100)).append("%");
 
+        sb.append("\nMonounsaturated Fat: ").append(monounsaturatedFat[1]).append("/").append(monounsaturatedFat[0]).append("g, ")
+                .append((int)((monounsaturatedFat[1] / monounsaturatedFat[0]) * 100)).append("%");
+
+        sb.append("\nPolyunsaturated Fat: ").append(polyunsaturatedFat[1]).append("/").append(polyunsaturatedFat[0]).append("g, ")
+                .append((int)((polyunsaturatedFat[1] / polyunsaturatedFat[0]) * 100)).append("%");
+
+        sb.append("\nSaturated Fat: ").append(saturatedFat[1]).append("/").append(saturatedFat[0]).append("g, ")
+                .append((int)((saturatedFat[1] / saturatedFat[0]) * 100)).append("%");
+
+        sb.append("\nFiber: ").append(fiber[1]).append("/").append(fiber[0]).append("g, ")
+                .append((int)((fiber[1] / fiber[0]) * 100)).append("%");
+
+        sb.append("\nVitamin A: ").append(vitaminA[1]).append("/").append(vitaminA[0]).append("ug, ")
+                .append((int)((vitaminA[1] / vitaminA[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B1: ").append(vitaminB1Thiamine[1]).append("/").append(vitaminB1Thiamine[0]).append("mg, ")
+                .append((int)((vitaminB1Thiamine[1] / vitaminB1Thiamine[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B2: ").append(vitaminB2Riboflavin[1]).append("/").append(vitaminB2Riboflavin[0]).append("mg, ")
+                .append((int)((vitaminB2Riboflavin[1] / vitaminB2Riboflavin[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B3: ").append(vitaminB3Niacin[1]).append("/").append(vitaminB3Niacin[0]).append("mg, ")
+                .append((int)((vitaminB3Niacin[1] / vitaminB3Niacin[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B5: ").append(vitaminB5PantothenicAcid[1]).append("/").append(vitaminB5PantothenicAcid[0]).append("mg, ")
+                .append((int)((vitaminB5PantothenicAcid[1] / vitaminB5PantothenicAcid[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B6: ").append(vitaminB6Pyridoxine[1]).append("/").append(vitaminB6Pyridoxine[0]).append("mg, ")
+                .append((int)((vitaminB6Pyridoxine[1] / vitaminB6Pyridoxine[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B7: ").append(vitaminB7Biotin[1]).append("/").append(vitaminB7Biotin[0]).append("ug, ")
+                .append((int)((vitaminB7Biotin[1] / vitaminB7Biotin[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B9: ").append(vitaminB9Folate[1]).append("/").append(vitaminB9Folate[0]).append("ug, ")
+                .append((int)((vitaminB9Folate[1] / vitaminB9Folate[0]) * 100)).append("%");
+
+        sb.append("\nVitamin B12: ").append(vitaminB12Cyanocobalamin[1]).append("/").append(vitaminB12Cyanocobalamin[0]).append("ug, ")
+                .append((int)((vitaminB12Cyanocobalamin[1] / vitaminB12Cyanocobalamin[0]) * 100)).append("%");
+
+        sb.append("\nVitamin C: ").append(vitaminC[1]).append("/").append(vitaminC[0]).append("mg, ")
+                .append((int)((vitaminC[1] / vitaminC[0]) * 100)).append("%");
+
+        sb.append("\nVitamin D: ").append(vitaminD[1]).append("/").append(vitaminD[0]).append("ng, ")
+                .append((int)((vitaminD[1] / vitaminD[0]) * 100)).append("%");
+
+        sb.append("\nVitamin E: ").append(vitaminE[1]).append("/").append(vitaminE[0]).append("mg, ")
+                .append((int)((vitaminE[1] / vitaminE[0]) * 100)).append("%");
+
+        sb.append("\nVitamin K: ").append(vitaminK[1]).append("/").append(vitaminK[0]).append("ug, ")
+                .append((int)((vitaminK[1] / vitaminK[0]) * 100)).append("%");
+
+        sb.append("\nCalcium: ").append(calcium[1]).append("/").append(calcium[0]).append("mg, ")
+                .append((int)((calcium[1] / calcium[0]) * 100)).append("%");
+
+        sb.append("\nChloride: ").append(chloride[1]).append("/").append(chloride[0]).append("g, ")
+                .append((int)((chloride[1] / chloride[0]) * 100)).append("%");
+
+        sb.append("\nCholine: ").append(choline[1]).append("/").append(choline[0]).append("mg, ")
+                .append((int)((choline[1] / choline[0]) * 100)).append("%");
+
+        sb.append("\nChromium: ").append(chromium[1]).append("/").append(chromium[0]).append("ug, ")
+                .append((int)((chromium[1] / chromium[0]) * 100)).append("%");
+
+        sb.append("\nCopper: ").append(copper[1]).append("/").append(copper[0]).append("ug, ")
+                .append((int)((copper[1] / copper[0]) * 100)).append("%");
+
+        sb.append("\nFluoride: ").append(flouride[1]).append("/").append(flouride[0]).append("mg, ")
+                .append((int)((flouride[1] / flouride[0]) * 100)).append("%");
+
+        sb.append("\nIodine: ").append(iodine[1]).append("/").append(iodine[0]).append("ug, ")
+                .append((int)((iodine[1] / iodine[0]) * 100)).append("%");
+
+        sb.append("\nIron: ").append(iron[1]).append("/").append(iron[0]).append("mg, ")
+                .append((int)((iron[1] / iron[0]) * 100)).append("%");
+
+        sb.append("\nMagnesium: ").append(magnesium[1]).append("/").append(magnesium[0]).append("mg, ")
+                .append((int)((magnesium[1] / magnesium[0]) * 100)).append("%");
+
+        sb.append("\nManganese: ").append(manganese[1]).append("/").append(manganese[0]).append("mg, ")
+                .append((int)((manganese[1] / manganese[0]) * 100)).append("%");
+
+        sb.append("\nMolybdenum: ").append(molybdenum[1]).append("/").append(molybdenum[0]).append("ug, ")
+                .append((int)((molybdenum[1] / molybdenum[0]) * 100)).append("%");
+
+        sb.append("\nPhosphorus: ").append(phosphorus[1]).append("/").append(phosphorus[0]).append("mg, ")
+                .append((int)((phosphorus[1] / phosphorus[0]) * 100)).append("%");
+
+        sb.append("\nPotassium: ").append(potassium[1]).append("/").append(potassium[0]).append("mg, ")
+                .append((int)((potassium[1] / potassium[0]) * 100)).append("%");
+
+        sb.append("\nSelenium: ").append(selenium[1]).append("/").append(selenium[0]).append("ug, ")
+                .append((int)((selenium[1] / selenium[0]) * 100)).append("%");
+
+        sb.append("\nSodium: ").append(sodium[1]).append("/").append(sodium[0]).append("mg, ")
+                .append((int)((sodium[1] / sodium[0]) * 100)).append("%");
+
+        sb.append("\nZinc: ").append(zinc[1]).append("/").append(zinc[0]).append("mg, ")
+                .append((int)((zinc[1] / zinc[0]) * 100)).append("%");
 
         System.out.println(sb);
     }
+
 
     // Although standard protocol is to have private variables at the top of the class,
     // there were simply too many private variables, making it hard to find the class's functional methods.
@@ -96,11 +205,11 @@ public class User {
     private double[] water = new double[2]; // liters
     private double[] energy = new double[2]; // kCal
     private double[] carbohyrate = new double[2]; // grams
-    private double[] fiber = new double[2]; // grams
     private double[] monounsaturatedFat = new double[2]; // grams
     private double[] saturatedFat = new double[2]; // grams
     private double[] polyunsaturatedFat = new double[2]; // grams
     private double[] protein = new double[2]; // grams
+    private double[] fiber = new double[2]; // grams
 
 
     // ***** Vitamins *****
@@ -122,6 +231,7 @@ public class User {
     // ***** Minerals *****
     private double[] choline = new double[2]; // milligrams
     private double[] calcium = new double[2]; // milligrams
+    private double[] chloride = new double[2]; // grams
     private double[] chromium = new double[2]; // micrograms
     private double[] copper = new double[2]; // micrograms
     private double[] flouride = new double[2]; // milligrams
@@ -131,11 +241,10 @@ public class User {
     private double[] manganese = new double[2]; // milligrams
     private double[] molybdenum = new double[2]; // micrograms
     private double[] phosphorus = new double[2]; // milligrams
-    private double[] selenium = new double[2]; // micrograms
-    private double[] zinc = new double[2]; // milligrams
     private double[] potassium = new double[2]; // milligrams
+    private double[] selenium = new double[2]; // micrograms
     private double[] sodium = new double[2]; // milligrams
-    private double[] chloride = new double[2]; // grams
+    private double[] zinc = new double[2]; // milligrams
 
 
     // One getter and setter for every vitamin/nutrient.
@@ -162,10 +271,10 @@ public class User {
             energy[option] = energy[option] + value;
         }
     }
-    public double getCarbs(int option){
+    public double getCarbohydrate(int option){
         return carbohyrate[option];
     }
-    public void setCarbs(int option, double value){
+    public void setCarbohyrate(int option, double value){
         if(option == 0){ // Change daily goal
             carbohyrate[option] = value;
         }
