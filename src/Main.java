@@ -254,6 +254,13 @@ public class Main {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
             String nutrientName = nutrient.get("nutrientName").getAsString();
             nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
+            // System.out.println("nutrientName (before): " + nutrientName);
+
+            // Handles parsing the special case of fatty acids
+            if(nutrientName.startsWith("fattyacids")){
+                nutrientName = nutrientName.substring(16);
+            }
+
             int commaIndex = nutrientName.indexOf(",");
             if(commaIndex != -1){
                 nutrientName = nutrientName.substring(0, commaIndex);
@@ -269,7 +276,7 @@ public class Main {
                 if(methodName.contains("set" + nutrientName)){
                     // System.out.println("methodName: " + methodName); // Test statement
                     try{
-                        System.out.println("Found!");
+                        // System.out.println("Found!");
                         userMethods[j].invoke(currentUser, 1, amount); // Update user's consumed nutrients
                         break;
                     } catch(Exception e){
