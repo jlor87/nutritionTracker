@@ -254,12 +254,22 @@ public class Main {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
             String nutrientName = nutrient.get("nutrientName").getAsString();
             nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
+            int commaIndex = nutrientName.indexOf(",");
+            if(commaIndex != -1){
+                nutrientName = nutrientName.substring(0, commaIndex);
+            }
+            // System.out.println("nutrientName: " + nutrientName); // Test statement
+
             double amount = nutrient.get("value").getAsDouble();
 
             // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
             for(int j = 0; j < length; j++){
-                if(userMethods[j].getName().toLowerCase().contains("set" + nutrientName)){
+                String methodName = userMethods[j].getName().toLowerCase();
+
+                if(methodName.contains("set" + nutrientName)){
+                    // System.out.println("methodName: " + methodName); // Test statement
                     try{
+                        System.out.println("Found!");
                         userMethods[j].invoke(currentUser, 1, amount); // Update user's consumed nutrients
                         break;
                     } catch(Exception e){
