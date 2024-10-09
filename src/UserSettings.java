@@ -4,10 +4,12 @@ import java.util.Scanner;
 public class UserSettings {
     User currentUser;
 
+    // Constructor
     public UserSettings(User user){
         this.currentUser = user;
     }
 
+    // Class functions
     public void alterUserData(Scanner scanner){
         // User wants to change profile info. This method will print to the console the current values set to the user and give the user a list of which value to change if any.
 
@@ -115,6 +117,10 @@ public class UserSettings {
 
 
 
+    }
+    public void setGoalData(){
+        // User wants to set caloric/nutritonal goals for the day
+        System.out.println("\nTo be implemented");
     }
 
 }

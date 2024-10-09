@@ -1,5 +1,5 @@
-
 // All user data (dietary goals, preferences, user info, etc.) is stored here
+
 public class User {
 
 	// Assigning new user with dummy values

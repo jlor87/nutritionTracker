@@ -2,11 +2,14 @@
 // All output-related functions are within in this class
 public class Print {
     User currentUser;
+
+    // Constructor
     public Print(User user){
         this.currentUser = user;
     }
 
 
+    // Class functions
     public void outputCurrentConsumption() {
         StringBuilder sb = new StringBuilder();
         sb.append("Progress:");
