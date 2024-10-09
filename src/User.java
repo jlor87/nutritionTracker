@@ -1,14 +1,19 @@
+
+// All user data (dietary goals, preferences, user info, etc.) is stored here
 public class User {
 
-	// Assigning user data with dummy values
+	// Assigning new user with dummy values
     private double userWeight = 0.00; //lbs
     private int userHeight = 0; //inches
     private char userSex = '0'; //m or f
     private String exerciseLevel = "not set"; //none, light, moderate, hard, extreme (different levels to be defined in readME)
 
+
+    // Constructor
     public User (){
         // Default daily goals are set for an 18-30 year old male
         setWater(0, 3.7);
+        setEnergy(0, 2000);
         setCarbohyrate(0, 130);
         setFiber(0, 38);
         setMonounsaturatedFat(0, 22);
@@ -80,12 +85,17 @@ public class User {
     	this.exerciseLevel = exercise;
     }
 
+
+    // Class functions
     public void printProgress() {
         StringBuilder sb = new StringBuilder();
         sb.append("Progress:");
 
         sb.append("\nWater: ").append(water[1]).append("/").append(water[0]).append("L, ")
                 .append((int)((water[1] / water[0]) * 100)).append("%");
+
+        sb.append("\nCalories: ").append(energy[1]).append("/").append(energy[0]).append("kCal, ")
+                .append((int)((energy[1] / energy[0]) * 100)).append("%");
 
         sb.append("\nCarbohydrates: ").append(carbohyrate[1]).append("/").append(carbohyrate[0]).append("g, ")
                 .append((int)((carbohyrate[1] / carbohyrate[0]) * 100)).append("%");
