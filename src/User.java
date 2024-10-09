@@ -38,7 +38,7 @@ public class User {
         setCholine(0, 550);
         setChromium(0, 35);
         setCopper(0, 900);
-        setFlouride(0, 4);
+        setFluoride(0, 4);
         setIodine(0, 150);
         setIron(0, 8);
         setMagnesium(0, 400);
@@ -169,8 +169,8 @@ public class User {
         sb.append("\nCopper: ").append(copper[1]).append("/").append(copper[0]).append("ug, ")
                 .append((int)((copper[1] / copper[0]) * 100)).append("%");
 
-        sb.append("\nFluoride: ").append(flouride[1]).append("/").append(flouride[0]).append("mg, ")
-                .append((int)((flouride[1] / flouride[0]) * 100)).append("%");
+        sb.append("\nFluoride: ").append(fluoride[1]).append("/").append(fluoride[0]).append("mg, ")
+                .append((int)((fluoride[1] / fluoride[0]) * 100)).append("%");
 
         sb.append("\nIodine: ").append(iodine[1]).append("/").append(iodine[0]).append("ug, ")
                 .append((int)((iodine[1] / iodine[0]) * 100)).append("%");
@@ -244,7 +244,7 @@ public class User {
     private double[] chloride = new double[2]; // grams
     private double[] chromium = new double[2]; // micrograms
     private double[] copper = new double[2]; // micrograms
-    private double[] flouride = new double[2]; // milligrams
+    private double[] fluoride = new double[2]; // milligrams
     private double[] iodine = new double[2]; // micrograms
     private double[] iron = new double[2];  // milligrams
     private double[] magnesium = new double[2]; // milligrams
@@ -534,15 +534,15 @@ public class User {
             copper[option] = copper[option] + value;
         }
     }
-    public double getFlouride(int option){
-        return flouride[option];
+    public double getFluoride(int option){
+        return fluoride[option];
     }
-    public void setFlouride(int option, double value){
+    public void setFluoride(int option, double value){
         if(option == 0){ // Change daily goal
-            flouride[option] = value;
+            fluoride[option] = value;
         }
         else if(option == 1){ // Update amount consumed
-            flouride[option] = flouride[option] + value;
+            fluoride[option] = fluoride[option] + value;
         }
     }
     public double getIodine(int option){

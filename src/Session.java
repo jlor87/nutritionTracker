@@ -13,24 +13,35 @@ import java.util.Scanner;
 
 // The session class is responsible for actually running the program via the startSession() function
 public class Session {
-    String userChoice = "dummyValue";
-    User currentUser;
+    private String userChoice = "dummyValue";
+    private User currentUser;
+    private Scanner scanner;
+
+    private UserSettings userSettings;
+    private Print print;
+
+    // Constructor
     public Session(User user){
         this.currentUser = user;
     }
 
 
-    // startSession() is the workhorse of the app (due to the do-while loop)
+    // Class helper functions to perform parts of a use case
     public void startSession(){
-        UserSettings userSettings = new UserSettings(currentUser);
-        Print print = new Print(currentUser);
+        // Initialize these utility classes for later usage
+        userSettings = new UserSettings(currentUser);
+        print = new Print(currentUser);
+        scanner = new Scanner(System.in);
+
+        // Open the menu
+        menu();
+    }
+    public void menu(){     // menu() is the center of the app (due to the do-while loop)
         System.out.println("Welcome to the nutrition app.");
         System.out.println("Skipping existing user login or new user creation functionality...\n");
 
-        Scanner scanner = new Scanner(System.in);
-
         do {
-            System.out.println("\nSelect an action for the system to perform from the list below.");
+            System.out.println("Select an action for the system to perform from the list below.");
             System.out.println("0. Exit the application.");
             System.out.println("1. Search for food/drink item.");
             System.out.println("2. Set caloric/nutritional intake goals for the day.");
@@ -57,13 +68,9 @@ public class Session {
                         System.out.println("\nClosing the application");
                 default -> System.out.println("Not a valid option");
             }
-
         } while (!userChoice.equals("0"));
-
         scanner.close();
     }
-
-    // Class helper functions to perform parts of a use case
     public void setGoalData(){
         // User wants to set caloric/nutritonal goals for the day
         System.out.println("\nTo be implemented");
