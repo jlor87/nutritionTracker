@@ -66,6 +66,7 @@ public class Session {
         userInput = scanner.nextLine();
         System.out.println("You entered: " + userInput);
         api.sendAPIRequest(userInput); // Calling api with user input
+        api.updateUserConsumption(api.getNutrients(), currentUser);;
     }
 
     // Getters

@@ -11,7 +11,17 @@ import java.net.http.HttpResponse;
 
 // Everything dealing with API usage is here
 public class API {
+
     private User currentUser;
+    private Gson gson;
+    private JsonObject responseObject;
+    private JsonArray foods;
+    private JsonObject firstFood;
+    private JsonArray nutrients;
+    private JsonObject nutrient;
+    private Method[] userMethods;
+    private String nutrientName;
+    private double amount;
 
     // Constructor
     public API(User user){
@@ -42,31 +52,29 @@ public class API {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // Parse the response JSON using Gson
-            Gson gson = new Gson();
-            JsonObject responseObject = gson.fromJson(response.body(), JsonObject.class);
-            JsonArray foods = responseObject.getAsJsonArray("foods");
+            gson = new Gson();
+            responseObject = gson.fromJson(response.body(), JsonObject.class);
+            foods = responseObject.getAsJsonArray("foods");
 
             // Check if we have results
             if (foods.size() > 0) {
                 // Extract details of the first food item
-                JsonObject firstFood = foods.get(0).getAsJsonObject();
+                firstFood = foods.get(0).getAsJsonObject();
                 String description = firstFood.get("description").getAsString();
-                JsonArray nutrients = firstFood.getAsJsonArray("foodNutrients");
+                nutrients = firstFood.getAsJsonArray("foodNutrients");
 
                 // Print the food description
                 System.out.println("Food: " + description);
 
                 // Loop through and print nutrients
                 for (int i = 0; i < nutrients.size(); i++) {
-                    JsonObject nutrient = nutrients.get(i).getAsJsonObject();
+                    nutrient = nutrients.get(i).getAsJsonObject();
                     String nutrientName = nutrient.get("nutrientName").getAsString();
                     double amount = nutrient.get("value").getAsDouble();
                     String unitName = nutrient.get("unitName").getAsString();
                     System.out.println(nutrientName + ": " + amount + " " + unitName);
                 }
 
-                // Assuming the user has eaten the food, now update their daily consumption
-                updateUserConsumption(nutrients, currentUser);
             } else {
                 System.out.println("No foods found for the query: " + query);
             }
@@ -76,12 +84,12 @@ public class API {
         }
     }
     public void updateUserConsumption(JsonArray nutrients, User currentUser){
-        Method[] userMethods = Utility.getMethods();
+        userMethods = Utility.getMethods();
         int length = userMethods.length;
 
         for (int i = 0; i < nutrients.size(); i++) {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
-            String nutrientName = nutrient.get("nutrientName").getAsString();
+            nutrientName = nutrient.get("nutrientName").getAsString();
             nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
             // System.out.println("nutrientName (before): " + nutrientName);
 
@@ -96,7 +104,7 @@ public class API {
             }
             // System.out.println("nutrientName: " + nutrientName); // Test statement
 
-            double amount = nutrient.get("value").getAsDouble();
+            amount = nutrient.get("value").getAsDouble();
 
             // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
             for(int j = 0; j < length; j++){
@@ -116,4 +124,32 @@ public class API {
         }
     }
 
+    // Getters
+    public Gson getGson(){
+        return gson;
+    }
+    public JsonObject getResponseObject() {
+        return responseObject;
+    }
+    public JsonArray getFoods() {
+        return foods;
+    }
+    public JsonObject getFirstFood() {
+        return firstFood;
+    }
+    public JsonArray getNutrients() {
+        return nutrients;
+    }
+    public JsonObject getNutrient() {
+        return nutrient;
+    }
+    public Method[] getUserMethods() {
+        return userMethods;
+    }
+    public String getNutrientName() {
+        return nutrientName;
+    }
+    public double getAmount() {
+        return amount;
+    }
 }
