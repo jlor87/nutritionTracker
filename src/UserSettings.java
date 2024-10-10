@@ -5,7 +5,11 @@ import java.util.Scanner;
  *
  */
 public class UserSettings {
-    User currentUser;
+    private User currentUser;
+    private double weight;
+    private int height;
+    private char sex;
+    private String exercise;
 
     /**
      * Constructor
@@ -28,10 +32,10 @@ public class UserSettings {
         // Loop until the user chooses to exit (option 5)
         do {
             // Get current user data
-            double weight = currentUser.weightGetter();
-            int height = currentUser.heightGetter();
-            char sex = currentUser.sexGetter();
-            String exercise = currentUser.exerciseGetter();
+            weight = currentUser.weightGetter();
+            height = currentUser.heightGetter();
+            sex = currentUser.sexGetter();
+            exercise = currentUser.exerciseGetter();
 
             // Display current metrics
             System.out.println("\nYour data is set as follows:");

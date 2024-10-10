@@ -5,7 +5,7 @@
  * // I will create a branch testing out that feature!
  */
 public class Print {
-    User currentUser;
+    private User currentUser;
 
     // Constructor
     public Print(User user){
