@@ -1,17 +1,65 @@
-// All user data (dietary goals, preferences, user info, etc.) is stored here
-
+/**
+ * All user data (dietary goals, preferences, user info, etc.) is stored here **? separate class for preferences?** 
+ * 
+ */
 public class User {
 
-	// Assigning new user with dummy values
+    // Assigning new user with dummy values
     private double userWeight = 0.00; //lbs
     private int userHeight = 0; //inches
     private char userSex = '0'; //m or f
     private String exerciseLevel = "not set"; //none, light, moderate, hard, extreme (different levels to be defined in readME)
+    
+    // Index 0 refers to the user's dietary goal. Index 1 refers to the amount consumed for the day.
 
+    // ***** Macros *****
+    private double[] water = new double[2]; // liters
+    private double[] energy = new double[2]; // kCal
+    private double[] carbohyrate = new double[2]; // grams
+    private double[] monounsaturatedFat = new double[2]; // grams
+    private double[] saturatedFat = new double[2]; // grams
+    private double[] polyunsaturatedFat = new double[2]; // grams
+    private double[] protein = new double[2]; // grams
+    private double[] fiber = new double[2]; // grams
 
-    // Constructor
+    // ***** Vitamins *****
+    private double[] vitaminA = new double[2]; // micrograms
+    private double[] vitaminB1Thiamine = new double[2]; // milligrams
+    private double[] vitaminB2Riboflavin = new double[2]; // milligrams
+    private double[] vitaminB3Niacin = new double[2]; // miligrams
+    private double[] vitaminB5PantothenicAcid = new double[2]; // milligrams
+    private double[] vitaminB6Pyridoxine = new double[2]; // milligrams
+    private double[] vitaminB7Biotin = new double[2]; // micrograms
+    private double[] vitaminB9Folate = new double[2]; // micrograms
+    private double[] vitaminB12Cyanocobalamin = new double[2]; // micrograms
+    private double[] vitaminC = new double[2]; // milligrams
+    private double[] vitaminD = new double[2]; // micrograms
+    private double[] vitaminE = new double[2]; // milligrams
+    private double[] vitaminK = new double[2]; // micrograms
+
+    // ***** Minerals *****
+    private double[] choline = new double[2]; // milligrams
+    private double[] calcium = new double[2]; // milligrams
+    private double[] chloride = new double[2]; // grams
+    private double[] chromium = new double[2]; // micrograms
+    private double[] copper = new double[2]; // micrograms
+    private double[] fluoride = new double[2]; // milligrams
+    private double[] iodine = new double[2]; // micrograms
+    private double[] iron = new double[2];  // milligrams
+    private double[] magnesium = new double[2]; // milligrams
+    private double[] manganese = new double[2]; // milligrams
+    private double[] molybdenum = new double[2]; // micrograms
+    private double[] phosphorus = new double[2]; // milligrams
+    private double[] potassium = new double[2]; // milligrams
+    private double[] selenium = new double[2]; // micrograms
+    private double[] sodium = new double[2]; // milligrams
+    private double[] zinc = new double[2]; // milligrams
+
+    /**
+     * Constructor
+     */
     public User (){
-        // Default daily goals are set for an 18-30 year old male
+        // Default daily goals are set for an 18-30 year old male **???**
         setWater(0, 3.7);
         setEnergy(0, 2000);
         setCarbohyrate(0, 130);
@@ -51,7 +99,6 @@ public class User {
         setZinc(0, 11);
     }
 
-
     // Getters and setters for user data (weight, height, sex, exercise level)
     public double weightGetter() {
     	return this.userWeight;
@@ -84,58 +131,6 @@ public class User {
     public void exerciseSetter(String exercise) {
     	this.exerciseLevel = exercise;
     }
-
-
-    // Although standard protocol is to have private variables at the top of the class,
-    // there were simply too many private variables, making it hard to find the class's functional methods.
-    // Therefore, I have placed all the private variables, getters, and setters for all the nutrients below.
-    // Index 0 refers to the user's dietary goal. Index 1 refers to the amount consumed for the day.
-
-    // ***** Macros *****
-    private double[] water = new double[2]; // liters
-    private double[] energy = new double[2]; // kCal
-    private double[] carbohyrate = new double[2]; // grams
-    private double[] monounsaturatedFat = new double[2]; // grams
-    private double[] saturatedFat = new double[2]; // grams
-    private double[] polyunsaturatedFat = new double[2]; // grams
-    private double[] protein = new double[2]; // grams
-    private double[] fiber = new double[2]; // grams
-
-
-    // ***** Vitamins *****
-    private double[] vitaminA = new double[2]; // micrograms
-    private double[] vitaminB1Thiamine = new double[2]; // milligrams
-    private double[] vitaminB2Riboflavin = new double[2]; // milligrams
-    private double[] vitaminB3Niacin = new double[2]; // miligrams
-    private double[] vitaminB5PantothenicAcid = new double[2]; // milligrams
-    private double[] vitaminB6Pyridoxine = new double[2]; // milligrams
-    private double[] vitaminB7Biotin = new double[2]; // micrograms
-    private double[] vitaminB9Folate = new double[2]; // micrograms
-    private double[] vitaminB12Cyanocobalamin = new double[2]; // micrograms
-    private double[] vitaminC = new double[2]; // milligrams
-    private double[] vitaminD = new double[2]; // micrograms
-    private double[] vitaminE = new double[2]; // milligrams
-    private double[] vitaminK = new double[2]; // micrograms
-
-
-    // ***** Minerals *****
-    private double[] choline = new double[2]; // milligrams
-    private double[] calcium = new double[2]; // milligrams
-    private double[] chloride = new double[2]; // grams
-    private double[] chromium = new double[2]; // micrograms
-    private double[] copper = new double[2]; // micrograms
-    private double[] fluoride = new double[2]; // milligrams
-    private double[] iodine = new double[2]; // micrograms
-    private double[] iron = new double[2];  // milligrams
-    private double[] magnesium = new double[2]; // milligrams
-    private double[] manganese = new double[2]; // milligrams
-    private double[] molybdenum = new double[2]; // micrograms
-    private double[] phosphorus = new double[2]; // milligrams
-    private double[] potassium = new double[2]; // milligrams
-    private double[] selenium = new double[2]; // micrograms
-    private double[] sodium = new double[2]; // milligrams
-    private double[] zinc = new double[2]; // milligrams
-
 
     // One getter and setter for every vitamin/nutrient.
     // An option of 0 refers to the daily goal; an option of 1 refers to the daily amount consumed.

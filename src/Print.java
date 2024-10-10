@@ -1,5 +1,9 @@
 
-// All output-related functions are within in this class
+/**
+ * All output-related functions are within in this class
+ * // Note From Haivan: I actually think we should dissolve this class and put it's functionality into the class that needs this operation done... just a note nothing major
+ * // I will create a branch testing out that feature!
+ */
 public class Print {
     User currentUser;
 
@@ -9,7 +13,9 @@ public class Print {
     }
 
 
-    // Class functions
+    /**
+     * Class function
+     */
     public void outputCurrentConsumption() {
         StringBuilder sb = new StringBuilder();
         sb.append("Progress:");

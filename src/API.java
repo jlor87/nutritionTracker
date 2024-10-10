@@ -9,7 +9,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-// Everything dealing with API usage is here
+/**
+ * This class makes API requests to the USDA's database of food https://api.nal.usda.gov
+ * The class is responsible for handling all interactions with the internet
+ * 
+ */
 public class API {
 
     private User currentUser;
@@ -23,28 +27,26 @@ public class API {
     private String nutrientName;
     private double amount;
 
-    // Constructor
+    /**
+     * Each API instance has a user attached for food logging purposes
+     * @param user the current instance of user that is making a request
+     */
     public API(User user){
         this.currentUser = user;
     }
 
     // Class functions
     public void sendAPIRequest(String query) {
-        // API key and base URL
-        final String API_KEY = "OUhmaL4b1NLdkO286efEMTYDBHWw7jfj8TIoyxNm";
+        System.out.printf(".........Retriving %s nutrition information.........\n", query);
+        final String API_KEY = "OUhmaL4b1NLdkO286efEMTYDBHWw7jfj8TIoyxNm";// API key allows acess to the api
         final String BASE_URL = "https://api.nal.usda.gov/fdc/v1/foods/search";
 
-        // Construct the full URL with the query and API key
-        String url = BASE_URL + "?api_key=" + API_KEY + "&query=" + query.replace(" ", "%20");
+        String url = BASE_URL + "?api_key=" + API_KEY + "&query=" + query.replace(" ", "%20");// Construct the full URL with the query and API key
 
-        // Create an HttpClient
-        HttpClient client = HttpClient.newHttpClient();
+        HttpClient client = HttpClient.newHttpClient();// Create an HttpClient
 
         // Create a GET request with the constructed URL
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
         // Send the request and get the response
         HttpResponse<String> response = null;
@@ -82,7 +84,15 @@ public class API {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        
+        System.out.printf(".........%s nutrition information^^^.........\n", query);
     }
+    
+    /**
+     * The purpose of this class is to update the nutrition values of the user who is adding food intake information
+     * @param nutrients an array of nutrient information being passed received from the API
+     * @param currentUser the current user object making the call
+     */
     public void updateUserConsumption(JsonArray nutrients, User currentUser){
         userMethods = Utility.getMethods();
         int length = userMethods.length;

@@ -3,3 +3,9 @@ classes
 jar
 .idea
 nutritionTracker.iml
+/nbproject/private/
+/build/
+.DS_Store
+build.xml
+manifest.mf
+nbproject/

@@ -1,18 +1,28 @@
 import java.util.Scanner;
 
-// Anything related to altering user data is within this class
+/**
+ * Anything related to altering user data is within this class
+ *
+ */
 public class UserSettings {
     User currentUser;
 
-    // Constructor
+    /**
+     * Constructor
+     * @param user the user who's settings will be altered
+     */
     public UserSettings(User user){
         this.currentUser = user;
     }
 
     // Class functions
+    
+    /**
+     * User wants to change profile info. 
+     * This method will print to the console the current values set to the user and give the user a list of which value to change if any.
+     * @param scanner 
+     */
     public void alterUserData(Scanner scanner){
-        // User wants to change profile info. This method will print to the console the current values set to the user and give the user a list of which value to change if any.
-
         String userChoice = "";
 
         // Loop until the user chooses to exit (option 5)
@@ -111,15 +121,12 @@ public class UserSettings {
                     break;
             }
         } while (!userChoice.equals("5"));  // Loop until the user chooses to exit
-
-
-
-
-
-
     }
+    
+    /**
+     * Set the user's preferred caloric/nutritional goals for the day
+     */
     public void setGoalData(){
-        // User wants to set caloric/nutritonal goals for the day
         System.out.println("\nTo be implemented");
     }
 

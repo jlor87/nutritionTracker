@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
-// The session class is responsible for actually running the program via the startSession() function
+/**
+ * The session class is responsible for actually running the program via the startSession() function
+ * The session class will most likely be responsible for rendering the GUI as well
+ */
 public class Session {
     private String userChoice = "dummyValue";
     private User currentUser;
@@ -15,7 +18,8 @@ public class Session {
     }
 
 
-    // Class helper functions to perform parts of a use case
+    // Class helper functions to perform parts of a use case 
+    //**? can someone explain better?**
     public void startSession(){
         // Initialize these utility classes for later usage
         userSettings = new UserSettings(currentUser);
@@ -23,7 +27,11 @@ public class Session {
         scanner = new Scanner(System.in);
         api = new API(currentUser);
     }
-    public void menu(){     // menu() is the center of the app (due to the do-while loop)
+    
+    /**
+     * menu() consists of a do-while loop responsible for keeping the app running
+     */
+    public void menu(){
         System.out.println("Welcome to the nutrition app.");
         System.out.println("Skipping existing user login or new user creation functionality...");
 
@@ -34,6 +42,7 @@ public class Session {
             System.out.println("2. Set caloric/nutritional intake goals for the day.");
             System.out.println("3. Alter or set user data (height, weight, sex, average daily exercise).");
             System.out.println("4. Display status of current nutrient consumption for the day.\n");
+            System.out.print("Your choice: ");
 
             userChoice = scanner.nextLine();  // Get user input
 
@@ -64,15 +73,19 @@ public class Session {
             }
         } while (!userChoice.equals("0"));
 
-        // App closes at this point
+        // User chose 0 app closes
         scanner.close();
     }
+    
+    /**
+     * This function is responsible for retrieving the food that the user of the app has consumed or plans to consume
+     * @param scanner takes in one scanner object created by the calling function to read in foods provided by the user
+     */
     public void getFoodInput(Scanner scanner){
-        System.out.println("\nInput food item:");
-        String userInput;
-        userInput = scanner.nextLine();
+        System.out.print("\nInput food item: ");
+        String userInput = scanner.nextLine();
         System.out.println("You entered: " + userInput);
-        api.sendAPIRequest(userInput); // Calling api with user input
+        api.sendAPIRequest(userInput); // Calling api with user's food input
         api.updateUserConsumption(api.getNutrients(), currentUser);
     }
 
