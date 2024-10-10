@@ -103,31 +103,24 @@ public class User {
     public double weightGetter() {
     	return this.userWeight;
     }
-    
     public void weightSetter(double weight) {
     	this.userWeight = weight;
     }
-    
     public int heightGetter() {
     	return this.userHeight;
     }
-    
     public void heightSetter(int height) {
     	this.userHeight = height;
     }
-    
     public char sexGetter() {
     	return this.userSex;
     }
-    
     public void sexSetter(char sex) {
     	this.userSex = sex;
     }
-    
     public String exerciseGetter() {
     	return this.exerciseLevel;
     }
-    
     public void exerciseSetter(String exercise) {
     	this.exerciseLevel = exercise;
     }
