@@ -38,22 +38,29 @@ public class Session {
             userChoice = scanner.nextLine();  // Get user input
 
             switch (userChoice) {
-                case "1" ->
+                case "1":
                     // User wants to search for food/drink item
-                        getFoodInput(scanner);
-                case "2" ->
+                    getFoodInput(scanner);
+                    break;
+                case "2":
                     // User wants to set caloric/nutritional goals for the day
-                        userSettings.setGoalData();
-                case "3" ->
+                    userSettings.setGoalData();
+                    break;
+                case "3":
                     // User wants to alter user data
-                        userSettings.alterUserData(scanner);
-                case "4" ->
+                    userSettings.alterUserData(scanner);
+                    break;
+                case "4":
                     // User wants to check current daily progress
-                        print.outputCurrentConsumption();
-                case "0" ->
+                    print.outputCurrentConsumption();
+                    break;
+                case "0":
                     // User closing app
-                        System.out.println("\nClosing the application");
-                default -> System.out.println("Not a valid option");
+                    System.out.println("\nClosing the application");
+                    break;
+                default:
+                    System.out.println("Not a valid option");
+                    break;
             }
         } while (!userChoice.equals("0"));
 
@@ -66,7 +73,7 @@ public class Session {
         userInput = scanner.nextLine();
         System.out.println("You entered: " + userInput);
         api.sendAPIRequest(userInput); // Calling api with user input
-        api.updateUserConsumption(api.getNutrients(), currentUser);;
+        api.updateUserConsumption(api.getNutrients(), currentUser);
     }
 
     // Getters
