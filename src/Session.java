@@ -22,9 +22,6 @@ public class Session {
         print = new Print(currentUser);
         scanner = new Scanner(System.in);
         api = new API(currentUser);
-
-        // Open the menu
-        menu();
     }
     public void menu(){     // menu() is the center of the app (due to the do-while loop)
         System.out.println("Welcome to the nutrition app.");
@@ -67,7 +64,24 @@ public class Session {
         System.out.println("\nInput food item:");
         String userInput;
         userInput = scanner.nextLine();
-        api.sendAPIRequest(userInput); //calling api with user input
+        System.out.println("You entered: " + userInput);
+        api.sendAPIRequest(userInput); // Calling api with user input
     }
 
+    // Getters
+    public User getCurrentUser(){
+        return currentUser;
+    }
+    public Scanner getScanner(){
+        return scanner;
+    }
+    public UserSettings getUserSettings(){
+        return userSettings;
+    }
+    public API getApi() {
+        return api;
+    }
+    public Print getPrint() {
+        return print;
+    }
 }

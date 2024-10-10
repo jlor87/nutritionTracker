@@ -5,6 +5,7 @@ public class Main {
     	User newUser = new User();
         Session newSession = new Session(newUser);
         newSession.startSession();
+        newSession.menu();
     }
 
 }
