@@ -86,8 +86,9 @@ public class API {
     public void updateUserConsumption(JsonArray nutrients, User currentUser){
         userMethods = Utility.getMethods();
         int length = userMethods.length;
+        int length2 = nutrients.size();
 
-        for (int i = 0; i < nutrients.size(); i++) {
+        for (int i = 0; i < length2; i++) {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
             nutrientName = nutrient.get("nutrientName").getAsString();
             nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
@@ -97,7 +98,7 @@ public class API {
             if(nutrientName.startsWith("fattyacids")){
                 nutrientName = nutrientName.substring(16);
             }
-
+            // The actual nutrient name starts after the comma, so remove the first half of the string
             int commaIndex = nutrientName.indexOf(",");
             if(commaIndex != -1){
                 nutrientName = nutrientName.substring(0, commaIndex);
@@ -151,5 +152,8 @@ public class API {
     }
     public double getAmount() {
         return amount;
+    }
+    public User getCurrentUser() {
+        return currentUser;
     }
 }

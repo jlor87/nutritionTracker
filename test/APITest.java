@@ -2,6 +2,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
+
 public class APITest {
     private User user;
     private API api;
@@ -29,8 +31,22 @@ public class APITest {
         Assert.assertTrue(!api.getNutrientName().isEmpty() // Isn't empty
                 && api.getNutrientName().equals(api.getNutrientName().toLowerCase()) // Is all lowercase
                 && !api.getNutrientName().contains(" ")); // Doesn't have whitespace
-        Assert.assertEquals(Double.class, ((Object) api.getAmount()).getClass());
-        // Still need to verify that the data in User actually is changed to the values from the API
+        Assert.assertEquals(Double.class, ((Object) api.getAmount()).getClass()); // Checks if data received from the API is in the correct format
+
+        // Verify that the data in User actually is changed to the recieved value from the API
+        Method[] userMethods = api.getUserMethods();
+        Double finalAmount = -1.0;
+        for (Method currentMethod : userMethods) {
+            if (currentMethod.getName().toLowerCase().contains("get" + api.getNutrientName())) { // call the correct getter for the last updated value
+                try {
+                    finalAmount = (Double) currentMethod.invoke(api.getCurrentUser(), 1);
+                    break;
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }
+        Assert.assertEquals(finalAmount, api.getAmount(), 0.0);
     }
 
 }
