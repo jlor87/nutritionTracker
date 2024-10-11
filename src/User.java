@@ -98,6 +98,8 @@ public class User {
         setSodium(0, 1500);
         setZinc(0, 11);
     }
+    
+    
 
     // Getters and setters for user data (weight, height, sex, exercise level)
     public double weightGetter() {
@@ -526,5 +528,4 @@ public class User {
             chloride[option] += value;
         }
     }
-
 }

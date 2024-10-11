@@ -13,9 +13,10 @@ public class Utility {
     private static Method[] userMethods;
 
     // Grab all the methods in the User class and store them into the array, userMethods
-    static{
+    static
+    {
         try {
-            Class<?> userClass = User.class; // Use generics for type safety
+            Class userClass = User.class; // Use generics for type safety... removed the <?> becuase we don't need to worry about the type it's never not going to be user
             userMethods = userClass.getDeclaredMethods();
         }
         catch (Throwable e) {
