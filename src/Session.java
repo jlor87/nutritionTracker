@@ -53,7 +53,7 @@ public class Session {
                     break;
                 case "2":
                     // User wants to set caloric/nutritional goals for the day
-                    userSettings.setGoalData();
+                    userSettings.setGoalData(scanner, print);
                     break;
                 case "3":
                     // User wants to alter user data
