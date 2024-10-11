@@ -89,17 +89,16 @@ public class API {
     }
     
     /**
-     * The purpose of this method is to update the nutrition values of the user who is adding food intake information... this should totally be done in the user class...
-     * The job of the class should just to be for handling API calls.
+     * The purpose of this class is to update the nutrition values of the user who is adding food intake information
      * @param nutrients an array of nutrient information being passed received from the API
      * @param currentUser the current user object making the call
      */
     public void updateUserConsumption(JsonArray nutrients, User currentUser){
         userMethods = Utility.getMethods();
-        int userMethodCount = userMethods.length;
-        int nutrientCount = nutrients.size();
+        int length = userMethods.length;
+        int length2 = nutrients.size();
 
-        for (int i = 0; i < nutrientCount; i++) {
+        for (int i = 0; i < length2; i++) {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
             nutrientName = nutrient.get("nutrientName").getAsString();
             nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
@@ -119,7 +118,7 @@ public class API {
             amount = nutrient.get("value").getAsDouble();
 
             // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
-            for(int j = 0; j < userMethodCount; j++){
+            for(int j = 0; j < length; j++){
                 String methodName = userMethods[j].getName().toLowerCase();
 
                 if(methodName.contains("set" + nutrientName)){

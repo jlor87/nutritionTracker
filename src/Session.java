@@ -10,7 +10,7 @@ public class Session {
     private Scanner scanner;
     private UserSettings userSettings;
     private API api;
-    private outputHandler print;
+    private Print print;
 
     // Constructor
     public Session(User user){
@@ -23,7 +23,7 @@ public class Session {
     public void startSession(){
         // Initialize these utility classes for later usage
         userSettings = new UserSettings(currentUser);
-        print = new outputHandler(currentUser);
+        print = new Print(currentUser);
         scanner = new Scanner(System.in);
         api = new API(currentUser);
     }
@@ -102,7 +102,7 @@ public class Session {
     public API getApi() {
         return api;
     }
-    public outputHandler getPrint() {
+    public Print getPrint() {
         return print;
     }
 }
