@@ -323,13 +323,14 @@ public void makeMainScreen() {
         JButton button = new JButton(label);
         button.setFont(new Font("Arial", Font.PLAIN, 18));
         mainbuttonPanel.add(button);
+}
 
-        // Add ActionListener or ActionCommand here if needed
-        
-    }
-
+    JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 300));
+    wrapperPanel.add(mainbuttonPanel);
+  
+    
     // Add the button panel to the center of the main window
-    mainWindow.add(mainbuttonPanel, BorderLayout.CENTER);
+    mainWindow.add(wrapperPanel, BorderLayout.CENTER);
 
     // Display the main window
     mainWindow.setLocationRelativeTo(null);  // Center window on screen
