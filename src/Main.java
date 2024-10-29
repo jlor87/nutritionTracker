@@ -14,8 +14,7 @@ public class Main {
         // Establish connection to the MySQL database for the whole session
         Connection connectionToMySQL = null;
         try {
-            connectionToMySQL =
-                    DriverManager.getConnection("jdbc:mysql://34.227.86.98:3306/nutritionTracker?user=publicuser&password=iamnotroot");
+            connectionToMySQL = DriverManager.getConnection("jdbc:mysql://34.227.86.98:3306/nutritionTracker?user=publicuser&password=iamnotroot");
             System.out.println("Connection to database successful.");
         } catch (SQLException ex) {
             // handle any errors
@@ -32,6 +31,7 @@ public class Main {
         gui.makeMainScreen();
         gui.displayTitleScreen();
 
+        // Construct essential objects
         User newUser = new User(gui.getRetrievedUserId());
         Session newSession = new Session(newUser);
 

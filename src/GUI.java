@@ -409,27 +409,32 @@ public void removeMainScreen() {
 
 
     private boolean createAccount(String username, String password) {
-        // First, check if the username already exists
-        try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String existingUsername = line.split(":")[0];  // Get the username from each line
-                if (existingUsername.equals(username)) {
-                    return false;  // Username already exists
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		String query = "INSERT INTO users (username, password, weight, height, sex, exercise) VALUES(?, ?, ?, ?, ?, ?)";
 
-        // Username does not exist, so append the new account to the file
-        try (FileWriter writer = new FileWriter(userFile, true)) {
-            writer.write(username + ":" + password + "\n");
-            return true;  // Account creation successful
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;  // Account creation failed
-        }
+		try{
+			PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query); // Using prepared statements as good practice against SQL injections
+			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, password);
+			preparedStatement.setInt(3, 150);
+			preparedStatement.setInt(4, 69);
+			preparedStatement.setString(5, "M");
+			preparedStatement.setString(6, "average");
+
+			// Execute and retrieve result
+			int rowsAffected = preparedStatement.executeUpdate();
+			if (rowsAffected > 0) {
+				System.out.println("User created successfully!");
+				return true;
+			} else {
+				System.out.println("Failed to create user!");
+				return false;
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+
+		return false; // Error occurred
     }
     
     
