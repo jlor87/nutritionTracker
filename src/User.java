@@ -5,6 +5,7 @@
 public class User {
 
     // Assigning new user with dummy values
+    private int userId = 0;
     private double userWeight = 0.00; //lbs
     private int userHeight = 0; //inches
     private char userSex = '0'; //m or f
@@ -58,7 +59,9 @@ public class User {
     /**
      * Constructor
      */
-    public User (){
+    public User (int userId){
+        this.userId = userId;
+
         // Default daily goals are set for an 18-30 year old male **???**
         setWater(0, 3.7);
         setEnergy(0, 2000);
@@ -100,6 +103,9 @@ public class User {
     }
 
     // Getters and setters for user data (weight, height, sex, exercise level)
+    public int getUserId() {
+        return userId;
+    }
     public double weightGetter() {
     	return this.userWeight;
     }

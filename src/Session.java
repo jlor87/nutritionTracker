@@ -33,9 +33,9 @@ public class Session {
      */
     public void menu(){
         System.out.println("Welcome to the nutrition app.");
-        System.out.println("Skipping existing user login or new user creation functionality...");
 
         do {
+            // Will remove and let the user utilize the GUI for menu interactions
             System.out.println("\nSelect an action for the system to perform from the list below.");
             System.out.println("0. Exit the application.");
             System.out.println("1. Search for food/drink item.");

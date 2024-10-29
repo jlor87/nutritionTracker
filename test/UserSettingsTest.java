@@ -12,7 +12,7 @@ public class UserSettingsTest {
     Session session;
     @Before
     public void setUp(){
-        user = new User();
+        user = new User(1);
         session = new Session(user);
         session.startSession();
         userSettings = session.getUserSettings();

@@ -4,7 +4,8 @@ public class UserTest {
     @Test
     // Checks for proper instantiation
     public void testUser(){
-        user = new User();
+        user = new User(1);
+        Assert.assertEquals(1, user.getUserId(), 0.0);
         Assert.assertEquals(0.00, user.weightGetter(), 0.0);
         Assert.assertEquals(0.0, user.heightGetter(), 0.0);
         Assert.assertEquals('0', user.sexGetter(), 0.0);

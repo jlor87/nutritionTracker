@@ -9,7 +9,7 @@ public class APITest {
     private API api;
     @Before
     public void setUp() {
-        user = new User();
+        user = new User(1);
         api = new API(user);
     }
     @Test

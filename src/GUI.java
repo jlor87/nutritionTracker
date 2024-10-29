@@ -1,39 +1,25 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 import javax.swing.JOptionPane;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
-
+import java.sql.*;
 
 
 public class GUI {
@@ -52,17 +38,20 @@ public class GUI {
 	JFrame createWindow = new JFrame();
 	JFrame mainWindow = new JFrame();
 	//these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
-	
-	
 
-	
-	
+	private final String userFile = "users.txt";   //text file for usernames and passwords
+
+	private final Connection connectionToMySQL;
+
+	private int retrievedUserId = -1;
+
+	// Constructor
+	public GUI(Connection connectionToMySQL){
+		this.connectionToMySQL = connectionToMySQL;
+	}
+
     
-private final String userFile = "users.txt";   //text file for usernames and passwords
-	
-	
-    
-public void makeTitleScreen() {
+	public void makeTitleScreen() {
 		
 	JPanel titlePanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
@@ -108,8 +97,6 @@ public void makeTitleScreen() {
         
         exitButton.addActionListener(e -> System.exit(0));
 	}
-
-    
 	
 	public void displayTitleScreen() {
 		titleWindow.setVisible(true);
@@ -452,33 +439,38 @@ public void removeMainScreen() {
     
     
     private boolean checkCredentials(String username, String password) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
-            String line;
-            String credentials = username + ":" + password; // Expected format in the file
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().equals(credentials)) {
-                    return true; // Match found
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false; // No match found
+		ResultSet resultSet = null;
+		String query = "SELECT password, userId FROM users WHERE username = ?";
+		String retrievedPassword = "";
+
+		try{
+			PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query); // Using prepared statements as good practice against SQL injections
+			preparedStatement.setString(1, username);
+
+			// Execute SQL query and retrieve the result
+			resultSet = preparedStatement.executeQuery();
+
+			// Process the result
+			while (resultSet.next()) {
+				retrievedPassword = resultSet.getString("password");
+				retrievedUserId = resultSet.getInt("userId");
+			}
+
+			if(retrievedPassword.equals(password)){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+
+		return false; // Error occurred
     }
-    
-    
-    
-    
-    
-    
-    
 
-
-
-
-
-
-
-
-
+	public int getRetrievedUserId() {
+		return retrievedUserId;
+	}
 }

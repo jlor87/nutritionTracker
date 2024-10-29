@@ -4,7 +4,7 @@ public class UtilityTest {
     User user;
     @Before
     public void setUp(){
-        user = new User();
+        user = new User(1);
     }
     @Test
     public void testGetMethods(){
