@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+import com.google.gson.JsonArray;
+
 /**
  * The session class is responsible for actually running the program via the startSession() function
  * The session class will most likely be responsible for rendering the GUI as well
@@ -11,10 +13,11 @@ public class Session {
     private UserSettings userSettings;
     private API api;
     private Print print;
-
+    private GUI gui;
     // Constructor
-    public Session(User user){
+    public Session(User user, GUI gui){
         this.currentUser = user;
+        this.gui = gui;
     }
 
 
@@ -47,10 +50,10 @@ public class Session {
             userChoice = scanner.nextLine();  // Get user input
 
             switch (userChoice) {
-                case "1":
+              //  case "1":
                     // User wants to search for food/drink item
-                    getFoodInput(scanner);
-                    break;
+                   // getFoodInput(scanner);
+                  //  break;
                 case "2":
                     // User wants to set caloric/nutritional goals for the day
                     userSettings.setGoalData(scanner, print);
@@ -81,12 +84,18 @@ public class Session {
      * This function is responsible for retrieving the food that the user of the app has consumed or plans to consume
      * @param scanner takes in one scanner object created by the calling function to read in foods provided by the user
      */
-    public void getFoodInput(Scanner scanner){
+    public void getFoodInput(String userInput){
         System.out.print("\nInput food item: ");
-        String userInput = scanner.nextLine();
         System.out.println("You entered: " + userInput);
-        api.sendAPIRequest(userInput); // Calling api with user's food input
-        api.updateUserConsumption(api.getNutrients(), currentUser);
+        String result = api.sendAPIRequest(userInput); // Calling api with user's food input
+        gui.outputArea.append(result + "\n");
+        gui.outputArea.append("CLICK THE 'ADD' BUTTON TO ADD THIS FOOD ITEM TO YOUR CONSUMTPION.\n");
+    }
+    
+    public void addFoodItem(String userInput) {
+    	
+    	api.updateUserConsumption(api.getNutrients(), currentUser);
+    	gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", userInput));
     }
 
     // Getters

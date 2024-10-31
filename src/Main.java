@@ -23,17 +23,21 @@ public class Main {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
 
-        // Load GUI
         GUI gui = new GUI(connectionToMySQL);
+        User newUser = new User(gui.getRetrievedUserId());
+        Session newSession = new Session(newUser, gui);
+
+        gui.setSession(newSession); // Pass session to GUI
+
+        // Construct the GUI screens
         gui.makeTitleScreen();
         gui.makeLoginScreen();
         gui.makeCreateScreen();
         gui.makeMainScreen();
+        gui.makeSearchItemScreen();
+        gui.makeSetGoalsScreen();
+        // Display the initial screen
         gui.displayTitleScreen();
-
-        // Construct essential objects
-        User newUser = new User(gui.getRetrievedUserId());
-        Session newSession = new Session(newUser);
 
         // Start user session
         newSession.startSession();

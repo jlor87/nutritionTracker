@@ -21,7 +21,7 @@ public class API {
     private JsonObject responseObject;
     private JsonArray foods;
     private JsonObject firstFood;
-    private JsonArray nutrients;
+    private JsonArray nutrients = new JsonArray();
     private JsonObject nutrient;
     private Method[] userMethods;
     private String nutrientName;
@@ -36,56 +36,62 @@ public class API {
     }
 
     // Class functions
-    public void sendAPIRequest(String query) {
-        System.out.printf(".........Retriving %s nutrition information.........\n", query);
-        final String API_KEY = "OUhmaL4b1NLdkO286efEMTYDBHWw7jfj8TIoyxNm";// API key allows acess to the api
+    public String sendAPIRequest(String query) {
+        System.out.printf(".........Retrieving %s nutrition information.........\n", query);
+        final String API_KEY = "OUhmaL4b1NLdkO286efEMTYDBHWw7jfj8TIoyxNm"; // API key allows access to the API
         final String BASE_URL = "https://api.nal.usda.gov/fdc/v1/foods/search";
 
-        String url = BASE_URL + "?api_key=" + API_KEY + "&query=" + query.replace(" ", "%20");// Construct the full URL with the query and API key
+        String url = BASE_URL + "?api_key=" + API_KEY + "&query=" + query.replace(" ", "%20"); // Construct the full URL
 
-        HttpClient client = HttpClient.newHttpClient();// Create an HttpClient
+        HttpClient client = HttpClient.newHttpClient(); // Create an HttpClient
 
         // Create a GET request with the constructed URL
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
-        // Send the request and get the response
-        HttpResponse<String> response = null;
+        // StringBuilder to accumulate the output
+        StringBuilder output = new StringBuilder();
+        output.append(".........Retrieving ").append(query).append(" nutrition information.........\n");
+
         try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            // Send the request and get the response
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // Parse the response JSON using Gson
-            gson = new Gson();
-            responseObject = gson.fromJson(response.body(), JsonObject.class);
-            foods = responseObject.getAsJsonArray("foods");
+            Gson gson = new Gson();
+            JsonObject responseObject = gson.fromJson(response.body(), JsonObject.class);
+            JsonArray foods = responseObject.getAsJsonArray("foods");
 
             // Check if we have results
             if (foods.size() > 0) {
                 // Extract details of the first food item
-                firstFood = foods.get(0).getAsJsonObject();
+                JsonObject firstFood = foods.get(0).getAsJsonObject();
                 String description = firstFood.get("description").getAsString();
-                nutrients = firstFood.getAsJsonArray("foodNutrients");
+                this.nutrients = firstFood.getAsJsonArray("foodNutrients");
 
-                // Print the food description
-                System.out.println("Food: " + description);
+                // Append the food description
+                output.append("Food: ").append(description).append("\n");
 
-                // Loop through and print nutrients
+                // Loop through and append each nutrient
                 for (int i = 0; i < nutrients.size(); i++) {
-                    nutrient = nutrients.get(i).getAsJsonObject();
+                    JsonObject nutrient = nutrients.get(i).getAsJsonObject();
                     String nutrientName = nutrient.get("nutrientName").getAsString();
                     double amount = nutrient.get("value").getAsDouble();
                     String unitName = nutrient.get("unitName").getAsString();
-                    System.out.println(nutrientName + ": " + amount + " " + unitName);
+                    output.append(nutrientName).append(": ").append(amount).append(" ").append(unitName).append("\n");
                 }
-
             } else {
-                System.out.println("No foods found for the query: " + query);
+                output.append("No foods found for the query: ").append(query).append("\n");
             }
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            output.append("An error occurred while retrieving nutrition information.\n");
         }
+
+        output.append(".........").append(query).append(" nutrition information complete.........\n");
         
-        System.out.printf(".........%s nutrition information^^^.........\n", query);
+        // Return the output as a string
+        return output.toString();
     }
     
     /**
