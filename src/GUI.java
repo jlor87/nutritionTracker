@@ -452,6 +452,7 @@ public void makeSetGoalsScreen() {
                                "Polyunsaturated Fat", "Saturated Fat", "Fiber"};
     for (String item : macronutrients) {
         JButton button = new JButton(item);
+        button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
         macronutrientsPanel.add(button);
     }
 
@@ -462,6 +463,7 @@ public void makeSetGoalsScreen() {
                          "Vitamin B7", "Vitamin B9", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K"};
     for (String item : vitamins) {
         JButton button = new JButton(item);
+        button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
         vitaminsPanel.add(button);
     }
 
@@ -472,6 +474,7 @@ public void makeSetGoalsScreen() {
                          "Iron", "Magnesium", "Manganese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc"};
     for (String item : minerals) {
         JButton button = new JButton(item);
+        button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
         mineralsPanel.add(button);
     }
 
@@ -485,7 +488,8 @@ public void makeSetGoalsScreen() {
 
     // Exit Button at the bottom
     JButton exitButton = new JButton("EXIT");
-    exitButton.addActionListener(e -> setGoalsWindow.dispose());
+    exitButton.addActionListener(cHandler);
+    exitButton.setActionCommand("goMainScreen");
     JPanel exitPanel = new JPanel();
     exitPanel.add(exitButton); // Add the button to a panel for centered alignment
     setGoalsWindow.add(exitPanel, BorderLayout.SOUTH);
@@ -496,6 +500,16 @@ public void makeSetGoalsScreen() {
     setGoalsWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
     setGoalsWindow.setVisible(false);
 }
+
+
+private void showInputDialog(String nutrient) {
+    String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + ":", "Set Goal", JOptionPane.PLAIN_MESSAGE);
+    if (input != null && !input.trim().isEmpty()) {
+        System.out.println("Goal for " + nutrient + ": " + input); // Example of handling the input
+        // You could save or process the input here as needed
+    }
+}
+
 
 
 public void displaySetGoalsScreen() {
@@ -570,21 +584,26 @@ public void removeSetGoalsScreen() {
                 	displaySearchScreen();
                     removeMainScreen();
                 	break;
-                	case "goMainScreen":
+                case "goMainScreen":
                 		removeSearchScreen();
+                		removeSetGoalsScreen();
                 		displayMainScreen();
                 		break;
-                	case "searchForFood":
+                case "searchForFood":
                 		searchItem = searchField.getText();
                 		session.getFoodInput(searchItem);
                 		break;
-                	case "addItem":
+                case "addItem":
                 		searchItem = searchField.getText();
                 		session.addFoodItem(searchItem);
                 		break;
-                	case "setnutritiongoals":
+                case "setnutritiongoals":
                 		displaySetGoalsScreen();
                 		removeMainScreen();
+                		break;
+                case "exit":
+                	removeMainScreen();
+                	displayLoginScreen();
                 		break;
             }
         }
