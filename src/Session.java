@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 import com.google.gson.JsonArray;
@@ -56,7 +57,7 @@ public class Session {
                   //  break;
                 case "2":
                     // User wants to set caloric/nutritional goals for the day
-                    userSettings.setGoalData(scanner, print);
+                 //   userSettings.setGoalData(scanner, print);
                     break;
                 case "3":
                     // User wants to alter user data
@@ -96,6 +97,23 @@ public class Session {
     	
     	api.updateUserConsumption(api.getNutrients(), currentUser);
     	gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", userInput));
+    }
+    
+    public void changeGoals(String nutrient, String newVal) {
+    	
+    	userSettings.setGoalData(nutrient, newVal);
+    }
+    
+    public void showGoals() {
+    	 List<String> goalStrings = print.outputCurrentConsumption();
+
+    	    String macronutrientsProgress = goalStrings.get(0);
+    	    String vitaminsProgress = goalStrings.get(1);
+    	    String mineralsProgress = goalStrings.get(2);
+    	    gui.macronutrientsField.setText(macronutrientsProgress);
+    	    gui.vitaminsField.setText(vitaminsProgress);
+    	    gui.mineralsField.setText(mineralsProgress);
+    	    
     }
 
     // Getters

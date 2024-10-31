@@ -1,4 +1,7 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  * Anything related to altering user data is within this class
@@ -130,262 +133,69 @@ public class UserSettings {
     /**
      * Set the user's preferred caloric/nutritional goals for the day
      */
-    public void setGoalData(Scanner scanner, Print print){
-    	 int choice;
-         double newValue;
+    public void setGoalData(String nutrient, String newVal) {
+        double newValue;
+
+        try {
+            newValue = Double.parseDouble(newVal); // Convert newVal to a double
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format for the new value. Please enter a valid number.");
+            return;
+        }
+
+        // Map each nutrient name to the corresponding setter method
+        Map<String, Consumer<Double>> nutrientSetters = new HashMap<>();
+        nutrientSetters.put("Water", val -> currentUser.setWater(0, val));
+        nutrientSetters.put("Calories", val -> currentUser.setEnergy(0, val));
+        nutrientSetters.put("Carbohydrates", val -> currentUser.setCarbohyrate(0, val));
+        nutrientSetters.put("Protein", val -> currentUser.setProtein(0, val));
+        nutrientSetters.put("Monounsaturated Fat", val -> currentUser.setMonounsaturatedFat(0, val));
+        nutrientSetters.put("Polyunsaturated Fat", val -> currentUser.setPolyunsaturatedFat(0, val));
+        nutrientSetters.put("Saturated Fat", val -> currentUser.setSaturatedFat(0, val));
+        nutrientSetters.put("Fiber", val -> currentUser.setFiber(0, val));
         
-        print.outputCurrentGoals();
+        // Vitamins
+        nutrientSetters.put("Vitamin A", val -> currentUser.setVitaminA(0, val));
+        nutrientSetters.put("Vitamin B1", val -> currentUser.setVitaminB1Thiamine(0, val));
+        nutrientSetters.put("Vitamin B2", val -> currentUser.setVitaminB2Riboflavin(0, val));
+        nutrientSetters.put("Vitamin B3", val -> currentUser.setVitaminB3Niacin(0, val));
+        nutrientSetters.put("Vitamin B5", val -> currentUser.setVitaminB5PantothenicAcid(0, val));
+        nutrientSetters.put("Vitamin B6", val -> currentUser.setVitaminB6Pyridoxine(0, val));
+        nutrientSetters.put("Vitamin B7", val -> currentUser.setVitaminB7Biotin(0, val));
+        nutrientSetters.put("Vitamin B9", val -> currentUser.setVitaminB9Folate(0, val));
+        nutrientSetters.put("Vitamin B12", val -> currentUser.setVitaminB12Cyanocobalamin(0, val));
+        nutrientSetters.put("Vitamin C", val -> currentUser.setVitaminC(0, val));
+        nutrientSetters.put("Vitamin D", val -> currentUser.setVitaminD(0, val));
+        nutrientSetters.put("Vitamin E", val -> currentUser.setVitaminE(0, val));
+        nutrientSetters.put("Vitamin K", val -> currentUser.setVitaminK(0, val));
         
-        
-        print.showListOfOptions();
-        
-       do {
-        
-        System.out.println("Enter the number that corresponds with the metric that you would like to set a new goal for.");
-        
-         choice = scanner.nextInt();
-    
-    
-    switch(choice) {
-    case 1:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setWater(0, newValue);
-    	break;
-    	
-    case 2:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setEnergy(0, newValue);
-    	break;
-    
-    case 3:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setCarbohyrate(0, newValue);
-    	break;
-    	
-    case 4:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setProtein(0, newValue);
-    	break;
-    	
-    case 5:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setMonounsaturatedFat(0, newValue);
-    	break;
-    
-    case 6:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setPolyunsaturatedFat(0, newValue);
-    	break;
-    
-    case 7:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setSaturatedFat(0, newValue);
-    	break;
-    	
-    case 8:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setFiber(0, newValue);
-    	break;
-    
-    case 9:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminA(0, newValue);
-    	break;
-    
-    case 10:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB1Thiamine(0, newValue);
-    	break;
-    	
-    case 11:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB2Riboflavin(0, newValue);
-    	break;
-    
-    case 12:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB3Niacin(0, newValue);
-    	break;
-    
-    case 13:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB5PantothenicAcid(0, newValue);
-    	break;
-    	
-    case 14:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB6Pyridoxine(0, newValue);
-    	break;
-    
-    case 15:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB7Biotin(0, newValue);
-    	break;
-   
-    case 16:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB9Folate(0, newValue);
-    	break;
-    	
-    case 17:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminB12Cyanocobalamin(0, newValue);
-    	break;
-    
-    case 18:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminC(0, newValue);
-    	break;
-   
-    case 19:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminD(0, newValue);
-    	break;
-    	
-    case 20:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminE(0, newValue);
-    	break;
-    
-    case 21:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setVitaminK(0, newValue);
-    	break;
-    
-    case 22:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setCalcium(0, newValue);
-    	break;
-    	
-    case 23:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setChloride(0, newValue);
-    	break;
-    
-    case 24:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setCholine(0, newValue);
-    	break;
-   
-    case 25:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setChromium(0, newValue);
-    	break;
-    	
-    case 26:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setCopper(0, newValue);
-    	break;
-    
-    case 27:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setFluoride(0, newValue);
-    	break;
-    
-    case 28:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setIodine(0, newValue);
-    	break;
-    	
-    case 29:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setIron(0, newValue);
-    	break;
-    
-    case 30:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setMagnesium(0, newValue);
-    	break;
-    
-    case 31:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setManganese(0, newValue);
-    	break;
-    	
-    case 32:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setMolybdenum(0, newValue);
-    	break;
-    
-    case 33:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setPhosphorus(0, newValue);
-    	break;
-    
-    case 34:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setPotassium(0, newValue);
-    	break;
-    	
-    case 35:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setSelenium(0, newValue);
-    	break;
-    
-    case 36:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setSodium(0, newValue);
-    	break;
-    	
-    case 37:
-    	System.out.println("What would you like to set your daily goal to for this metric?");
-    	newValue = scanner.nextDouble();
-    	currentUser.setZinc(0, newValue);
-    	break;
-    	
-    case 38:
-    	System.out.println("Routing back to the main menu");
-    	scanner.nextLine();
-    	break;
-    	
-    default:
-        System.out.println("Invalid option. Please select a valid number (1-38).");
-        break;
-    
-    
-    } //case
-    
-    
-       }while(choice != 38);
-    
-    
-    } //method
+        // Minerals
+        nutrientSetters.put("Calcium", val -> currentUser.setCalcium(0, val));
+        nutrientSetters.put("Chloride", val -> currentUser.setChloride(0, val));
+        nutrientSetters.put("Choline", val -> currentUser.setCholine(0, val));
+        nutrientSetters.put("Chromium", val -> currentUser.setChromium(0, val));
+        nutrientSetters.put("Copper", val -> currentUser.setCopper(0, val));
+        nutrientSetters.put("Fluoride", val -> currentUser.setFluoride(0, val));
+        nutrientSetters.put("Iodine", val -> currentUser.setIodine(0, val));
+        nutrientSetters.put("Iron", val -> currentUser.setIron(0, val));
+        nutrientSetters.put("Magnesium", val -> currentUser.setMagnesium(0, val));
+        nutrientSetters.put("Manganese", val -> currentUser.setManganese(0, val));
+        nutrientSetters.put("Molybdenum", val -> currentUser.setMolybdenum(0, val));
+        nutrientSetters.put("Phosphorus", val -> currentUser.setPhosphorus(0, val));
+        nutrientSetters.put("Potassium", val -> currentUser.setPotassium(0, val));
+        nutrientSetters.put("Selenium", val -> currentUser.setSelenium(0, val));
+        nutrientSetters.put("Sodium", val -> currentUser.setSodium(0, val));
+        nutrientSetters.put("Zinc", val -> currentUser.setZinc(0, val));
+
+        // Set goal based on nutrient name
+        Consumer<Double> setter = nutrientSetters.get(nutrient);
+        if (setter != null) {
+            setter.accept(newValue);
+            System.out.println("Goal for " + nutrient + " set to " + newValue);
+        } else {
+            System.out.println("Invalid nutrient name. Please check and try again.");
+        }
+    }
 
 
 }

@@ -36,6 +36,8 @@ public class Main {
         gui.makeMainScreen();
         gui.makeSearchItemScreen();
         gui.makeSetGoalsScreen();
+        gui.makeStatusGoalsScreen();
+        gui.makeAlterUserDataScreen();
         // Display the initial screen
         gui.displayTitleScreen();
 

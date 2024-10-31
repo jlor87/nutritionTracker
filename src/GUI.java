@@ -39,6 +39,10 @@ public class GUI {
     JTextArea outputArea = new JTextArea(10, 30);
     JScrollPane scrollPane = new JScrollPane(outputArea);
     
+    JTextArea macronutrientsField = new JTextArea("Macronutrients: ");
+    JTextArea vitaminsField = new JTextArea("Vitamins: ");
+    JTextArea mineralsField = new JTextArea("Minerals: ");
+    
     ChoiceHandler cHandler = new ChoiceHandler(loginUsernameField, loginPasswordField);
 	public String yourChoice;
 	public String searchItem;
@@ -49,6 +53,8 @@ public class GUI {
 	JFrame mainWindow = new JFrame();
 	JFrame searchWindow = new JFrame();
 	JFrame setGoalsWindow = new JFrame();
+	JFrame statusWindow = new JFrame();
+	JFrame alterUserDataWindow = new JFrame();
 	//these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
 
 	private final String userFile = "users.txt";   //text file for usernames and passwords
@@ -506,7 +512,7 @@ private void showInputDialog(String nutrient) {
     String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + ":", "Set Goal", JOptionPane.PLAIN_MESSAGE);
     if (input != null && !input.trim().isEmpty()) {
         System.out.println("Goal for " + nutrient + ": " + input); // Example of handling the input
-        // You could save or process the input here as needed
+        session.changeGoals(nutrient,input);
     }
 }
 
@@ -521,7 +527,191 @@ public void removeSetGoalsScreen() {
 	}
 
 
+
+
+public void makeStatusGoalsScreen() {
+    // Create the main frame
+    statusWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    statusWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    statusWindow.setLayout(new BorderLayout(10, 10));
+
+    // Title at the top
+    JLabel titleLabel = new JLabel("Status of Goals", JLabel.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+    statusWindow.add(titleLabel, BorderLayout.NORTH);
+
+    // Center panel for sections
+    JPanel centerPanel = new JPanel();
+    centerPanel.setLayout(new GridLayout(6, 1, 0, 10)); // Adjust for labels and text areas with scroll panes
+
+    // Macronutrients section
+    JLabel macronutrientsLabel = new JLabel("Macronutrients Progress", JLabel.CENTER);
+    macronutrientsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+    centerPanel.add(macronutrientsLabel);
+
+    macronutrientsField = new JTextArea();
+    macronutrientsField.setEditable(false);
+    macronutrientsField.setLineWrap(true);
+    macronutrientsField.setWrapStyleWord(true);
+    JScrollPane macronutrientsScrollPane = new JScrollPane(macronutrientsField);
+    centerPanel.add(macronutrientsScrollPane);
+
+    // Vitamins section
+    JLabel vitaminsLabel = new JLabel("Vitamins Progress", JLabel.CENTER);
+    vitaminsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+    centerPanel.add(vitaminsLabel);
+
+    vitaminsField = new JTextArea();
+    vitaminsField.setEditable(false);
+    vitaminsField.setLineWrap(true);
+    vitaminsField.setWrapStyleWord(true);
+    JScrollPane vitaminsScrollPane = new JScrollPane(vitaminsField);
+    centerPanel.add(vitaminsScrollPane);
+
+    // Minerals section
+    JLabel mineralsLabel = new JLabel("Minerals Progress", JLabel.CENTER);
+    mineralsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+    centerPanel.add(mineralsLabel);
+
+    mineralsField = new JTextArea();
+    mineralsField.setEditable(false);
+    mineralsField.setLineWrap(true);
+    mineralsField.setWrapStyleWord(true);
+    JScrollPane mineralsScrollPane = new JScrollPane(mineralsField);
+    centerPanel.add(mineralsScrollPane);
+
+    statusWindow.add(centerPanel, BorderLayout.CENTER);
+
+    // Exit button centered at the bottom
+    JPanel buttonPanel = new JPanel();
+    JButton exitButton = new JButton("Exit");
+    exitButton.addActionListener(cHandler);
+    exitButton.setActionCommand("goMainScreen");
+    buttonPanel.add(exitButton);
+    statusWindow.add(buttonPanel, BorderLayout.SOUTH);
+
+    // Set frame visibility to true
+    statusWindow.setVisible(false);
+}
+
+public void displayStatusGoalsScreen() {
+	statusWindow.setVisible(true);
+	}
 	
+public void removeStatusGoalsScreen() {
+	statusWindow.setVisible(false);
+	}
+
+	
+
+
+
+public void makeAlterUserDataScreen() {
+    // Frame setup
+	alterUserDataWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    alterUserDataWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    alterUserDataWindow.setSize(400, 300);
+    alterUserDataWindow.setLayout(new BorderLayout(10, 10));
+
+    // Title at the top
+    JLabel titleLabel = new JLabel("Alter User Data", JLabel.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+    alterUserDataWindow.add(titleLabel, BorderLayout.NORTH);
+
+    // Center panel for buttons
+    JPanel centerPanel = new JPanel();
+    centerPanel.setLayout(new GridLayout(2, 2, 10, 10)); // 2x2 grid for the buttons
+
+    // Button for Weight
+    JButton weightButton = new JButton("Weight");
+    weightButton.addActionListener(e -> {
+        String weightInput = JOptionPane.showInputDialog(alterUserDataWindow, "Enter your weight in pounds:");
+        if (weightInput != null) {
+            try {
+                double weight = Double.parseDouble(weightInput);
+                // Save weight to a variable
+                System.out.println("Weight saved: " + weight);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(alterUserDataWindow, "Please enter a valid number.");
+            }
+        }
+    });
+    centerPanel.add(weightButton);
+
+    // Button for Height
+    JButton heightButton = new JButton("Height");
+    heightButton.addActionListener(e -> {
+        String heightInput = JOptionPane.showInputDialog(alterUserDataWindow, "Enter your height in inches:");
+        if (heightInput != null) {
+            try {
+                double height = Double.parseDouble(heightInput);
+                // Save height to a variable
+                System.out.println("Height saved: " + height);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(alterUserDataWindow, "Please enter a valid number.");
+            }
+        }
+    });
+    centerPanel.add(heightButton);
+
+    // Button for Sex
+    JButton sexButton = new JButton("Sex: M"); // Default to "M"
+    sexButton.addActionListener(new ActionListener() {
+        private String sex = "M";
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            sex = sex.equals("M") ? "F" : "M";
+            sexButton.setText("Sex: " + sex);
+            // Save sex to a variable
+            System.out.println("Sex saved: " + sex);
+        }
+    });
+    centerPanel.add(sexButton);
+
+    // Button for Exercise Level
+    JButton exerciseLevelButton = new JButton("Exercise Level: None"); // Default to "None"
+    exerciseLevelButton.addActionListener(new ActionListener() {
+        private String[] levels = {"None", "Light", "Moderate", "Hard", "Extreme"};
+        private int levelIndex = 0;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            levelIndex = (levelIndex + 1) % levels.length;
+            String level = levels[levelIndex];
+            exerciseLevelButton.setText("Exercise Level: " + level);
+            // Save exercise level to a variable
+            System.out.println("Exercise Level saved: " + level);
+        }
+    });
+    centerPanel.add(exerciseLevelButton);
+
+    // Add the center panel to the frame
+    alterUserDataWindow.add(centerPanel, BorderLayout.CENTER);
+
+    // Exit button centered at the bottom
+    JPanel buttonPanel = new JPanel();
+    JButton exitButton = new JButton("Exit");
+    exitButton.addActionListener(cHandler);
+    exitButton.setActionCommand("goMainScreen");
+    buttonPanel.add(exitButton);
+    alterUserDataWindow.add(buttonPanel, BorderLayout.SOUTH);
+
+    // Set frame visibility to true
+    alterUserDataWindow.setVisible(false);
+}
+
+
+public void displayAlterUserDataScreen() {
+	alterUserDataWindow.setVisible(true);
+	}
+	
+public void removeAlterUserDataScreen() {
+	alterUserDataWindow.setVisible(false);
+	}
+
+
+
     public class ChoiceHandler implements ActionListener {
         private JTextField usernameField;
         private JPasswordField passwordField;
@@ -587,6 +777,8 @@ public void removeSetGoalsScreen() {
                 case "goMainScreen":
                 		removeSearchScreen();
                 		removeSetGoalsScreen();
+                		removeStatusGoalsScreen();
+                		removeAlterUserDataScreen();
                 		displayMainScreen();
                 		break;
                 case "searchForFood":
@@ -605,6 +797,15 @@ public void removeSetGoalsScreen() {
                 	removeMainScreen();
                 	displayLoginScreen();
                 		break;
+                case "displaystatusofgoals":
+                	session.showGoals();
+                	removeMainScreen();
+                	displayStatusGoalsScreen();
+                	break;
+                case "alteruserdata":
+                	removeMainScreen();
+                	displayAlterUserDataScreen();
+                	break;
             }
         }
 		
