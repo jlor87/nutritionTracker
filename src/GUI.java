@@ -512,7 +512,7 @@ public class GUI
 
     private void showInputDialog(String nutrient)
     {
-        String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + ":", "Set Goal", JOptionPane.PLAIN_MESSAGE);
+        String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + " in grams:", "Set Goal", JOptionPane.PLAIN_MESSAGE);
         if(input != null && !input.trim().isEmpty())
         {
             System.out.println("Goal for " + nutrient + ": " + input); // Example of handling the input
