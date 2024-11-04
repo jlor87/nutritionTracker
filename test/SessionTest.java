@@ -1,14 +1,23 @@
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.*;
+
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.sql.Connection;
+
 public class SessionTest {
     private User user;
     private Session session;
     @Before
     public void setUp() {
         user = new User(1);
-        session = new Session(user);
+        Connection dummyConnection = null;
+        GUI gui = new GUI(dummyConnection);
+        session = new Session(user, gui, dummyConnection);
     }
     @Test
     public void testStartSession(){
@@ -44,7 +53,7 @@ public class SessionTest {
         System.setOut(new PrintStream(resultingOutput)); // Whatever getFoodInput() spews out will get stored into resultingOutput
 
         session.startSession();
-        session.getFoodInput(session.getScanner());
+        session.getFoodInput(resultingOutput.toString());
         String finalOutput = resultingOutput.toString();
         Assert.assertTrue(finalOutput.contains("Input food item:"));
         Assert.assertTrue(finalOutput.contains("You entered: banana"));

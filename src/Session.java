@@ -1,7 +1,7 @@
+import java.sql.Connection;
 import java.util.List;
 import java.util.Scanner;
 
-import com.google.gson.JsonArray;
 
 /**
  * The session class is responsible for actually running the program via the startSession() function
@@ -15,92 +15,42 @@ public class Session {
     private API api;
     private Print print;
     private GUI gui;
+    private Connection connectionToMySQL;
     // Constructor
-    public Session(User user, GUI gui){
+    public Session(User user, GUI gui, Connection connectionToMySQL){
         this.currentUser = user;
         this.gui = gui;
+        this.connectionToMySQL = connectionToMySQL;
     }
 
 
-    // Class helper functions to perform parts of a use case 
-    //**? can someone explain better?**
     public void startSession(){
         // Initialize these utility classes for later usage
-        userSettings = new UserSettings(currentUser);
+        userSettings = new UserSettings(currentUser, connectionToMySQL);
         print = new Print(currentUser);
         scanner = new Scanner(System.in);
         api = new API(currentUser);
     }
     
     /**
-     * menu() consists of a do-while loop responsible for keeping the app running
-     */
-    public void menu(){
-        System.out.println("Welcome to the nutrition app.");
-
-        do {
-            // Will remove and let the user utilize the GUI for menu interactions
-            System.out.println("\nSelect an action for the system to perform from the list below.");
-            System.out.println("0. Exit the application.");
-            System.out.println("1. Search for food/drink item.");
-            System.out.println("2. Set caloric/nutritional intake goals for the day.");
-            System.out.println("3. Alter or set user data (height, weight, sex, average daily exercise).");
-            System.out.println("4. Display status of current nutrient consumption for the day.\n");
-            System.out.print("Your choice: ");
-
-            userChoice = scanner.nextLine();  // Get user input
-
-            switch (userChoice) {
-              //  case "1":
-                    // User wants to search for food/drink item
-                   // getFoodInput(scanner);
-                  //  break;
-                case "2":
-                    // User wants to set caloric/nutritional goals for the day
-                 //   userSettings.setGoalData(scanner, print);
-                    break;
-                case "3":
-                    // User wants to alter user data
-                    userSettings.alterUserData(scanner);
-                    break;
-                case "4":
-                    // User wants to check current daily progress
-                    print.outputCurrentConsumption();
-                    break;
-                case "0":
-                    // User closing app
-                    System.out.println("\nClosing the application");
-                    break;
-                default:
-                    System.out.println("Not a valid option");
-                    break;
-            }
-        } while (!userChoice.equals("0"));
-
-        // User chose 0 app closes
-        scanner.close();
-    }
-    
-    /**
      * This function is responsible for retrieving the food that the user of the app has consumed or plans to consume
-     * @param scanner takes in one scanner object created by the calling function to read in foods provided by the user
+     * @param userInput takes in the name of the food item entered by the user in the Search Food Item option of the menu
      */
     public void getFoodInput(String userInput){
         System.out.print("\nInput food item: ");
         System.out.println("You entered: " + userInput);
         String result = api.sendAPIRequest(userInput); // Calling api with user's food input
         gui.outputArea.append(result + "\n");
-        gui.outputArea.append("CLICK THE 'ADD' BUTTON TO ADD THIS FOOD ITEM TO YOUR CONSUMTPION.\n");
+        gui.outputArea.append("CLICK THE 'ADD' BUTTON TO ADD THIS FOOD ITEM TO YOUR CONSUMPTION.\n");
     }
     
     public void addFoodItem(String userInput) {
-    	
-    	api.updateUserConsumption(api.getNutrients(), currentUser);
+        userSettings.updateUserConsumption(api.getNutrients(), userInput);
     	gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", userInput));
     }
     
     public void changeGoals(String nutrient, String newVal) {
-    	
+
     	userSettings.setGoalData(nutrient, newVal);
     }
     

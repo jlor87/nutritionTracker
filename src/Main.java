@@ -23,11 +23,8 @@ public class Main {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
 
+        // Setup the GUI
         GUI gui = new GUI(connectionToMySQL);
-        User newUser = new User(gui.getRetrievedUserId());
-        Session newSession = new Session(newUser, gui);
-
-        gui.setSession(newSession); // Pass session to GUI
 
         // Construct the GUI screens
         gui.makeTitleScreen();
@@ -38,12 +35,9 @@ public class Main {
         gui.makeSetGoalsScreen();
         gui.makeStatusGoalsScreen();
         gui.makeAlterUserDataScreen();
+
         // Display the initial screen
         gui.displayTitleScreen();
-
-        // Start user session
-        newSession.startSession();
-        newSession.menu();
     }
 }
 

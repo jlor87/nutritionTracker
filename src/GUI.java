@@ -764,13 +764,14 @@ public class GUI
 
                     if(checkCredentials(username, loginPasswordString))
                     {
-                        System.out.println("Successful login");
+                        System.out.println("Login successful.");
                         removeLoginScreen();
                         displayMainScreen();
+                        createSession();
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(null, "Please check user name and password then try again");
+                        JOptionPane.showMessageDialog(null, "Please check your username and password and then try again.");
                     }
                     break;
 
@@ -789,13 +790,13 @@ public class GUI
                     String passwordString = new String(createPassword);
                     if(createAccount(createUsername, passwordString))
                     {
-                        System.out.println("Account created successfully");
-                        JOptionPane.showMessageDialog(null, "account created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("Account created successfully.");
+                        JOptionPane.showMessageDialog(null, "Account created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     }
                     else
                     {
-                        System.out.println("Username already exists");
-                        JOptionPane.showMessageDialog(null, "ERROR: user already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                        System.out.println("Username already exists!");
+                        JOptionPane.showMessageDialog(null, "ERROR: User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
                 case "searchforfooditem":
@@ -834,9 +835,19 @@ public class GUI
                     removeMainScreen();
                     displayAlterUserDataScreen();
                     break;
+                // case "makecustomfooditem"
+                // case "viewadvancedstatistics"
+                // case "catalogfoodintake"
             }
         }
 
+    }
+
+    private void createSession() {
+        User newUser = new User(retrievedUserId, connectionToMySQL);
+        Session newSession = new Session(newUser, this, connectionToMySQL);
+        setSession(newSession); // Pass session to GUI
+        newSession.startSession(); // Start the session
     }
 
     private boolean createAccount(String username, String password)
@@ -892,7 +903,8 @@ public class GUI
             while(resultSet.next())
             {
                 retrievedPassword = resultSet.getString("password");
-                retrievedUserId = resultSet.getInt("userId");
+                this.retrievedUserId = resultSet.getInt("userId");
+                System.out.println("the retrieved userId is: " + retrievedUserId);
             }
 
             if(retrievedPassword.equals(password))

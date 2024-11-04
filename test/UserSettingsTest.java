@@ -1,9 +1,8 @@
 import org.junit.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.PrintStream;
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class UserSettingsTest {
@@ -13,7 +12,9 @@ public class UserSettingsTest {
     @Before
     public void setUp(){
         user = new User(1);
-        session = new Session(user);
+        Connection dummyConnection = null;
+        GUI gui = new GUI(dummyConnection);
+        session = new Session(user, gui, dummyConnection);
         session.startSession();
         userSettings = session.getUserSettings();
     }

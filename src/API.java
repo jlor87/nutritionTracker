@@ -17,12 +17,7 @@ import java.net.http.HttpResponse;
 public class API {
 
     private User currentUser;
-    private Gson gson;
-    private JsonObject responseObject;
-    private JsonArray foods;
-    private JsonObject firstFood;
     private JsonArray nutrients = new JsonArray();
-    private JsonObject nutrient;
     private Method[] userMethods;
     private String nutrientName;
     private double amount;
@@ -138,27 +133,13 @@ public class API {
                     }
                 }
             }
+
         }
     }
 
     // Getters
-    public Gson getGson(){
-        return gson;
-    }
-    public JsonObject getResponseObject() {
-        return responseObject;
-    }
-    public JsonArray getFoods() {
-        return foods;
-    }
-    public JsonObject getFirstFood() {
-        return firstFood;
-    }
     public JsonArray getNutrients() {
         return nutrients;
-    }
-    public JsonObject getNutrient() {
-        return nutrient;
     }
     public Method[] getUserMethods() {
         return userMethods;

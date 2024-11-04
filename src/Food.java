@@ -1,30 +1,12 @@
-import javax.swing.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.StringTokenizer;
 
 /**
- * All user data (dietary goals, preferences, user info, etc.) is stored here **? separate class for preferences?** 
- * 
+ * All user data (dietary goals, preferences, user info, etc.) is stored here **? separate class for preferences?**
+ *
  */
-public class User {
+public class Food {
 
-    // Assigning new user with dummy values
-    private LinkedList<Food> foodCatalog = new LinkedList<>();
-    private String dailyFoodsConsumed = "";
-    private int userId = 0;
-    private double userWeight = 0.00; //lbs
-    private int userHeight = 0; //inches
-    private char userSex = '0'; //m or f
-    private String exerciseLevel = "not set"; //none, light, moderate, hard, extreme (different levels to be defined in readME)
-
-    private Connection connectionToMySQL;
-
-    // Index 0 refers to the user's dietary goal. Index 1 refers to the amount consumed for the day.
-
+    private String name;
     // ***** Macros *****
     private double[] water = new double[2]; // liters
     private double[] energy = new double[2]; // kCal
@@ -71,134 +53,50 @@ public class User {
     /**
      * Constructor
      */
-    public User (int userId, Connection connectionToMySQL){
-        this.userId = userId;
-        this.connectionToMySQL = connectionToMySQL; // needed to grab information the database related to the user
+    public Food (String name){
+        this.name = name;
 
-        LocalDate currentDate = LocalDate.now();
-        int currentDay = currentDate.getDayOfMonth();
-        int currentMonth = currentDate.getMonth().getValue();
-        int currentYear = currentDate.getYear();
-
-        // Retrieve food diary from the database for today
-        ResultSet resultSet = null;
-        String query = "SELECT foodsConsumedThisDay FROM foodcatalogs WHERE userId = ? AND yearNum = ? AND monthNum =? AND dayNum =?";
-        String retrievedFoodDiary = "";
-
-        try
-        {
-            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query); // Using prepared statements as good practice against SQL injections
-            preparedStatement.setInt(1, userId);
-            preparedStatement.setInt(2, currentYear);
-            preparedStatement.setInt(3, currentMonth);
-            preparedStatement.setInt(4, currentDay);
-
-            // Execute SQL query and retrieve the result
-            resultSet = preparedStatement.executeQuery();
-
-            // Process the result
-            while(resultSet.next())
-            {
-                retrievedFoodDiary = resultSet.getString("foodsConsumedThisDay");
-                dailyFoodsConsumed = retrievedFoodDiary;
-                System.out.println("The retrieved food diary is: " + retrievedFoodDiary);
-                StringTokenizer st = new StringTokenizer(retrievedFoodDiary);
-                String nameOfFood = "";
-                while(st.hasMoreTokens()){
-                    nameOfFood = st.nextToken();
-                    Food foodItem = new Food(nameOfFood);
-                    foodCatalog.add(foodItem);
-                }
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        // Default daily goals are set for an 18-30 year old male **???**
-        setWater(0, 3.7);
-        setEnergy(0, 2000);
-        setCarbohyrate(0, 130);
-        setFiber(0, 38);
-        setMonounsaturatedFat(0, 22);
-        setSaturatedFat(0, 22);
-        setPolyunsaturatedFat(0, 17);
-        setProtein(0, 56);
-        setVitaminA(0, 900);
-        setVitaminB1Thiamine(0, 1.2);
-        setVitaminB2Riboflavin(0, 1.3);
-        setVitaminB3Niacin(0, 16);
-        setVitaminB5PantothenicAcid(0, 5);
-        setVitaminB6Pyridoxine(0, 1.3);
-        setVitaminB7Biotin(0, 30);
-        setVitaminB9Folate(0, 400);
-        setVitaminB12Cyanocobalamin(0, 2.4);
-        setVitaminC(0, 90);
-        setVitaminD(0, 15);
-        setVitaminE(0, 15);
-        setVitaminK(0, 120);
-        setCalcium(0, 1000);
-        setChloride(0, 2.3);
-        setCholine(0, 550);
-        setChromium(0, 35);
-        setCopper(0, 900);
-        setFluoride(0, 4);
-        setIodine(0, 150);
-        setIron(0, 8);
+        setWater(0, 0);
+        setEnergy(0, 0);
+        setCarbohyrate(0, 0);
+        setFiber(0, 0);
+        setMonounsaturatedFat(0, 0);
+        setSaturatedFat(0, 0);
+        setPolyunsaturatedFat(0, 0);
+        setProtein(0, 0);
+        setVitaminA(0, 0);
+        setVitaminB1Thiamine(0, 0);
+        setVitaminB2Riboflavin(0, 0);
+        setVitaminB3Niacin(0, 0);
+        setVitaminB5PantothenicAcid(0, 0);
+        setVitaminB6Pyridoxine(0, 0);
+        setVitaminB7Biotin(0, 0);
+        setVitaminB9Folate(0, 0);
+        setVitaminB12Cyanocobalamin(0, 0);
+        setVitaminC(0, 0);
+        setVitaminD(0, 0);
+        setVitaminE(0, 0);
+        setVitaminK(0, 0);
+        setCalcium(0, 0);
+        setChloride(0, 0);
+        setCholine(0, 0);
+        setChromium(0, 0);
+        setCopper(0, 0);
+        setFluoride(0, 0);
+        setIodine(0, 0);
+        setIron(0, 0);
         setMagnesium(0, 400);
-        setManganese(0, 2.3);
-        setMolybdenum(0, 45);
-        setPhosphorus(0, 700);
-        setPotassium(0, 3400);
-        setSelenium(0, 55);
-        setSodium(0, 1500);
-        setZinc(0, 11);
+        setManganese(0, 0);
+        setMolybdenum(0, 0);
+        setPhosphorus(0, 0);
+        setPotassium(0, 0);
+        setSelenium(0, 0);
+        setSodium(0, 0);
+        setZinc(0, 0);
     }
 
-    // Getters and setters for user data (weight, height, sex, exercise level)
-    public int getUserId() {
-        return userId;
-    }
-    public double weightGetter() {
-    	return this.userWeight;
-    }
-    public void weightSetter(double weight) {
-    	this.userWeight = weight;
-    }
-    public int heightGetter() {
-    	return this.userHeight;
-    }
-    public void heightSetter(int height) {
-    	this.userHeight = height;
-    }
-    public char sexGetter() {
-    	return this.userSex;
-    }
-    public void sexSetter(char sex) {
-    	this.userSex = sex;
-    }
-    public String exerciseGetter() {
-    	return this.exerciseLevel;
-    }
-    public void exerciseSetter(String exercise) {
-    	this.exerciseLevel = exercise;
-    }
-    public void addFood(Food food){
-        foodCatalog.add(food);
-
-        StringBuilder foodsConsumedThisDay = new StringBuilder();
-        for(Food foodEntry : foodCatalog){
-            foodsConsumedThisDay.append(foodEntry.getName()).append(" ");
-        }
-
-        // The food diary is a single long string
-        dailyFoodsConsumed = foodsConsumedThisDay.toString();
-
-
-    }
-    public String getDailyFoodsConsumed(){
-        return dailyFoodsConsumed;
+    public String getName(){
+        return this.name;
     }
 
     // One getter and setter for every vitamin/nutrient.

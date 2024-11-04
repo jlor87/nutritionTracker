@@ -11,6 +11,7 @@ import java.lang.reflect.*;
  */
 public class Utility {
     private static Method[] userMethods;
+    private static Method[] foodMethods;
 
     // Grab all the methods in the User class and store them into the array, userMethods
     static{
@@ -23,7 +24,21 @@ public class Utility {
         }
     }
 
+    static{
+        try {
+            Class<?> foodClass = Food.class; // Use generics for type safety
+            foodMethods = foodClass.getDeclaredMethods();
+        }
+        catch (Throwable e) {
+            System.err.println(e);
+        }
+    }
+
     public static Method[] getMethods(){ // Returns a publicly accessible list of the methods in User
         return userMethods;
+    }
+
+    public static Method[] getFoodMethods(){ // Returns a publicly accessible list of the methods in the Food class
+        return foodMethods;
     }
 }
