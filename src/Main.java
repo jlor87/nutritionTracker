@@ -23,7 +23,7 @@ public class Main {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
 
-        // Setup the GUI
+        // Set up the GUI
         GUI gui = new GUI(connectionToMySQL);
 
         // Construct the GUI screens
@@ -35,6 +35,7 @@ public class Main {
         gui.makeSetGoalsScreen();
         gui.makeStatusGoalsScreen();
         gui.makeAlterUserDataScreen();
+        gui.makeCatalogFoodIntakeScreen();
 
         // Display the initial screen
         gui.displayTitleScreen();

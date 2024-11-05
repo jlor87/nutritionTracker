@@ -313,7 +313,8 @@ public class UserSettings {
         double amount = 0.00;
 
         // Add the food's name to the user's daily food diary
-        Food newFood = new Food(foodName);
+        String revisedFoodName = foodName.replace(" ", "-");
+        Food newFood = new Food(revisedFoodName);
         currentUser.addFood(newFood);
         updateFoodDiary(currentUser.getDailyFoodsConsumed());
 

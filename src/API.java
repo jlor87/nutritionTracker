@@ -20,6 +20,8 @@ public class API {
     private JsonArray nutrients = new JsonArray();
     private Method[] userMethods;
     private String nutrientName;
+
+    private String currentFoodName;
     private double amount;
 
     /**
@@ -61,6 +63,7 @@ public class API {
                 // Extract details of the first food item
                 JsonObject firstFood = foods.get(0).getAsJsonObject();
                 String description = firstFood.get("description").getAsString();
+                this.currentFoodName = description;
                 this.nutrients = firstFood.getAsJsonArray("foodNutrients");
 
                 // Append the food description
@@ -138,6 +141,10 @@ public class API {
     }
 
     // Getters
+
+    public String getCurrentFoodName() {
+        return currentFoodName;
+    }
     public JsonArray getNutrients() {
         return nutrients;
     }

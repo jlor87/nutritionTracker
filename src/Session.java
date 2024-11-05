@@ -45,7 +45,7 @@ public class Session {
     }
     
     public void addFoodItem(String userInput) {
-        userSettings.updateUserConsumption(api.getNutrients(), userInput);
+        userSettings.updateUserConsumption(api.getNutrients(), api.getCurrentFoodName());
     	gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", userInput));
     }
     

@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -9,10 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,9 +21,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.JOptionPane;
+
 
 import java.sql.*;
+import java.util.LinkedList;
 
 public class GUI {
     JTextField loginUsernameField = new JTextField(25);
@@ -41,6 +37,7 @@ public class GUI {
     JTextArea macronutrientsField = new JTextArea("Macronutrients: ");
     JTextArea vitaminsField = new JTextArea("Vitamins: ");
     JTextArea mineralsField = new JTextArea("Minerals: ");
+    JTextArea foodsConsumedField = new JTextArea("Foods Consumed:");
     ChoiceHandler cHandler = new ChoiceHandler(loginUsernameField, loginPasswordField);
     public String searchItem;
     JFrame titleWindow = new JFrame();
@@ -51,10 +48,12 @@ public class GUI {
     JFrame setGoalsWindow = new JFrame();
     JFrame statusWindow = new JFrame();
     JFrame alterUserDataWindow = new JFrame();
+    JFrame catalogFoodIntakeWindow = new JFrame();
 
     //these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
     private final Connection connectionToMySQL;
     private Session session;
+    private User currentUser;
     private int retrievedUserId = -1; // dummy value before user logs in
 
     // Constructor
@@ -63,10 +62,6 @@ public class GUI {
         this.connectionToMySQL = connectionToMySQL;
     }
 
-    public void setSession(Session session)
-    {
-        this.session = session;
-    }
 
     // All functions that make screens in ABC order
     public void makeAlterUserDataScreen() {
@@ -179,6 +174,46 @@ public class GUI {
 
         // Set frame visibility to true
         alterUserDataWindow.setVisible(false);
+    }
+    public void makeCatalogFoodIntakeScreen(){
+        // Create the main frame
+        catalogFoodIntakeWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        catalogFoodIntakeWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        catalogFoodIntakeWindow.setLayout(new BorderLayout(10, 10));
+
+        // Title at the top
+        JLabel titleLabel = new JLabel("Daily Food Consumption", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        catalogFoodIntakeWindow.add(titleLabel, BorderLayout.NORTH);
+
+        // Center panel for sections
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(6, 1, 0, 10)); // Adjust for labels and text areas with scroll panes
+
+        // Foods consumed section
+        JLabel foodsConsumedLabel = new JLabel("Foods Consumed:", JLabel.CENTER);
+        foodsConsumedLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        centerPanel.add(foodsConsumedLabel);
+
+        foodsConsumedField = new JTextArea();
+        foodsConsumedField.setEditable(false);
+        foodsConsumedField.setLineWrap(true);
+        foodsConsumedField.setWrapStyleWord(true);
+        JScrollPane foodsConsumedScrollPane = new JScrollPane(foodsConsumedField);
+        centerPanel.add(foodsConsumedScrollPane);
+
+        catalogFoodIntakeWindow.add(centerPanel, BorderLayout.CENTER);
+
+        // Exit button centered at the bottom
+        JPanel buttonPanel = new JPanel();
+        JButton exitButton = new JButton("Exit");
+        exitButton.addActionListener(cHandler);
+        exitButton.setActionCommand("goMainScreen");
+        buttonPanel.add(exitButton);
+        catalogFoodIntakeWindow.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Set frame visibility to true
+        catalogFoodIntakeWindow.setVisible(false);
     }
     public void makeCreateScreen() {
 
@@ -625,6 +660,15 @@ public class GUI {
     {
         alterUserDataWindow.setVisible(true);
     }
+    private void displayCatalogFoodIntakeScreen() {
+        LinkedList<Food> retrievedFoodCatalog = currentUser.getFoodCatalog();
+        StringBuilder finalOutput = new StringBuilder();
+        for(Food foodEntry : retrievedFoodCatalog){
+            finalOutput.append(foodEntry.getName()).append("\n");
+        }
+        foodsConsumedField.setText(finalOutput.toString());
+        catalogFoodIntakeWindow.setVisible(true);
+    }
     public void displayCreateScreen()
     {
         createWindow.setVisible(true);
@@ -660,6 +704,10 @@ public class GUI {
     {
         alterUserDataWindow.setVisible(false);
     }
+    public void removeCatalogFoodIntakeScreen()
+    {
+        catalogFoodIntakeWindow.setVisible(false);
+    }
     public void removeCreateScreen()
     {
         createWindow.setVisible(false);
@@ -693,7 +741,7 @@ public class GUI {
 
     // All class helper functions in ABC order
     private boolean checkCredentials(String username, String password) {
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         String query = "SELECT password, userId FROM users WHERE username = ?";
         String retrievedPassword = "";
 
@@ -713,14 +761,7 @@ public class GUI {
                 System.out.println("the retrieved userId is: " + retrievedUserId);
             }
 
-            if(retrievedPassword.equals(password))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return retrievedPassword.equals(password);
         }
         catch(Exception e)
         {
@@ -732,7 +773,6 @@ public class GUI {
         return false; // Error occurred
     }
     public class ChoiceHandler implements ActionListener {
-
         private JTextField usernameField;
         private JPasswordField passwordField;
         private String yourChoice;
@@ -809,6 +849,7 @@ public class GUI {
                     removeSetGoalsScreen();
                     removeStatusGoalsScreen();
                     removeAlterUserDataScreen();
+                    removeCatalogFoodIntakeScreen();
                     displayMainScreen();
                     break;
                 case "searchForFood":
@@ -838,7 +879,10 @@ public class GUI {
                     break;
                 // case "makecustomfooditem"
                 // case "viewadvancedstatistics"
-                // case "catalogfoodintake"
+                case "catalogfoodintake":
+                    removeMainScreen();
+                    displayCatalogFoodIntakeScreen();
+                    break;
             }
         }
 
@@ -878,9 +922,16 @@ public class GUI {
     }
     private void createSession() {
         User newUser = new User(retrievedUserId, connectionToMySQL);
+        this.currentUser = newUser;
+        System.out.println("current user is set to: " + currentUser.getUserId());
+        System.out.println("current user's food diary is: " + currentUser.getDailyFoodsConsumed());
         Session newSession = new Session(newUser, this, connectionToMySQL);
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
+    }
+    public void setSession(Session session)
+    {
+        this.session = session;
     }
     private void showInputDialog(String nutrient) {
         String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + " in grams:", "Set Goal", JOptionPane.PLAIN_MESSAGE);

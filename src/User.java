@@ -156,6 +156,9 @@ public class User {
     }
 
     // Getters and setters for user data (weight, height, sex, exercise level)
+    public LinkedList<Food> getFoodCatalog(){
+        return foodCatalog;
+    }
     public int getUserId() {
         return userId;
     }
@@ -193,8 +196,6 @@ public class User {
 
         // The food diary is a single long string
         dailyFoodsConsumed = foodsConsumedThisDay.toString();
-
-
     }
     public String getDailyFoodsConsumed(){
         return dailyFoodsConsumed;
