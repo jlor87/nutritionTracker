@@ -29,7 +29,7 @@ public class Session {
         userSettings = new UserSettings(currentUser, connectionToMySQL);
         print = new Print(currentUser);
         scanner = new Scanner(System.in);
-        api = new API(currentUser);
+        api = new API(currentUser, connectionToMySQL);
     }
     
     /**

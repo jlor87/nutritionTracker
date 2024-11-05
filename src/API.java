@@ -8,6 +8,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * This class makes API requests to the USDA's database of food https://api.nal.usda.gov
@@ -21,6 +24,7 @@ public class API {
     private Method[] userMethods;
     private String nutrientName;
 
+    private Connection connectionToMySQL;
     private String currentFoodName;
     private double amount;
 
@@ -28,8 +32,9 @@ public class API {
      * Each API instance has a user attached for food logging purposes
      * @param user the current instance of user that is making a request
      */
-    public API(User user){
+    public API(User user, Connection connectionToMySQL){
         this.currentUser = user;
+        this.connectionToMySQL = connectionToMySQL;
     }
 
     // Class functions
@@ -97,48 +102,6 @@ public class API {
      * @param nutrients an array of nutrient information being passed received from the API
      * @param currentUser the current user object making the call
      */
-    public void updateUserConsumption(JsonArray nutrients, User currentUser){
-        userMethods = Utility.getMethods();
-        int length = userMethods.length;
-        int length2 = nutrients.size();
-
-        for (int i = 0; i < length2; i++) {
-            JsonObject nutrient = nutrients.get(i).getAsJsonObject();
-            nutrientName = nutrient.get("nutrientName").getAsString();
-            nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
-            // System.out.println("nutrientName (before): " + nutrientName);
-
-            // Handles parsing the special case of fatty acids
-            if(nutrientName.startsWith("fattyacids")){
-                nutrientName = nutrientName.substring(16);
-            }
-            // The actual nutrient name starts after the comma, so remove the first half of the string
-            int commaIndex = nutrientName.indexOf(",");
-            if(commaIndex != -1){
-                nutrientName = nutrientName.substring(0, commaIndex);
-            }
-            // System.out.println("nutrientName: " + nutrientName); // Test statement
-
-            amount = nutrient.get("value").getAsDouble();
-
-            // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
-            for(int j = 0; j < length; j++){
-                String methodName = userMethods[j].getName().toLowerCase();
-
-                if(methodName.contains("set" + nutrientName)){
-                    // System.out.println("methodName: " + methodName); // Test statement
-                    try{
-                        // System.out.println("Found!");
-                        userMethods[j].invoke(currentUser, 1, amount); // Update user's consumed nutrients
-                        break;
-                    } catch(Exception e){
-                        System.out.println(e);
-                    }
-                }
-            }
-
-        }
-    }
 
     // Getters
 

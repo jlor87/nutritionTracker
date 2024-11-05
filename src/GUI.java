@@ -835,6 +835,8 @@ public class GUI {
                     {
                         System.out.println("Account created successfully.");
                         JOptionPane.showMessageDialog(null, "Account created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        displayLoginScreen();
+                        removeCreateScreen();
                     }
                     else
                     {
@@ -891,7 +893,6 @@ public class GUI {
     }
     private boolean createAccount(String username, String password) {
         String query = "INSERT INTO users (username, password, weight, height, sex, exercise) VALUES(?, ?, ?, ?, ?, ?)";
-
         try
         {
             PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query); // Using prepared statements as good practice against SQL injections
@@ -904,10 +905,10 @@ public class GUI {
 
             // Execute and retrieve result
             int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
             if(rowsAffected > 0)
             {
                 System.out.println("User created successfully!");
-                return true;
             }
             else
             {
@@ -918,13 +919,138 @@ public class GUI {
         catch(SQLException e)
         {
             e.printStackTrace();
+            return false;
         }
 
-        return false; // Error occurred
+        // Need to retrieve the userId of the newly created user to set up initial goals and daily consumption
+        String query2 = "SELECT userId FROM users WHERE username = ? AND password = ?";
+        try
+        {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query2); // Using prepared statements as good practice against SQL injections
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            // Execute and retrieve result
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                retrievedUserId = resultSet.getInt("userId");
+                // Continue processing with userId
+                System.out.println("Created userId: " + retrievedUserId);
+            } else {
+                System.out.println("Error retrieving userId.");
+                return false;
+            }
+            resultSet.close();
+            preparedStatement.close();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+
+        // Set nutrient goals to initial values
+        String query3 = "INSERT INTO nutrientGoals (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try
+        {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query3); // Using prepared statements as good practice against SQL injections
+            preparedStatement.setDouble(1, retrievedUserId); // userId
+            preparedStatement.setDouble(2, 3.7);             // water
+            preparedStatement.setDouble(3, 2000);            // energy
+            preparedStatement.setDouble(4, 130);             // carbohydrate
+            preparedStatement.setDouble(5, 22);              // monounsaturatedFat
+            preparedStatement.setDouble(6, 22);              // saturatedFat
+            preparedStatement.setDouble(7, 17);              // polyunsaturatedFat
+            preparedStatement.setDouble(8, 56);              // protein
+            preparedStatement.setDouble(9, 38);              // fiber
+            preparedStatement.setDouble(10, 900);            // vitaminA
+            preparedStatement.setDouble(11, 1.2);            // vitaminB1Thiamine
+            preparedStatement.setDouble(12, 1.3);            // vitaminB2Riboflavin
+            preparedStatement.setDouble(13, 16);             // vitaminB3Niacin
+            preparedStatement.setDouble(14, 5);              // vitaminB5PantothenicAcid
+            preparedStatement.setDouble(15, 1.3);            // vitaminB6Pyridoxine
+            preparedStatement.setDouble(16, 30);             // vitaminB7Biotin
+            preparedStatement.setDouble(17, 400);            // vitaminB9Folate
+            preparedStatement.setDouble(18, 2.4);            // vitaminB12Cyanocobalamin
+            preparedStatement.setDouble(19, 90);             // vitaminC
+            preparedStatement.setDouble(20, 15);             // vitaminD
+            preparedStatement.setDouble(21, 15);             // vitaminE
+            preparedStatement.setDouble(22, 120);            // vitaminK
+            preparedStatement.setDouble(23, 550);            // choline
+            preparedStatement.setDouble(24, 1000);           // calcium
+            preparedStatement.setDouble(25, 2.3);            // chloride
+            preparedStatement.setDouble(26, 35);             // chromium
+            preparedStatement.setDouble(27, 900);            // copper
+            preparedStatement.setDouble(28, 4);              // fluoride
+            preparedStatement.setDouble(29, 150);            // iodine
+            preparedStatement.setDouble(30, 8);              // iron
+            preparedStatement.setDouble(31, 400);            // magnesium
+            preparedStatement.setDouble(32, 2.3);            // manganese
+            preparedStatement.setDouble(33, 45);             // molybdenum
+            preparedStatement.setDouble(34, 700);            // phosphorus
+            preparedStatement.setDouble(35, 3400);           // potassium
+            preparedStatement.setDouble(36, 55);             // selenium
+            preparedStatement.setDouble(37, 1500);           // sodium
+            preparedStatement.setDouble(38, 11);             // zinc
+
+
+
+            // Execute and retrieve result
+            int rowsAffected = preparedStatement.executeUpdate();
+            if(rowsAffected > 0)
+            {
+                System.out.println("Initial nutrient goals set successfully!");
+            }
+            else
+            {
+                System.out.println("Failed to initialize nutrient goals!");
+                return false;
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Set daily consumption to 0
+        String query4 = "INSERT INTO currentConsumption (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try
+        {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query4); // Using prepared statements as good practice against SQL injections
+            preparedStatement.setDouble(1, retrievedUserId);
+            for (int i = 2; i <= 38; i++) {
+                preparedStatement.setDouble(i, 0.00);
+            }
+
+            // Execute and retrieve result
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+
+            if(rowsAffected > 0)
+            {
+                System.out.println("Current consumption set successfully!");
+                return true;
+            }
+            else
+            {
+                System.out.println("Failed to set current consumption to 0!");
+                return false;
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
     }
     private void createSession() {
         User newUser = new User(retrievedUserId, connectionToMySQL);
         this.currentUser = newUser;
+        currentUser.updateAllFromDatabase();
         System.out.println("current user is set to: " + currentUser.getUserId());
         System.out.println("current user's food diary is: " + currentUser.getDailyFoodsConsumed());
         Session newSession = new Session(newUser, this, connectionToMySQL);

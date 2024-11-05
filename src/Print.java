@@ -19,6 +19,10 @@ public class Print {
      * Class function
      */
     public List<String> outputCurrentConsumption() {
+        // User must pull updated numbers from the database before outputting to the GUI
+        currentUser.updateAllFromDatabase();
+        System.out.println("User consumption and goals updated. Displaying current status of goals now:");
+
         StringBuilder macronutrientsSb = new StringBuilder();
         macronutrientsSb.append("Macronutrients Progress:");
         macronutrientsSb.append("\nWater: ").append(currentUser.getWater(1)).append("/").append(currentUser.getWater(0)).append("L, ")

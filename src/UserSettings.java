@@ -211,8 +211,6 @@ public class UserSettings {
         }
     }
 
-
-
     public void updateFoodDiary(String foodsConsumedThisDay){
         int userId = currentUser.getUserId();
 
@@ -318,6 +316,7 @@ public class UserSettings {
         currentUser.addFood(newFood);
         updateFoodDiary(currentUser.getDailyFoodsConsumed());
 
+        // Deal with each nutrient one by one
         for (int i = 0; i < length2; i++) {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
             nutrientName = nutrient.get("nutrientName").getAsString();
@@ -338,21 +337,50 @@ public class UserSettings {
             amount = nutrient.get("value").getAsDouble();
 
             // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
-            for(int j = 0; j < length; j++){
+            for (int j = 0; j < length; j++) {
                 String methodName = userMethods[j].getName().toLowerCase();
 
-                if(methodName.contains("set" + nutrientName)){
-                    // System.out.println("methodName: " + methodName); // Test statement
-                    try{
-                        // System.out.println("Found!");
-                        userMethods[j].invoke(currentUser, 1, amount); // Update user's consumed nutrients
-                        foodMethods[j].invoke(newFood, 1, amount); // Update the new food class with the nutrients recieved
-                        break;
-                    } catch(Exception e){
-                        System.out.println(e);
+                if (methodName.contains("set" + nutrientName)) {
+                    try {
+                        // Update user's consumed nutrients
+                        userMethods[j].invoke(currentUser, 1, amount);
+                        foodMethods[j].invoke(newFood, 1, amount);
+
+                        // Retrieve the updated value using the getter method
+                        double newAmount = 0.00;
+                        for (int k = 0; k < length; k++) {
+                            String methodName2 = userMethods[k].getName().toLowerCase();
+                            if (methodName2.contains("get" + nutrientName)) {
+                                System.out.println("invoking " + methodName2);
+                                newAmount = (double) userMethods[k].invoke(currentUser, 1);
+                                System.out.println("new amount is: " + newAmount);
+                                break;
+                            }
+                        }
+
+                        // Update the nutrient value in the database
+                        String updateQuery = "UPDATE currentConsumption SET " + nutrientName + " = ? WHERE userId = ?";
+                        try {
+                            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(updateQuery);
+                            preparedStatement.setDouble(1, newAmount);
+                            preparedStatement.setInt(2, currentUser.getUserId()); // Replace `currentUser.getUserId()` with how you access the user's ID
+
+                            int rowsAffected = preparedStatement.executeUpdate();
+                            if (rowsAffected > 0) {
+                                System.out.println("User nutrient updated!");
+                            } else {
+                                System.out.println("Failed to update consumption!");
+                            }
+                            preparedStatement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
+
 
         }
     }
