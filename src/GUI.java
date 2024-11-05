@@ -664,7 +664,9 @@ public class GUI {
         LinkedList<Food> retrievedFoodCatalog = currentUser.getFoodCatalog();
         StringBuilder finalOutput = new StringBuilder();
         for(Food foodEntry : retrievedFoodCatalog){
-            finalOutput.append(foodEntry.getName()).append("\n");
+            String foodName = foodEntry.getName();
+            foodName = foodName.replace("-", " ");
+            finalOutput.append(foodName).append("\n");
         }
         foodsConsumedField.setText(finalOutput.toString());
         catalogFoodIntakeWindow.setVisible(true);
