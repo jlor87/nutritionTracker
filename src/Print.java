@@ -199,7 +199,7 @@ sb2.append("\nZinc: ").append(currentUser.getZinc(0)).append("mg");
     }
     
     
-public void showListOfOptions() {
+    public void showListOfOptions() {
 	
 	StringBuilder sb3 = new StringBuilder();
 	
