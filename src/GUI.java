@@ -87,42 +87,41 @@ public class GUI
         weightButton.addActionListener(e ->
         {
             String weightInput = JOptionPane.showInputDialog(alterUserDataWindow, "Enter your weight in pounds:");
-            if(weightInput != null)
+
+            try
             {
-                try
+                if(weightInput != null)
                 {
                     double weight = Double.parseDouble(weightInput);
-                    // Save weight to a variable
+                    
                     System.out.println("Weight saved: " + weight);
-
+                    
                     String query = "UPDATE nutritionTracker.users SET weight = " + weight + " WHERE userId = " + currentUser.getUserId();
-
-                    try
+                    
+                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+                    // Execute and retrieve result
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    preparedStatement.close();
+                    
+                    if(rowsAffected > 0)
                     {
-                        PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
-                        // Execute and retrieve result
-                        int rowsAffected = preparedStatement.executeUpdate();
-                        preparedStatement.close();
-
-                        if(rowsAffected > 0)
-                        {
-                            System.out.println("User created successfully!");
-                        }
-                        else
-                        {
-                            System.out.println("Failed to create user!");// make a popup
-                        }
+                        JOptionPane.showMessageDialog(alterUserDataWindow, "Successfully updated your weight");
                     }
-                    catch(SQLException ex)
+                    else
                     {
-                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(alterUserDataWindow, "Could not update your weight");
                     }
-
                 }
-                catch(NumberFormatException ex)
-                {
-                    JOptionPane.showMessageDialog(alterUserDataWindow, "Please enter a valid number.");
-                }
+            }
+            catch(NumberFormatException ex)
+            {
+                JOptionPane.showMessageDialog(alterUserDataWindow, "Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+            catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(alterUserDataWindow, "Something went wrong, you may have not entered a number.", "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
         });
         centerPanel.add(weightButton);
