@@ -1,3 +1,4 @@
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -22,11 +23,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-
 import java.sql.*;
 import java.util.LinkedList;
 
-public class GUI {
+public class GUI
+{
+
     JTextField loginUsernameField = new JTextField(25);
     JPasswordField loginPasswordField = new JPasswordField(25);
     JTextField createUsernameField = new JTextField(25);
@@ -62,9 +64,9 @@ public class GUI {
         this.connectionToMySQL = connectionToMySQL;
     }
 
-
     // All functions that make screens in ABC order
-    public void makeAlterUserDataScreen() {
+    public void makeAlterUserDataScreen()
+    {
         // Frame setup
         alterUserDataWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         alterUserDataWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -92,6 +94,30 @@ public class GUI {
                     double weight = Double.parseDouble(weightInput);
                     // Save weight to a variable
                     System.out.println("Weight saved: " + weight);
+
+                    String query = "UPDATE nutritionTracker.users SET weight = " + weight + " WHERE userId = " + currentUser.getUserId();
+
+                    try
+                    {
+                        PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+                        // Execute and retrieve result
+                        int rowsAffected = preparedStatement.executeUpdate();
+                        preparedStatement.close();
+
+                        if(rowsAffected > 0)
+                        {
+                            System.out.println("User created successfully!");
+                        }
+                        else
+                        {
+                            System.out.println("Failed to create user!");// make a popup
+                        }
+                    }
+                    catch(SQLException ex)
+                    {
+                        ex.printStackTrace();
+                    }
+
                 }
                 catch(NumberFormatException ex)
                 {
@@ -113,6 +139,29 @@ public class GUI {
                     double height = Double.parseDouble(heightInput);
                     // Save height to a variable
                     System.out.println("Height saved: " + height);
+
+                    String query = "UPDATE nutritionTracker.users SET height = " + height + " WHERE userId = " + currentUser.getUserId();
+
+                    try
+                    {
+                        PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+                        // Execute and retrieve result
+                        int rowsAffected = preparedStatement.executeUpdate();
+                        preparedStatement.close();
+
+                        if(rowsAffected > 0)
+                        {
+                            System.out.println("User created successfully!");
+                        }
+                        else
+                        {
+                            System.out.println("Failed to create user!");// make a popup
+                        }
+                    }
+                    catch(SQLException ex)
+                    {
+                        ex.printStackTrace();
+                    }
                 }
                 catch(NumberFormatException ex)
                 {
@@ -135,6 +184,29 @@ public class GUI {
                 sexButton.setText("Sex: " + sex);
                 // Save sex to a variable
                 System.out.println("Sex saved: " + sex);
+
+                String query = "UPDATE nutritionTracker.users SET sex = '" + sex + "' WHERE userId = " + currentUser.getUserId();
+
+                try
+                {
+                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+                    // Execute and retrieve result
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    preparedStatement.close();
+
+                    if(rowsAffected > 0)
+                    {
+                        System.out.println("User created successfully!");
+                    }
+                    else
+                    {
+                        System.out.println("Failed to create user!");// make a popup
+                    }
+                }
+                catch(SQLException ex)
+                {
+                    ex.printStackTrace();
+                }
             }
         });
         centerPanel.add(sexButton);
@@ -144,9 +216,9 @@ public class GUI {
         exerciseLevelButton.addActionListener(new ActionListener()
         {
             private String[] levels =
-                    {
-                            "None", "Light", "Moderate", "Hard", "Extreme"
-                    };
+            {
+                "None", "Light", "Moderate", "Hard", "Extreme"
+            };
             private int levelIndex = 0;
 
             @Override
@@ -157,6 +229,29 @@ public class GUI {
                 exerciseLevelButton.setText("Exercise Level: " + level);
                 // Save exercise level to a variable
                 System.out.println("Exercise Level saved: " + level);
+
+                String query = "UPDATE nutritionTracker.users SET exercise = '" + level + "' WHERE userId = " + currentUser.getUserId();
+
+                try
+                {
+                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+                    // Execute and retrieve result
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    preparedStatement.close();
+
+                    if(rowsAffected > 0)
+                    {
+                        System.out.println("User created successfully!");
+                    }
+                    else
+                    {
+                        System.out.println("Failed to create user!");// make a popup
+                    }
+                }
+                catch(SQLException ex)
+                {
+                    ex.printStackTrace();
+                }
             }
         });
         centerPanel.add(exerciseLevelButton);
@@ -175,7 +270,9 @@ public class GUI {
         // Set frame visibility to true
         alterUserDataWindow.setVisible(false);
     }
-    public void makeCatalogFoodIntakeScreen(){
+
+    public void makeCatalogFoodIntakeScreen()
+    {
         // Create the main frame
         catalogFoodIntakeWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         catalogFoodIntakeWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -215,7 +312,9 @@ public class GUI {
         // Set frame visibility to true
         catalogFoodIntakeWindow.setVisible(false);
     }
-    public void makeCreateScreen() {
+
+    public void makeCreateScreen()
+    {
 
         JPanel createPanel = new JPanel();
         JLabel createTitleLabel = new JLabel();
@@ -283,7 +382,9 @@ public class GUI {
         createTitleLabel.setVisible(true);
         createWindow.setVisible(false);
     }
-    public void makeLoginScreen() {
+
+    public void makeLoginScreen()
+    {
 
         JPanel loginPanel = new JPanel();
         JLabel loginTitleLabel = new JLabel();
@@ -351,7 +452,9 @@ public class GUI {
         loginTitleLabel.setVisible(true);
         loginWindow.setVisible(false);
     }
-    public void makeMainScreen() {
+
+    public void makeMainScreen()
+    {
         // Main window setup
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setSize(800, 600);
@@ -370,16 +473,16 @@ public class GUI {
 
         // Create and add buttons to the panel
         String[] buttonLabels =
-                {
-                        "Exit",
-                        "Search for Food Item",
-                        "Set Nutrition Goals",
-                        "Alter User Data",
-                        "Display Status of Goals",
-                        "Make Custom Food Item",
-                        "View Advanced Statistics",
-                        "Catalog Food Intake"
-                };
+        {
+            "Exit",
+            "Search for Food Item",
+            "Set Nutrition Goals",
+            "Alter User Data",
+            "Display Status of Goals",
+            "Make Custom Food Item",
+            "View Advanced Statistics",
+            "Catalog Food Intake"
+        };
 
         for(String label : buttonLabels)
         {
@@ -406,7 +509,9 @@ public class GUI {
         mainWindow.setLocationRelativeTo(null);  // Center window on screen
         mainWindow.setVisible(false);
     }
-    public void makeSearchItemScreen() {
+
+    public void makeSearchItemScreen()
+    {
 
         searchWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         searchWindow.setSize(800, 600);
@@ -465,7 +570,9 @@ public class GUI {
         searchWindow.setVisible(false);
 
     }
-    public void makeSetGoalsScreen() {
+
+    public void makeSetGoalsScreen()
+    {
         setGoalsWindow = new JFrame("Set Nutritional Goals");
         setGoalsWindow.setLayout(new BorderLayout(10, 10)); // Use BorderLayout for overall structure
 
@@ -482,10 +589,10 @@ public class GUI {
         JPanel macronutrientsPanel = new JPanel(new GridLayout(0, 1));
         macronutrientsPanel.setBorder(BorderFactory.createTitledBorder("Macronutrients"));
         String[] macronutrients =
-                {
-                        "Water", "Calories", "Carbohydrates", "Protein", "Monounsaturated Fat",
-                        "Polyunsaturated Fat", "Saturated Fat", "Fiber"
-                };
+        {
+            "Water", "Calories", "Carbohydrates", "Protein", "Monounsaturated Fat",
+            "Polyunsaturated Fat", "Saturated Fat", "Fiber"
+        };
         for(String item : macronutrients)
         {
             JButton button = new JButton(item);
@@ -497,10 +604,10 @@ public class GUI {
         JPanel vitaminsPanel = new JPanel(new GridLayout(0, 1));
         vitaminsPanel.setBorder(BorderFactory.createTitledBorder("Vitamins"));
         String[] vitamins =
-                {
-                        "Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B3", "Vitamin B5", "Vitamin B6",
-                        "Vitamin B7", "Vitamin B9", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K"
-                };
+        {
+            "Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B3", "Vitamin B5", "Vitamin B6",
+            "Vitamin B7", "Vitamin B9", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K"
+        };
         for(String item : vitamins)
         {
             JButton button = new JButton(item);
@@ -512,10 +619,10 @@ public class GUI {
         JPanel mineralsPanel = new JPanel(new GridLayout(0, 1));
         mineralsPanel.setBorder(BorderFactory.createTitledBorder("Minerals"));
         String[] minerals =
-                {
-                        "Calcium", "Chloride", "Choline", "Chromium", "Copper", "Fluoride", "Iodine",
-                        "Iron", "Magnesium", "Manganese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc"
-                };
+        {
+            "Calcium", "Chloride", "Choline", "Chromium", "Copper", "Fluoride", "Iodine",
+            "Iron", "Magnesium", "Manganese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc"
+        };
         for(String item : minerals)
         {
             JButton button = new JButton(item);
@@ -545,7 +652,9 @@ public class GUI {
         setGoalsWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setGoalsWindow.setVisible(false);
     }
-    public void makeStatusGoalsScreen() {
+
+    public void makeStatusGoalsScreen()
+    {
         // Create the main frame
         statusWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         statusWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -609,7 +718,9 @@ public class GUI {
         // Set frame visibility to true
         statusWindow.setVisible(false);
     }
-    public void makeTitleScreen() {
+
+    public void makeTitleScreen()
+    {
 
         JPanel titlePanel = new JPanel();
         JPanel buttonPanel = new JPanel();
@@ -654,16 +765,18 @@ public class GUI {
         exitButton.addActionListener(e -> System.exit(0));
     }
 
-
     // All functions that display screens in ABC order
     public void displayAlterUserDataScreen()
     {
         alterUserDataWindow.setVisible(true);
     }
-    private void displayCatalogFoodIntakeScreen() {
+
+    private void displayCatalogFoodIntakeScreen()
+    {
         LinkedList<Food> retrievedFoodCatalog = currentUser.getFoodCatalog();
         StringBuilder finalOutput = new StringBuilder();
-        for(Food foodEntry : retrievedFoodCatalog){
+        for(Food foodEntry : retrievedFoodCatalog)
+        {
             String foodName = foodEntry.getName();
             foodName = foodName.replace("-", " ");
             finalOutput.append(foodName).append("\n");
@@ -671,78 +784,91 @@ public class GUI {
         foodsConsumedField.setText(finalOutput.toString());
         catalogFoodIntakeWindow.setVisible(true);
     }
+
     public void displayCreateScreen()
     {
         createWindow.setVisible(true);
     }
+
     public void displayMainScreen()
     {
         mainWindow.setVisible(true);
     }
+
     public void displayLoginScreen()
     {
         loginWindow.setVisible(true);
     }
+
     public void displaySearchScreen()
     {
         searchWindow.setVisible(true);
     }
+
     public void displaySetGoalsScreen()
     {
         setGoalsWindow.setVisible(true);
     }
+
     public void displayStatusGoalsScreen()
     {
         statusWindow.setVisible(true);
     }
+
     public void displayTitleScreen()
     {
         titleWindow.setVisible(true);
     }
-
 
     // All functions that remove screens in ABC order
     public void removeAlterUserDataScreen()
     {
         alterUserDataWindow.setVisible(false);
     }
+
     public void removeCatalogFoodIntakeScreen()
     {
         catalogFoodIntakeWindow.setVisible(false);
     }
+
     public void removeCreateScreen()
     {
         createWindow.setVisible(false);
     }
+
     public void removeLoginScreen()
     {
         loginWindow.setVisible(false);
     }
+
     public void removeMainScreen()
     {
         mainWindow.setVisible(false);
     }
+
     public void removeSearchScreen()
     {
         searchWindow.setVisible(false);
     }
+
     public void removeSetGoalsScreen()
     {
         setGoalsWindow.setVisible(false);
     }
+
     public void removeStatusGoalsScreen()
     {
         statusWindow.setVisible(false);
     }
+
     public void removeTitleScreen()
     {
         titleWindow.setVisible(false);
     }
 
-
-
     // All class helper functions in ABC order
-    private boolean checkCredentials(String username, String password) {
+    private boolean checkCredentials(String username, String password)
+    {
         ResultSet resultSet;
         String query = "SELECT password, userId FROM users WHERE username = ?";
         String retrievedPassword = "";
@@ -774,7 +900,10 @@ public class GUI {
 
         return false; // Error occurred
     }
-    public class ChoiceHandler implements ActionListener {
+
+    public class ChoiceHandler implements ActionListener
+    {
+
         private JTextField usernameField;
         private JPasswordField passwordField;
         private String yourChoice;
@@ -808,6 +937,7 @@ public class GUI {
                     if(checkCredentials(username, loginPasswordString))
                     {
                         System.out.println("Login successful.");
+
                         removeLoginScreen();
                         displayMainScreen();
                         createSession();
@@ -891,7 +1021,9 @@ public class GUI {
         }
 
     }
-    private boolean createAccount(String username, String password) {
+
+    private boolean createAccount(String username, String password)
+    {
         String query = "INSERT INTO users (username, password, weight, height, sex, exercise) VALUES(?, ?, ?, ?, ?, ?)";
         try
         {
@@ -932,11 +1064,14 @@ public class GUI {
 
             // Execute and retrieve result
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            if(resultSet.next())
+            {
                 retrievedUserId = resultSet.getInt("userId");
                 // Continue processing with userId
                 System.out.println("Created userId: " + retrievedUserId);
-            } else {
+            }
+            else
+            {
                 System.out.println("Error retrieving userId.");
                 return false;
             }
@@ -949,10 +1084,9 @@ public class GUI {
             return false;
         }
 
-
         // Set nutrient goals to initial values
-        String query3 = "INSERT INTO nutrientGoals (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query3 = "INSERT INTO nutrientGoals (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try
         {
             PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query3); // Using prepared statements as good practice against SQL injections
@@ -995,8 +1129,6 @@ public class GUI {
             preparedStatement.setDouble(37, 1500);           // sodium
             preparedStatement.setDouble(38, 11);             // zinc
 
-
-
             // Execute and retrieve result
             int rowsAffected = preparedStatement.executeUpdate();
             if(rowsAffected > 0)
@@ -1016,13 +1148,14 @@ public class GUI {
         }
 
         // Set daily consumption to 0
-        String query4 = "INSERT INTO currentConsumption (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query4 = "INSERT INTO currentConsumption (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try
         {
             PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query4); // Using prepared statements as good practice against SQL injections
             preparedStatement.setDouble(1, retrievedUserId);
-            for (int i = 2; i <= 38; i++) {
+            for(int i = 2; i <= 38; i++)
+            {
                 preparedStatement.setDouble(i, 0.00);
             }
 
@@ -1047,7 +1180,9 @@ public class GUI {
             return false;
         }
     }
-    private void createSession() {
+
+    private void createSession()
+    {
         User newUser = new User(retrievedUserId, connectionToMySQL);
         this.currentUser = newUser;
         currentUser.updateAllFromDatabase();
@@ -1057,11 +1192,14 @@ public class GUI {
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
     }
+
     public void setSession(Session session)
     {
         this.session = session;
     }
-    private void showInputDialog(String nutrient) {
+
+    private void showInputDialog(String nutrient)
+    {
         String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + " in grams:", "Set Goal", JOptionPane.PLAIN_MESSAGE);
         if(input != null && !input.trim().isEmpty())
         {
