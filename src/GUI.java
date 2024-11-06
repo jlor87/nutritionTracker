@@ -131,41 +131,41 @@ public class GUI
         heightButton.addActionListener(e ->
         {
             String heightInput = JOptionPane.showInputDialog(alterUserDataWindow, "Enter your height in inches:");
-            if(heightInput != null)
+            
+            try
             {
-                try
+                if(heightInput != null)
                 {
                     double height = Double.parseDouble(heightInput);
-                    // Save height to a variable
+                    
                     System.out.println("Height saved: " + height);
 
                     String query = "UPDATE nutritionTracker.users SET height = " + height + " WHERE userId = " + currentUser.getUserId();
-
-                    try
+                    
+                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+                    // Execute and retrieve result
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    preparedStatement.close();
+                    
+                    if(rowsAffected > 0)
                     {
-                        PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
-                        // Execute and retrieve result
-                        int rowsAffected = preparedStatement.executeUpdate();
-                        preparedStatement.close();
-
-                        if(rowsAffected > 0)
-                        {
-                            System.out.println("User created successfully!");
-                        }
-                        else
-                        {
-                            System.out.println("Failed to create user!");// make a popup
-                        }
+                        JOptionPane.showMessageDialog(alterUserDataWindow, "Successfully updated your height");
                     }
-                    catch(SQLException ex)
+                    else
                     {
-                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(alterUserDataWindow, "Could not update your height");
                     }
                 }
-                catch(NumberFormatException ex)
-                {
-                    JOptionPane.showMessageDialog(alterUserDataWindow, "Please enter a valid number.");
-                }
+            }
+            catch(NumberFormatException ex)
+            {
+                JOptionPane.showMessageDialog(alterUserDataWindow, "Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+            catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(alterUserDataWindow, "Something went wrong, you may have not entered a number.", "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
         });
         centerPanel.add(heightButton);
