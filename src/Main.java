@@ -36,7 +36,7 @@ public class Main {
         gui.makeStatusGoalsScreen();
         gui.makeAlterUserDataScreen();
         gui.makeCatalogFoodIntakeScreen();
-
+        gui.makeCustomFoodItemScreen();
         // Display the initial screen
         gui.displayTitleScreen();
     }
