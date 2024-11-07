@@ -766,7 +766,7 @@ public class GUI
         exitButton.addActionListener(e -> System.exit(0));
     }
 
-    
+
     public void makeCustomFoodItemScreen() {
         customFoodWindow.setLayout(new BorderLayout());
         customFoodWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -789,14 +789,16 @@ public class GUI
         // Macronutrients Panel
         JPanel macroPanel = new JPanel(new GridLayout(0, 1));
         macroPanel.setBorder(BorderFactory.createTitledBorder("Macronutrients"));
-        JTextField waterField = new JTextField();
-        JTextField energyField = new JTextField();
-        JTextField carbohydrateField = new JTextField();
-        JTextField monounsaturatedFatField = new JTextField();
-        JTextField saturatedFatField = new JTextField();
-        JTextField polyunsaturatedFatField = new JTextField();
-        JTextField proteinField = new JTextField();
-        JTextField fiberField = new JTextField();
+
+        // Automatically set text fields to "0"
+        JTextField waterField = new JTextField("0");
+        JTextField energyField = new JTextField("0");
+        JTextField carbohydrateField = new JTextField("0");
+        JTextField monounsaturatedFatField = new JTextField("0");
+        JTextField saturatedFatField = new JTextField("0");
+        JTextField polyunsaturatedFatField = new JTextField("0");
+        JTextField proteinField = new JTextField("0");
+        JTextField fiberField = new JTextField("0");
 
         macroPanel.add(new JLabel("Water (L):"));
         macroPanel.add(waterField);
@@ -820,19 +822,20 @@ public class GUI
         // Vitamins Panel
         JPanel vitaminPanel = new JPanel(new GridLayout(0, 1));
         vitaminPanel.setBorder(BorderFactory.createTitledBorder("Vitamins"));
-        JTextField vitaminAField = new JTextField();
-        JTextField vitaminB1Field = new JTextField();
-        JTextField vitaminB2Field = new JTextField();
-        JTextField vitaminB3Field = new JTextField();
-        JTextField vitaminB5Field = new JTextField();
-        JTextField vitaminB6Field = new JTextField();
-        JTextField vitaminB7Field = new JTextField();
-        JTextField vitaminB9Field = new JTextField();
-        JTextField vitaminB12Field = new JTextField();
-        JTextField vitaminCField = new JTextField();
-        JTextField vitaminDField = new JTextField();
-        JTextField vitaminEField = new JTextField();
-        JTextField vitaminKField = new JTextField();
+
+        JTextField vitaminAField = new JTextField("0");
+        JTextField vitaminB1Field = new JTextField("0");
+        JTextField vitaminB2Field = new JTextField("0");
+        JTextField vitaminB3Field = new JTextField("0");
+        JTextField vitaminB5Field = new JTextField("0");
+        JTextField vitaminB6Field = new JTextField("0");
+        JTextField vitaminB7Field = new JTextField("0");
+        JTextField vitaminB9Field = new JTextField("0");
+        JTextField vitaminB12Field = new JTextField("0");
+        JTextField vitaminCField = new JTextField("0");
+        JTextField vitaminDField = new JTextField("0");
+        JTextField vitaminEField = new JTextField("0");
+        JTextField vitaminKField = new JTextField("0");
 
         vitaminPanel.add(new JLabel("Vitamin A (ug):"));
         vitaminPanel.add(vitaminAField);
@@ -866,22 +869,23 @@ public class GUI
         // Minerals Panel
         JPanel mineralPanel = new JPanel(new GridLayout(0, 1));
         mineralPanel.setBorder(BorderFactory.createTitledBorder("Minerals"));
-        JTextField cholineField = new JTextField();
-        JTextField calciumField = new JTextField();
-        JTextField chlorideField = new JTextField();
-        JTextField chromiumField = new JTextField();
-        JTextField copperField = new JTextField();
-        JTextField fluorideField = new JTextField();
-        JTextField iodineField = new JTextField();
-        JTextField ironField = new JTextField();
-        JTextField magnesiumField = new JTextField();
-        JTextField manganeseField = new JTextField();
-        JTextField molybdenumField = new JTextField();
-        JTextField phosphorusField = new JTextField();
-        JTextField potassiumField = new JTextField();
-        JTextField seleniumField = new JTextField();
-        JTextField sodiumField = new JTextField();
-        JTextField zincField = new JTextField();
+
+        JTextField cholineField = new JTextField("0");
+        JTextField calciumField = new JTextField("0");
+        JTextField chlorideField = new JTextField("0");
+        JTextField chromiumField = new JTextField("0");
+        JTextField copperField = new JTextField("0");
+        JTextField fluorideField = new JTextField("0");
+        JTextField iodineField = new JTextField("0");
+        JTextField ironField = new JTextField("0");
+        JTextField magnesiumField = new JTextField("0");
+        JTextField manganeseField = new JTextField("0");
+        JTextField molybdenumField = new JTextField("0");
+        JTextField phosphorusField = new JTextField("0");
+        JTextField potassiumField = new JTextField("0");
+        JTextField seleniumField = new JTextField("0");
+        JTextField sodiumField = new JTextField("0");
+        JTextField zincField = new JTextField("0");
 
         mineralPanel.add(new JLabel("Choline (mg):"));
         mineralPanel.add(cholineField);
@@ -974,114 +978,115 @@ public class GUI
                 // Insert the data into the database
                 String sql = "INSERT INTO food (foodName, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, " +
                         "vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, " +
-                        "choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc, userId) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-           try {
-               PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(sql);
+                try {
+                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(sql);
 
-               // Bind parameters (starting from 1 and going up to 37)
-               preparedStatement.setString(1, foodName);
-               preparedStatement.setDouble(2, water);
-               preparedStatement.setDouble(3, energy);
-               preparedStatement.setDouble(4, carbohydrate);
-               preparedStatement.setDouble(5, monounsaturatedFat);
-               preparedStatement.setDouble(6, saturatedFat);
-               preparedStatement.setDouble(7, polyunsaturatedFat);
-               preparedStatement.setDouble(8, protein);
-               preparedStatement.setDouble(9, fiber);
-               preparedStatement.setDouble(10, vitaminA);
-               preparedStatement.setDouble(11, vitaminB1);
-               preparedStatement.setDouble(12, vitaminB2);
-               preparedStatement.setDouble(13, vitaminB3);
-               preparedStatement.setDouble(14, vitaminB5);
-               preparedStatement.setDouble(15, vitaminB6);
-               preparedStatement.setDouble(16, vitaminB7);
-               preparedStatement.setDouble(17, vitaminB9);
-               preparedStatement.setDouble(18, vitaminB12);
-               preparedStatement.setDouble(19, vitaminC);
-               preparedStatement.setDouble(20, vitaminD);
-               preparedStatement.setDouble(21, vitaminE);
-               preparedStatement.setDouble(22, vitaminK);
-               preparedStatement.setDouble(23, choline);
-               preparedStatement.setDouble(24, calcium);
-               preparedStatement.setDouble(25, chloride);
-               preparedStatement.setDouble(26, chromium);
-               preparedStatement.setDouble(27, copper);
-               preparedStatement.setDouble(28, fluoride);
-               preparedStatement.setDouble(29, iodine);
-               preparedStatement.setDouble(30, iron);
-               preparedStatement.setDouble(31, magnesium);
-               preparedStatement.setDouble(32, manganese);
-               preparedStatement.setDouble(33, molybdenum);
-               preparedStatement.setDouble(34, phosphorus);
-               preparedStatement.setDouble(35, potassium);
-               preparedStatement.setDouble(36, selenium);
-               preparedStatement.setDouble(37, sodium);
-               preparedStatement.setDouble(38, zinc);
+                    // Bind parameters (starting from 1 and going up to 37)
+                    preparedStatement.setString(1, foodName);
+                    preparedStatement.setDouble(2, water);
+                    preparedStatement.setDouble(3, energy);
+                    preparedStatement.setDouble(4, carbohydrate);
+                    preparedStatement.setDouble(5, monounsaturatedFat);
+                    preparedStatement.setDouble(6, saturatedFat);
+                    preparedStatement.setDouble(7, polyunsaturatedFat);
+                    preparedStatement.setDouble(8, protein);
+                    preparedStatement.setDouble(9, fiber);
+                    preparedStatement.setDouble(10, vitaminA);
+                    preparedStatement.setDouble(11, vitaminB1);
+                    preparedStatement.setDouble(12, vitaminB2);
+                    preparedStatement.setDouble(13, vitaminB3);
+                    preparedStatement.setDouble(14, vitaminB5);
+                    preparedStatement.setDouble(15, vitaminB6);
+                    preparedStatement.setDouble(16, vitaminB7);
+                    preparedStatement.setDouble(17, vitaminB9);
+                    preparedStatement.setDouble(18, vitaminB12);
+                    preparedStatement.setDouble(19, vitaminC);
+                    preparedStatement.setDouble(20, vitaminD);
+                    preparedStatement.setDouble(21, vitaminE);
+                    preparedStatement.setDouble(22, vitaminK);
+                    preparedStatement.setDouble(23, choline);
+                    preparedStatement.setDouble(24, calcium);
+                    preparedStatement.setDouble(25, chloride);
+                    preparedStatement.setDouble(26, chromium);
+                    preparedStatement.setDouble(27, copper);
+                    preparedStatement.setDouble(28, fluoride);
+                    preparedStatement.setDouble(29, iodine);
+                    preparedStatement.setDouble(30, iron);
+                    preparedStatement.setDouble(31, magnesium);
+                    preparedStatement.setDouble(32, manganese);
+                    preparedStatement.setDouble(33, molybdenum);
+                    preparedStatement.setDouble(34, phosphorus);
+                    preparedStatement.setDouble(35, potassium);
+                    preparedStatement.setDouble(36, selenium);
+                    preparedStatement.setDouble(37, sodium);
+                    preparedStatement.setDouble(38, zinc);
+                    preparedStatement.setInt(39, retrievedUserId);
 
-               preparedStatement.executeUpdate();
-               JOptionPane.showMessageDialog(customFoodWindow, "Food item created and added to the database!");
+                    preparedStatement.executeUpdate();
+                    JOptionPane.showMessageDialog(customFoodWindow, "Food item created and added to the database!");
 
-               // Clear the input fields after successful insertion
-               nameField.setText("");
-               waterField.setText("");
-               energyField.setText("");
-               carbohydrateField.setText("");
-               monounsaturatedFatField.setText("");
-               saturatedFatField.setText("");
-               polyunsaturatedFatField.setText("");
-               proteinField.setText("");
-               fiberField.setText("");
-               vitaminAField.setText("");
-               vitaminB1Field.setText("");
-               vitaminB2Field.setText("");
-               vitaminB3Field.setText("");
-               vitaminB5Field.setText("");
-               vitaminB6Field.setText("");
-               vitaminB7Field.setText("");
-               vitaminB9Field.setText("");
-               vitaminB12Field.setText("");
-               vitaminCField.setText("");
-               vitaminDField.setText("");
-               vitaminEField.setText("");
-               vitaminKField.setText("");
-               cholineField.setText("");
-               calciumField.setText("");
-               chlorideField.setText("");
-               chromiumField.setText("");
-               copperField.setText("");
-               fluorideField.setText("");
-               iodineField.setText("");
-               ironField.setText("");
-               magnesiumField.setText("");
-               manganeseField.setText("");
-               molybdenumField.setText("");
-               phosphorusField.setText("");
-               potassiumField.setText("");
-               seleniumField.setText("");
-               sodiumField.setText("");
-               zincField.setText("");
+                    // Clear the input fields after successful insertion
+                    nameField.setText("");
+                    waterField.setText("0");
+                    energyField.setText("0");
+                    carbohydrateField.setText("0");
+                    monounsaturatedFatField.setText("0");
+                    saturatedFatField.setText("0");
+                    polyunsaturatedFatField.setText("0");
+                    proteinField.setText("0");
+                    fiberField.setText("0");
+                    vitaminAField.setText("0");
+                    vitaminB1Field.setText("0");
+                    vitaminB2Field.setText("0");
+                    vitaminB3Field.setText("0");
+                    vitaminB5Field.setText("0");
+                    vitaminB6Field.setText("0");
+                    vitaminB7Field.setText("0");
+                    vitaminB9Field.setText("0");
+                    vitaminB12Field.setText("0");
+                    vitaminCField.setText("0");
+                    vitaminDField.setText("0");
+                    vitaminEField.setText("0");
+                    vitaminKField.setText("0");
+                    cholineField.setText("0");
+                    calciumField.setText("0");
+                    chlorideField.setText("0");
+                    chromiumField.setText("0");
+                    copperField.setText("0");
+                    fluorideField.setText("0");
+                    iodineField.setText("0");
+                    ironField.setText("0");
+                    magnesiumField.setText("0");
+                    manganeseField.setText("0");
+                    molybdenumField.setText("0");
+                    phosphorusField.setText("0");
+                    potassiumField.setText("0");
+                    seleniumField.setText("0");
+                    sodiumField.setText("0");
+                    zincField.setText("0");
 
-           } catch (SQLException ex) {
-               JOptionPane.showMessageDialog(customFoodWindow, "Error saving to the database: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-           }
-       } catch (NumberFormatException ex) {
-           JOptionPane.showMessageDialog(customFoodWindow, "Please enter valid numbers for all fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
-       }
-   });
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(customFoodWindow, "Error saving to the database: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(customFoodWindow, "Please enter valid numbers for all fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
-   exitButton.addActionListener(e -> customFoodWindow.dispose());
+        exitButton.addActionListener(e -> customFoodWindow.dispose());
 
-   buttonPanel.add(createFoodButton);
-   buttonPanel.add(exitButton);
+        buttonPanel.add(createFoodButton);
+        buttonPanel.add(exitButton);
 
-   customFoodWindow.add(buttonPanel, BorderLayout.SOUTH);
-   customFoodWindow.setSize(800, 600);
-   customFoodWindow.setVisible(false);
-}
-    
-    
+        customFoodWindow.add(buttonPanel, BorderLayout.SOUTH);
+        customFoodWindow.setSize(800, 600);
+        customFoodWindow.setVisible(false);
+    }
+
+
     // All functions that display screens in ABC order
     
     
