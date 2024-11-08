@@ -25,20 +25,23 @@ public class Main {
 
         // Set up the GUI
         GUI gui = new GUI(connectionToMySQL);
-
-        // Construct the GUI screens
+        
+        // Make the title first
         gui.makeTitleScreen();
+        
+        // then display it
+        gui.displayTitleScreen();
+        
+        // Create the rest of the GUI
         gui.makeLoginScreen();
         gui.makeCreateScreen();
         gui.makeMainScreen();
         gui.makeSearchItemScreen();
         gui.makeSetGoalsScreen();
         gui.makeStatusGoalsScreen();
-        gui.makeAlterUserDataScreen();
         gui.makeCatalogFoodIntakeScreen();
-
-        // Display the initial screen
-        gui.displayTitleScreen();
+        gui.makeAlterUserDataScreen();
+        
     }
 }
 
