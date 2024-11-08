@@ -51,6 +51,7 @@ public class GUI
     JFrame statusWindow = new JFrame();
     JFrame alterUserDataWindow = new JFrame();
     JFrame catalogFoodIntakeWindow = new JFrame();
+    String tempSex = "UNCHANGED";
 
     //these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
     private final Connection connectionToMySQL;
@@ -169,16 +170,19 @@ public class GUI
             }
         });
         centerPanel.add(heightButton);
-
+        
         // Button for Sex
-        JButton sexButton = new JButton("Sex: M"); // Default to "M"
+        JButton sexButton = new JButton("Sex: " + tempSex);
+        
         sexButton.addActionListener(new ActionListener()
         {
             private String sex = "M";
-
+            
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                System.out.println("User sex: " + currentUser.getSex());
+                 
                 sex = sex.equals("M") ? "F" : "M";
                 sexButton.setText("Sex: " + sex);
                 // Save sex to a variable
@@ -192,15 +196,6 @@ public class GUI
                     // Execute and retrieve result
                     int rowsAffected = preparedStatement.executeUpdate();
                     preparedStatement.close();
-
-                    if(rowsAffected > 0)
-                    {
-                        System.out.println("User created successfully!");
-                    }
-                    else
-                    {
-                        System.out.println("Failed to create user!");// make a popup
-                    }
                 }
                 catch(SQLException ex)
                 {
@@ -940,6 +935,8 @@ public class GUI
                         removeLoginScreen();
                         displayMainScreen();
                         createSession();
+                        
+                        tempSex = currentUser.getSex();
                     }
                     else
                     {
@@ -1180,16 +1177,40 @@ public class GUI
         }
     }
 
-    private void createSession()
+    private String createSession()
     {
-        User newUser = new User(retrievedUserId, connectionToMySQL);
-        this.currentUser = newUser;
+        this.currentUser = new User(retrievedUserId, connectionToMySQL);
         currentUser.updateAllFromDatabase();
+        
+        String userInfoQuery = "SELECT sex, exercise FROM nutritionTracker.users WHERE userId = ?;";
+        ResultSet userInfo;
+
+        try 
+        {
+            // Update current consumption values
+            PreparedStatement preparedStatement1 = connectionToMySQL.prepareStatement(userInfoQuery);
+            preparedStatement1.setInt(1, this.currentUser.getUserId());
+            
+            userInfo = preparedStatement1.executeQuery();
+            
+            if(userInfo.next())
+            {
+                currentUser.setSex(userInfo.getString("sex"));
+                currentUser.setExercise(userInfo.getString("exercise"));
+            }
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Something went wrong getting info");
+        }
+
         System.out.println("current user is set to: " + currentUser.getUserId());
         System.out.println("current user's food diary is: " + currentUser.getDailyFoodsConsumed());
-        Session newSession = new Session(newUser, this, connectionToMySQL);
+        Session newSession = new Session(this.currentUser, this, connectionToMySQL);
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
+        
+        return currentUser.getSex();
     }
 
     public void setSession(Session session)
