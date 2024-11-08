@@ -85,7 +85,7 @@ public class Food {
         setFluoride(0, 0);
         setIodine(0, 0);
         setIron(0, 0);
-        setMagnesium(0, 400);
+        setMagnesium(0, 0);
         setManganese(0, 0);
         setMolybdenum(0, 0);
         setPhosphorus(0, 0);

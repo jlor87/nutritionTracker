@@ -21,20 +21,18 @@ public class API {
 
     private User currentUser;
     private JsonArray nutrients = new JsonArray();
-    private Method[] userMethods;
-    private String nutrientName;
 
     private Connection connectionToMySQL;
     private String currentFoodName;
-    private double amount;
+
 
     /**
      * Each API instance has a user attached for food logging purposes
      * @param user the current instance of user that is making a request
      */
-    public API(User user, Connection connectionToMySQL){
+    public API(User user){
         this.currentUser = user;
-        this.connectionToMySQL = connectionToMySQL;
+        this.connectionToMySQL = Main.getConnection();
     }
 
     // Class functions
@@ -96,31 +94,12 @@ public class API {
         // Return the output as a string
         return output.toString();
     }
-    
-    /**
-     * The purpose of this class is to update the nutrition values of the user who is adding food intake information
-     * @param nutrients an array of nutrient information being passed received from the API
-     * @param currentUser the current user object making the call
-     */
 
     // Getters
-
     public String getCurrentFoodName() {
         return currentFoodName;
     }
     public JsonArray getNutrients() {
         return nutrients;
-    }
-    public Method[] getUserMethods() {
-        return userMethods;
-    }
-    public String getNutrientName() {
-        return nutrientName;
-    }
-    public double getAmount() {
-        return amount;
-    }
-    public User getCurrentUser() {
-        return currentUser;
     }
 }
