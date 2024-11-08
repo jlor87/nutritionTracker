@@ -23,7 +23,7 @@ public class UserSettings {
     private User currentUser;
     private double weight;
     private int height;
-    private char sex;
+    private String sex;
     private String exercise;
     private Connection connectionToMySQL;
 
@@ -49,10 +49,10 @@ public class UserSettings {
         // Loop until the user chooses to exit (option 5)
         do {
             // Get current user data
-            weight = currentUser.weightGetter();
-            height = currentUser.heightGetter();
-            sex = currentUser.sexGetter();
-            exercise = currentUser.exerciseGetter();
+            weight = currentUser.getWeight();
+            height = currentUser.getHeight();
+            sex = currentUser.getSex();
+            exercise = currentUser.getExercise();
 
             // Display current metrics
             System.out.println("\nYour data is set as follows:");
@@ -77,7 +77,7 @@ public class UserSettings {
                     // Update weight
                     System.out.print("Enter your new weight (lbs): ");
                     weight = Double.parseDouble(scanner.nextLine());
-                    currentUser.weightSetter(weight);
+                    currentUser.setWeight(weight);
                     System.out.println("Weight updated successfully.");
                     break;
 
@@ -85,15 +85,15 @@ public class UserSettings {
                     // Update height
                     System.out.print("Enter your new height (inches): ");
                     height = Integer.parseInt(scanner.nextLine());
-                    currentUser.heightSetter(height);
+                    currentUser.setHeight(height);
                     System.out.println("Height updated successfully.");
                     break;
 
                 case "3":
                     // Update sex
                     System.out.print("Enter your sex (M/F): ");
-                    sex = scanner.nextLine().charAt(0); // get first character
-                    currentUser.sexSetter(sex);
+                    sex = String.valueOf(scanner.nextLine().charAt(0)); // get first character
+                    currentUser.setSex(sex);
                     System.out.println("Sex updated successfully.");
                     break;
 
@@ -128,7 +128,7 @@ public class UserSettings {
                             exercise = "NONE";
                             break;
                     }
-                    currentUser.exerciseSetter(exercise);
+                    currentUser.setExercise(exercise);
                     System.out.println("Exercise level updated to " + exercise + " successfully.");
                     break;
 

@@ -30,10 +30,10 @@ public class UserSettingsTest {
         Scanner scanner = new Scanner(System.in);
 
         userSettings.alterUserData(scanner);
-        Assert.assertEquals(150, user.weightGetter(), 0.0);
-        Assert.assertEquals(70, user.heightGetter(), 0.0);
-        Assert.assertEquals('F', user.sexGetter());
-        Assert.assertEquals("EXTREME", user.exerciseGetter());
+        Assert.assertEquals(150, user.getWeight(), 0.0);
+        Assert.assertEquals(70, user.getHeight(), 0.0);
+        Assert.assertEquals('F', user.getSex());
+        Assert.assertEquals("EXTREME", user.getExercise());
     }
 
 //    Not implemented yet, so no test will be implemented yet either

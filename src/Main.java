@@ -40,8 +40,7 @@ public class Main {
         gui.makeSetGoalsScreen();
         gui.makeStatusGoalsScreen();
         gui.makeCatalogFoodIntakeScreen();
-        gui.makeAlterUserDataScreen();
-        
+        gui.makeCustomFoodItemScreen();
     }
 }
 

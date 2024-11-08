@@ -6,10 +6,10 @@ public class UserTest {
     public void testUser(){
         user = new User(1);
         Assert.assertEquals(1, user.getUserId(), 0.0);
-        Assert.assertEquals(0.00, user.weightGetter(), 0.0);
-        Assert.assertEquals(0.0, user.heightGetter(), 0.0);
-        Assert.assertEquals('0', user.sexGetter(), 0.0);
-        Assert.assertEquals("not set", user.exerciseGetter());
+        Assert.assertEquals(0.00, user.getWeight(), 0.0);
+        Assert.assertEquals(0.0, user.getHeight(), 0.0);
+        Assert.assertEquals('0', user.getSex(), 0.0);
+        Assert.assertEquals("not set", user.getExercise());
         Assert.assertEquals(3.7, user.getWater(0), 0.0);
         Assert.assertEquals(2000, user.getEnergy(0), 0.0);
         Assert.assertEquals(130, user.getCarbohydrate(0), 0.0);
