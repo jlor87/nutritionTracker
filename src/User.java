@@ -176,9 +176,9 @@ public class User {
     /**
      * Constructor
      */
-    public User (int userId, Connection connectionToMySQL){
+    public User (int userId){
         this.userId = userId;
-        this.connectionToMySQL = connectionToMySQL; // needed to grab information the database related to the user
+        this.connectionToMySQL = Main.getConnection(); // needed to grab information the database related to the user
 
         LocalDate currentDate = LocalDate.now();
         int currentDay = currentDate.getDayOfMonth();

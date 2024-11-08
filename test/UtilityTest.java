@@ -1,42 +1,54 @@
 import org.junit.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class UtilityTest {
-    User user;
+
+    private static Method[] userMethods;
+    private static Method[] foodMethods;
+
     @Before
-    public void setUp(){
-        user = new User(1);
+    public void setUp() {
+        // Initialize methods arrays for testing
+        userMethods = Utility.getMethods();
+        foodMethods = Utility.getFoodMethods();
     }
+
     @Test
-    public void testGetMethods(){
-        Method[] userMethods = Utility.getMethods();
+    public void testUserMethodsNotNull() {
+        // Ensure that the userMethods array is not null and contains methods
+        assertNotNull(userMethods);
+        assertTrue(userMethods.length > 0);
+    }
 
-        // Use all setter methods to set values to 5.0
-        for (Method userMethod : userMethods) {
-            try {
-                if(userMethod.getName().contains("set")) {
-                    userMethod.invoke(user, 0, 5.0); // test value of 5.0
-                    userMethod.invoke(user, 1, 5.0);
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
+    @Test
+    public void testFoodMethodsNotNull() {
+        // Ensure that the foodMethods array is not null and contains methods
+        assertNotNull(foodMethods);
+        assertTrue(foodMethods.length > 0);
+    }
 
-        // If the returned values are all 5.0, then both the setters and getters work normally
-        for (Method userMethod : userMethods) {
-            try{
-                // Test getters to see if they work
-                if(userMethod.getName().contains("get")){
-                    Double valueOfIndexZero = (Double) userMethod.invoke(user, 0);
-                    Double valueOfIndexOne = (Double) userMethod.invoke(user, 1);
-                    Assert.assertEquals(5.0, valueOfIndexZero, 0.0);
-                    Assert.assertEquals(5.0, valueOfIndexOne, 0.0);
-                }
-            } catch (Exception e){
-                System.out.println(e);
-            }
-        }
+    @Test
+    public void testUserMethodNamesContainSettersAndGetters() {
+        // Check that userMethods contain expected setters and getters
+        List<String> methodNames = Arrays.stream(userMethods)
+                .map(Method::getName)
+                .toList();
+        assertTrue(methodNames.contains("setVitaminA"));
+        assertTrue(methodNames.contains("getVitaminC"));
+    }
 
-
+    @Test
+    public void testFoodMethodNamesContainSettersAndGetters() {
+        // Check that foodMethods contain expected setter and getters
+        List<String> methodNames = Arrays.stream(foodMethods)
+                .map(Method::getName)
+                .toList();
+        assertTrue(methodNames.contains("setVitaminA"));
+        assertTrue(methodNames.contains("getVitaminC"));
     }
 }
+

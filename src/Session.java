@@ -8,7 +8,6 @@ import java.util.Scanner;
  * The session class will most likely be responsible for rendering the GUI as well
  */
 public class Session {
-    private String userChoice = "dummyValue";
     private User currentUser;
     private Scanner scanner;
     private UserSettings userSettings;
@@ -16,11 +15,12 @@ public class Session {
     private Print print;
     private GUI gui;
     private Connection connectionToMySQL;
+
     // Constructor
-    public Session(User user, GUI gui, Connection connectionToMySQL){
+    public Session(User user, GUI gui){
         this.currentUser = user;
         this.gui = gui;
-        this.connectionToMySQL = connectionToMySQL;
+        this.connectionToMySQL = Main.getConnection();
     }
 
 
@@ -56,14 +56,12 @@ public class Session {
     
     public void showGoals() {
     	 List<String> goalStrings = print.outputCurrentConsumption();
-
-    	    String macronutrientsProgress = goalStrings.get(0);
-    	    String vitaminsProgress = goalStrings.get(1);
-    	    String mineralsProgress = goalStrings.get(2);
-    	    gui.macronutrientsField.setText(macronutrientsProgress);
-    	    gui.vitaminsField.setText(vitaminsProgress);
-    	    gui.mineralsField.setText(mineralsProgress);
-    	    
+         String macronutrientsProgress = goalStrings.get(0);
+         String vitaminsProgress = goalStrings.get(1);
+         String mineralsProgress = goalStrings.get(2);
+         gui.macronutrientsField.setText(macronutrientsProgress);
+         gui.vitaminsField.setText(vitaminsProgress);
+         gui.mineralsField.setText(mineralsProgress);
     }
 
     // Getters

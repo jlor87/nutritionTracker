@@ -9,22 +9,38 @@ import java.sql.SQLException;
 
 public class Main {
 
+    private static Connection connectionToMySQL;
+    private static GUI gui;
+
+
+    // Getters
+    public static GUI getGui(){
+        return gui;
+    }
+    // Utility methods
+    public static Connection getConnection() {
+        if (connectionToMySQL == null) {
+            try {
+                connectionToMySQL = DriverManager.getConnection(
+                        "jdbc:mysql://34.227.86.98:3306/nutritionTracker?user=publicuser&password=iamnotroot"
+                );
+                System.out.println("Connection to database successful.");
+            } catch (SQLException ex) {
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+            }
+        }
+        return connectionToMySQL;
+    }
+
     // The Main class is only responsible for starting the application
     public static void main(String[] args) {
         // Establish connection to the MySQL database for the whole session
-        Connection connectionToMySQL = null;
-        try {
-            connectionToMySQL = DriverManager.getConnection("jdbc:mysql://34.227.86.98:3306/nutritionTracker?user=publicuser&password=iamnotroot");
-            System.out.println("Connection to database successful.");
-        } catch (SQLException ex) {
-            // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
+        connectionToMySQL = getConnection();
 
         // Set up the GUI
-        GUI gui = new GUI(connectionToMySQL);
+        gui = new GUI(connectionToMySQL);
 
         // Construct the GUI screens
         gui.makeTitleScreen();

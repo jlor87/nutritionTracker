@@ -66,8 +66,7 @@ public class GUI
     }
 
     // All functions that make screens in ABC order
-    public void makeAlterUserDataScreen()
-    {
+    public void makeAlterUserDataScreen() {
         // Frame setup
         alterUserDataWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         alterUserDataWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -271,9 +270,7 @@ public class GUI
         // Set frame visibility to true
         alterUserDataWindow.setVisible(false);
     }
-
-    public void makeCatalogFoodIntakeScreen()
-    {
+    public void makeCatalogFoodIntakeScreen() {
         // Create the main frame
         catalogFoodIntakeWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         catalogFoodIntakeWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -313,9 +310,7 @@ public class GUI
         // Set frame visibility to true
         catalogFoodIntakeWindow.setVisible(false);
     }
-
-    public void makeCreateScreen()
-    {
+    public void makeCreateScreen() {
 
         JPanel createPanel = new JPanel();
         JLabel createTitleLabel = new JLabel();
@@ -383,390 +378,6 @@ public class GUI
         createTitleLabel.setVisible(true);
         createWindow.setVisible(false);
     }
-
-    public void makeLoginScreen()
-    {
-
-        JPanel loginPanel = new JPanel();
-        JLabel loginTitleLabel = new JLabel();
-
-        loginWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginWindow.setSize(800, 600);
-        loginWindow.setLayout(new BorderLayout());
-        loginWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        loginPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);  // Adds padding around components
-        gbc.fill = GridBagConstraints.NONE;
-
-        // Username label
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        loginPanel.add(new JLabel("Username:"), gbc);
-
-        // Username text field
-        gbc.gridx = 1;
-        loginPanel.add(loginUsernameField, gbc);
-
-        // Password label
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        loginPanel.add(new JLabel("Password:"), gbc);
-
-        // Password text field
-        gbc.gridx = 1;
-        loginPanel.add(loginPasswordField, gbc);
-
-        // Login button
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-
-        JButton loginButton = new JButton();
-        loginButton.setText("Login");
-        loginButton.addActionListener(cHandler);
-        loginButton.setActionCommand("tryToLogin");
-        loginPanel.add(loginButton, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-
-        JButton createButton = new JButton();
-        createButton.setText("Create");
-        createButton.addActionListener(cHandler);
-        createButton.setActionCommand("createAccount");
-        loginPanel.add(createButton, gbc);
-
-        loginTitleLabel.setText("Login or Create Account");
-        loginTitleLabel.setHorizontalAlignment(JLabel.CENTER);
-        loginTitleLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
-        loginTitleLabel.setForeground(Color.BLUE);
-
-        loginWindow.add(loginTitleLabel, BorderLayout.NORTH);
-        loginWindow.add(loginPanel, BorderLayout.CENTER);
-
-        loginPanel.setVisible(true);
-        loginTitleLabel.setVisible(true);
-        loginWindow.setVisible(false);
-    }
-
-    public void makeMainScreen()
-    {
-        // Main window setup
-        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setSize(800, 600);
-        mainWindow.setLayout(new BorderLayout());
-        mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        // Title label at the top
-        JLabel mainLabel = new JLabel("Main Navigation");
-        mainLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
-        mainLabel.setHorizontalAlignment(JLabel.CENTER);
-        mainWindow.add(mainLabel, BorderLayout.NORTH);
-
-        // Panel for buttons with GridLayout
-        JPanel mainbuttonPanel = new JPanel();
-        mainbuttonPanel.setLayout(new GridLayout(8, 1, 10, 10));  // 8 rows, 1 column, spacing of 10px
-
-        // Create and add buttons to the panel
-        String[] buttonLabels =
-        {
-            "Exit",
-            "Search for Food Item",
-            "Set Nutrition Goals",
-            "Alter User Data",
-            "Display Status of Goals",
-            "Make Custom Food Item",
-            "View Advanced Statistics",
-            "Catalog Food Intake"
-        };
-
-        for(String label : buttonLabels)
-        {
-            JButton button = new JButton(label);
-            button.setFont(new Font("Arial", Font.PLAIN, 18));
-
-            // Set ActionListener and ActionCommand for each button
-            button.addActionListener(cHandler);
-            button.setActionCommand(label.replace(" ", "").toLowerCase());
-
-            mainbuttonPanel.add(button);
-        }
-
-        JPanel wrapperPanel = new JPanel();
-        wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));
-        wrapperPanel.add(Box.createVerticalGlue());  // Adds flexible space above
-        wrapperPanel.add(mainbuttonPanel);
-        wrapperPanel.add(Box.createVerticalGlue());  // Adds flexible space below
-
-        // Add the button panel to the center of the main window
-        mainWindow.add(wrapperPanel, BorderLayout.CENTER);
-
-        // Display the main window
-        mainWindow.setLocationRelativeTo(null);  // Center window on screen
-        mainWindow.setVisible(false);
-    }
-
-    public void makeSearchItemScreen()
-    {
-
-        searchWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        searchWindow.setSize(800, 600);
-        searchWindow.setLayout(new BorderLayout());
-        searchWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        JLabel titleLabel = new JLabel("Search For Food Item", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        searchWindow.add(titleLabel, BorderLayout.NORTH);
-
-        // Panel to contain search components and output
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Search panel for "Search:" label, text field, and button
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel searchLabel = new JLabel("Search:");
-
-        JButton searchButton = new JButton("Search");
-        searchButton.addActionListener(cHandler);
-        searchButton.setActionCommand("searchForFood");
-        searchPanel.add(searchLabel);
-        searchPanel.add(searchField);
-        searchPanel.add(searchButton);
-
-        // Scrollable output area for food item details
-        outputArea.setLineWrap(true);
-        outputArea.setWrapStyleWord(true);
-        outputArea.setEditable(false);
-
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        // Panel for "Add Item" and "Exit" buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton addItemButton = new JButton("Add Item");
-        addItemButton.addActionListener(cHandler);
-        addItemButton.setActionCommand("addItem");
-        JButton exitButton = new JButton("Exit");
-        exitButton.addActionListener(cHandler);
-        exitButton.setActionCommand("goMainScreen");
-        buttonPanel.add(addItemButton);
-        buttonPanel.add(exitButton);
-
-        // Add components to the center panel
-        centerPanel.add(searchPanel);
-        centerPanel.add(Box.createVerticalStrut(10)); // Spacing
-        centerPanel.add(scrollPane);
-        centerPanel.add(Box.createVerticalStrut(10)); // Spacing
-        centerPanel.add(buttonPanel);
-
-        // Add centerPanel to the main window's center area
-        searchWindow.add(centerPanel, BorderLayout.CENTER);
-
-        // Set the window visible
-        searchWindow.setVisible(false);
-
-    }
-
-    public void makeSetGoalsScreen()
-    {
-        setGoalsWindow = new JFrame("Set Nutritional Goals");
-        setGoalsWindow.setLayout(new BorderLayout(10, 10)); // Use BorderLayout for overall structure
-
-        // Title Label at the top
-        JLabel titleLabel = new JLabel("Set Nutritional Goals", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        setGoalsWindow.add(titleLabel, BorderLayout.NORTH);
-
-        // Main panel with a grid layout for three columns
-        JPanel mainPanel = new JPanel(new GridLayout(1, 3, 10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Macronutrients Panel
-        JPanel macronutrientsPanel = new JPanel(new GridLayout(0, 1));
-        macronutrientsPanel.setBorder(BorderFactory.createTitledBorder("Macronutrients"));
-        String[] macronutrients =
-        {
-            "Water", "Calories", "Carbohydrates", "Protein", "Monounsaturated Fat",
-            "Polyunsaturated Fat", "Saturated Fat", "Fiber"
-        };
-        for(String item : macronutrients)
-        {
-            JButton button = new JButton(item);
-            button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
-            macronutrientsPanel.add(button);
-        }
-
-        // Vitamins Panel
-        JPanel vitaminsPanel = new JPanel(new GridLayout(0, 1));
-        vitaminsPanel.setBorder(BorderFactory.createTitledBorder("Vitamins"));
-        String[] vitamins =
-        {
-            "Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B3", "Vitamin B5", "Vitamin B6",
-            "Vitamin B7", "Vitamin B9", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K"
-        };
-        for(String item : vitamins)
-        {
-            JButton button = new JButton(item);
-            button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
-            vitaminsPanel.add(button);
-        }
-
-        // Minerals Panel
-        JPanel mineralsPanel = new JPanel(new GridLayout(0, 1));
-        mineralsPanel.setBorder(BorderFactory.createTitledBorder("Minerals"));
-        String[] minerals =
-        {
-            "Calcium", "Chloride", "Choline", "Chromium", "Copper", "Fluoride", "Iodine",
-            "Iron", "Magnesium", "Manganese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc"
-        };
-        for(String item : minerals)
-        {
-            JButton button = new JButton(item);
-            button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
-            mineralsPanel.add(button);
-        }
-
-        // Add category panels to the main panel
-        mainPanel.add(macronutrientsPanel);
-        mainPanel.add(vitaminsPanel);
-        mainPanel.add(mineralsPanel);
-
-        // Add the main panel to the center of the window
-        setGoalsWindow.add(mainPanel, BorderLayout.CENTER);
-
-        // Exit Button at the bottom
-        JButton exitButton = new JButton("EXIT");
-        exitButton.addActionListener(cHandler);
-        exitButton.setActionCommand("goMainScreen");
-        JPanel exitPanel = new JPanel();
-        exitPanel.add(exitButton); // Add the button to a panel for centered alignment
-        setGoalsWindow.add(exitPanel, BorderLayout.SOUTH);
-
-        // Set up the frame
-        setGoalsWindow.setSize(600, 500);
-        setGoalsWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setGoalsWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setGoalsWindow.setVisible(false);
-    }
-
-    public void makeStatusGoalsScreen()
-    {
-        // Create the main frame
-        statusWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        statusWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        statusWindow.setLayout(new BorderLayout(10, 10));
-
-        // Title at the top
-        JLabel titleLabel = new JLabel("Status of Goals", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        statusWindow.add(titleLabel, BorderLayout.NORTH);
-
-        // Center panel for sections
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(6, 1, 0, 10)); // Adjust for labels and text areas with scroll panes
-
-        // Macronutrients section
-        JLabel macronutrientsLabel = new JLabel("Macronutrients Progress", JLabel.CENTER);
-        macronutrientsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(macronutrientsLabel);
-
-        macronutrientsField = new JTextArea();
-        macronutrientsField.setEditable(false);
-        macronutrientsField.setLineWrap(true);
-        macronutrientsField.setWrapStyleWord(true);
-        JScrollPane macronutrientsScrollPane = new JScrollPane(macronutrientsField);
-        centerPanel.add(macronutrientsScrollPane);
-
-        // Vitamins section
-        JLabel vitaminsLabel = new JLabel("Vitamins Progress", JLabel.CENTER);
-        vitaminsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(vitaminsLabel);
-
-        vitaminsField = new JTextArea();
-        vitaminsField.setEditable(false);
-        vitaminsField.setLineWrap(true);
-        vitaminsField.setWrapStyleWord(true);
-        JScrollPane vitaminsScrollPane = new JScrollPane(vitaminsField);
-        centerPanel.add(vitaminsScrollPane);
-
-        // Minerals section
-        JLabel mineralsLabel = new JLabel("Minerals Progress", JLabel.CENTER);
-        mineralsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(mineralsLabel);
-
-        mineralsField = new JTextArea();
-        mineralsField.setEditable(false);
-        mineralsField.setLineWrap(true);
-        mineralsField.setWrapStyleWord(true);
-        JScrollPane mineralsScrollPane = new JScrollPane(mineralsField);
-        centerPanel.add(mineralsScrollPane);
-
-        statusWindow.add(centerPanel, BorderLayout.CENTER);
-
-        // Exit button centered at the bottom
-        JPanel buttonPanel = new JPanel();
-        JButton exitButton = new JButton("Exit");
-        exitButton.addActionListener(cHandler);
-        exitButton.setActionCommand("goMainScreen");
-        buttonPanel.add(exitButton);
-        statusWindow.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Set frame visibility to true
-        statusWindow.setVisible(false);
-    }
-
-    public void makeTitleScreen()
-    {
-
-        JPanel titlePanel = new JPanel();
-        JPanel buttonPanel = new JPanel();
-
-        titleWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        titleWindow.setSize(800, 600);
-        titleWindow.setLayout(new BorderLayout());
-        titleWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        JLabel titleLabel = new JLabel();
-        titleLabel.setText("Nutrition Tracker  CEN4010  Josh Lor, Sam Gray, Haivan Benjamin");
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
-        titleLabel.setForeground(Color.YELLOW);
-
-        buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.setBackground(Color.DARK_GRAY);
-
-        // Create buttons
-        JButton startButton = new JButton("Start");
-        startButton.addActionListener(cHandler);
-        startButton.setActionCommand("goLoginScreen");
-        JButton exitButton = new JButton("Exit");
-
-        // Add buttons to the panel
-        buttonPanel.add(startButton);
-        buttonPanel.add(exitButton);
-
-        // Set background for the title area
-        titlePanel.setBackground(Color.BLUE);
-        titlePanel.add(titleLabel);
-
-        // Add the title label and button panel to the window
-        titleWindow.add(titlePanel, BorderLayout.NORTH);
-        titleWindow.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Center the window on screen
-        titleWindow.setLocationRelativeTo(null);
-        titleWindow.setVisible(true);
-        // Make the window visible
-
-        exitButton.addActionListener(e -> System.exit(0));
-    }
-
-
     public void makeCustomFoodItemScreen() {
         customFoodWindow.setLayout(new BorderLayout());
         customFoodWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -1085,28 +696,384 @@ public class GUI
         customFoodWindow.setSize(800, 600);
         customFoodWindow.setVisible(false);
     }
+    public void makeLoginScreen() {
+
+        JPanel loginPanel = new JPanel();
+        JLabel loginTitleLabel = new JLabel();
+
+        loginWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginWindow.setSize(800, 600);
+        loginWindow.setLayout(new BorderLayout());
+        loginWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        loginPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);  // Adds padding around components
+        gbc.fill = GridBagConstraints.NONE;
+
+        // Username label
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        loginPanel.add(new JLabel("Username:"), gbc);
+
+        // Username text field
+        gbc.gridx = 1;
+        loginPanel.add(loginUsernameField, gbc);
+
+        // Password label
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        loginPanel.add(new JLabel("Password:"), gbc);
+
+        // Password text field
+        gbc.gridx = 1;
+        loginPanel.add(loginPasswordField, gbc);
+
+        // Login button
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        JButton loginButton = new JButton();
+        loginButton.setText("Login");
+        loginButton.addActionListener(cHandler);
+        loginButton.setActionCommand("tryToLogin");
+        loginPanel.add(loginButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        JButton createButton = new JButton();
+        createButton.setText("Create");
+        createButton.addActionListener(cHandler);
+        createButton.setActionCommand("createAccount");
+        loginPanel.add(createButton, gbc);
+
+        loginTitleLabel.setText("Login or Create Account");
+        loginTitleLabel.setHorizontalAlignment(JLabel.CENTER);
+        loginTitleLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
+        loginTitleLabel.setForeground(Color.BLUE);
+
+        loginWindow.add(loginTitleLabel, BorderLayout.NORTH);
+        loginWindow.add(loginPanel, BorderLayout.CENTER);
+
+        loginPanel.setVisible(true);
+        loginTitleLabel.setVisible(true);
+        loginWindow.setVisible(false);
+    }
+    public void makeMainScreen() {
+        // Main window setup
+        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow.setSize(800, 600);
+        mainWindow.setLayout(new BorderLayout());
+        mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        // Title label at the top
+        JLabel mainLabel = new JLabel("Main Navigation");
+        mainLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
+        mainLabel.setHorizontalAlignment(JLabel.CENTER);
+        mainWindow.add(mainLabel, BorderLayout.NORTH);
+
+        // Panel for buttons with GridLayout
+        JPanel mainbuttonPanel = new JPanel();
+        mainbuttonPanel.setLayout(new GridLayout(8, 1, 10, 10));  // 8 rows, 1 column, spacing of 10px
+
+        // Create and add buttons to the panel
+        String[] buttonLabels =
+        {
+            "Exit",
+            "Search for Food Item",
+            "Set Nutrition Goals",
+            "Alter User Data",
+            "Display Status of Goals",
+            "Make Custom Food Item",
+            "View Advanced Statistics",
+            "Catalog Food Intake"
+        };
+
+        for(String label : buttonLabels)
+        {
+            JButton button = new JButton(label);
+            button.setFont(new Font("Arial", Font.PLAIN, 18));
+
+            // Set ActionListener and ActionCommand for each button
+            button.addActionListener(cHandler);
+            button.setActionCommand(label.replace(" ", "").toLowerCase());
+
+            mainbuttonPanel.add(button);
+        }
+
+        JPanel wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));
+        wrapperPanel.add(Box.createVerticalGlue());  // Adds flexible space above
+        wrapperPanel.add(mainbuttonPanel);
+        wrapperPanel.add(Box.createVerticalGlue());  // Adds flexible space below
+
+        // Add the button panel to the center of the main window
+        mainWindow.add(wrapperPanel, BorderLayout.CENTER);
+
+        // Display the main window
+        mainWindow.setLocationRelativeTo(null);  // Center window on screen
+        mainWindow.setVisible(false);
+    }
+    public void makeSearchItemScreen() {
+
+        searchWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        searchWindow.setSize(800, 600);
+        searchWindow.setLayout(new BorderLayout());
+        searchWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel titleLabel = new JLabel("Search For Food Item", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        searchWindow.add(titleLabel, BorderLayout.NORTH);
+
+        // Panel to contain search components and output
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Search panel for "Search:" label, text field, and button
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel searchLabel = new JLabel("Search:");
+
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(cHandler);
+        searchButton.setActionCommand("searchForFood");
+        searchPanel.add(searchLabel);
+        searchPanel.add(searchField);
+        searchPanel.add(searchButton);
+
+        // Scrollable output area for food item details
+        outputArea.setLineWrap(true);
+        outputArea.setWrapStyleWord(true);
+        outputArea.setEditable(false);
+
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        // Panel for "Add Item" and "Exit" buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton addItemButton = new JButton("Add Item");
+        addItemButton.addActionListener(cHandler);
+        addItemButton.setActionCommand("addItem");
+        JButton exitButton = new JButton("Exit");
+        exitButton.addActionListener(cHandler);
+        exitButton.setActionCommand("goMainScreen");
+        buttonPanel.add(addItemButton);
+        buttonPanel.add(exitButton);
+
+        // Add components to the center panel
+        centerPanel.add(searchPanel);
+        centerPanel.add(Box.createVerticalStrut(10)); // Spacing
+        centerPanel.add(scrollPane);
+        centerPanel.add(Box.createVerticalStrut(10)); // Spacing
+        centerPanel.add(buttonPanel);
+
+        // Add centerPanel to the main window's center area
+        searchWindow.add(centerPanel, BorderLayout.CENTER);
+
+        // Set the window visible
+        searchWindow.setVisible(false);
+
+    }
+    public void makeSetGoalsScreen() {
+        setGoalsWindow = new JFrame("Set Nutritional Goals");
+        setGoalsWindow.setLayout(new BorderLayout(10, 10)); // Use BorderLayout for overall structure
+
+        // Title Label at the top
+        JLabel titleLabel = new JLabel("Set Nutritional Goals", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        setGoalsWindow.add(titleLabel, BorderLayout.NORTH);
+
+        // Main panel with a grid layout for three columns
+        JPanel mainPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Macronutrients Panel
+        JPanel macronutrientsPanel = new JPanel(new GridLayout(0, 1));
+        macronutrientsPanel.setBorder(BorderFactory.createTitledBorder("Macronutrients"));
+        String[] macronutrients =
+        {
+            "Water", "Calories", "Carbohydrates", "Protein", "Monounsaturated Fat",
+            "Polyunsaturated Fat", "Saturated Fat", "Fiber"
+        };
+        for(String item : macronutrients)
+        {
+            JButton button = new JButton(item);
+            button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
+            macronutrientsPanel.add(button);
+        }
+
+        // Vitamins Panel
+        JPanel vitaminsPanel = new JPanel(new GridLayout(0, 1));
+        vitaminsPanel.setBorder(BorderFactory.createTitledBorder("Vitamins"));
+        String[] vitamins =
+        {
+            "Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B3", "Vitamin B5", "Vitamin B6",
+            "Vitamin B7", "Vitamin B9", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K"
+        };
+        for(String item : vitamins)
+        {
+            JButton button = new JButton(item);
+            button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
+            vitaminsPanel.add(button);
+        }
+
+        // Minerals Panel
+        JPanel mineralsPanel = new JPanel(new GridLayout(0, 1));
+        mineralsPanel.setBorder(BorderFactory.createTitledBorder("Minerals"));
+        String[] minerals =
+        {
+            "Calcium", "Chloride", "Choline", "Chromium", "Copper", "Fluoride", "Iodine",
+            "Iron", "Magnesium", "Manganese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc"
+        };
+        for(String item : minerals)
+        {
+            JButton button = new JButton(item);
+            button.addActionListener(e -> showInputDialog(item)); // Show dialog on click
+            mineralsPanel.add(button);
+        }
+
+        // Add category panels to the main panel
+        mainPanel.add(macronutrientsPanel);
+        mainPanel.add(vitaminsPanel);
+        mainPanel.add(mineralsPanel);
+
+        // Add the main panel to the center of the window
+        setGoalsWindow.add(mainPanel, BorderLayout.CENTER);
+
+        // Exit Button at the bottom
+        JButton exitButton = new JButton("EXIT");
+        exitButton.addActionListener(cHandler);
+        exitButton.setActionCommand("goMainScreen");
+        JPanel exitPanel = new JPanel();
+        exitPanel.add(exitButton); // Add the button to a panel for centered alignment
+        setGoalsWindow.add(exitPanel, BorderLayout.SOUTH);
+
+        // Set up the frame
+        setGoalsWindow.setSize(600, 500);
+        setGoalsWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setGoalsWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setGoalsWindow.setVisible(false);
+    }
+    public void makeStatusGoalsScreen() {
+        // Create the main frame
+        statusWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        statusWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        statusWindow.setLayout(new BorderLayout(10, 10));
+
+        // Title at the top
+        JLabel titleLabel = new JLabel("Status of Goals", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        statusWindow.add(titleLabel, BorderLayout.NORTH);
+
+        // Center panel for sections
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(6, 1, 0, 10)); // Adjust for labels and text areas with scroll panes
+
+        // Macronutrients section
+        JLabel macronutrientsLabel = new JLabel("Macronutrients Progress", JLabel.CENTER);
+        macronutrientsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        centerPanel.add(macronutrientsLabel);
+
+        macronutrientsField = new JTextArea();
+        macronutrientsField.setEditable(false);
+        macronutrientsField.setLineWrap(true);
+        macronutrientsField.setWrapStyleWord(true);
+        JScrollPane macronutrientsScrollPane = new JScrollPane(macronutrientsField);
+        centerPanel.add(macronutrientsScrollPane);
+
+        // Vitamins section
+        JLabel vitaminsLabel = new JLabel("Vitamins Progress", JLabel.CENTER);
+        vitaminsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        centerPanel.add(vitaminsLabel);
+
+        vitaminsField = new JTextArea();
+        vitaminsField.setEditable(false);
+        vitaminsField.setLineWrap(true);
+        vitaminsField.setWrapStyleWord(true);
+        JScrollPane vitaminsScrollPane = new JScrollPane(vitaminsField);
+        centerPanel.add(vitaminsScrollPane);
+
+        // Minerals section
+        JLabel mineralsLabel = new JLabel("Minerals Progress", JLabel.CENTER);
+        mineralsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        centerPanel.add(mineralsLabel);
+
+        mineralsField = new JTextArea();
+        mineralsField.setEditable(false);
+        mineralsField.setLineWrap(true);
+        mineralsField.setWrapStyleWord(true);
+        JScrollPane mineralsScrollPane = new JScrollPane(mineralsField);
+        centerPanel.add(mineralsScrollPane);
+
+        statusWindow.add(centerPanel, BorderLayout.CENTER);
+
+        // Exit button centered at the bottom
+        JPanel buttonPanel = new JPanel();
+        JButton exitButton = new JButton("Exit");
+        exitButton.addActionListener(cHandler);
+        exitButton.setActionCommand("goMainScreen");
+        buttonPanel.add(exitButton);
+        statusWindow.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Set frame visibility to true
+        statusWindow.setVisible(false);
+    }
+    public void makeTitleScreen() {
+
+        JPanel titlePanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
+
+        titleWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        titleWindow.setSize(800, 600);
+        titleWindow.setLayout(new BorderLayout());
+        titleWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel titleLabel = new JLabel();
+        titleLabel.setText("Nutrition Tracker  CEN4010  Josh Lor, Sam Gray, Haivan Benjamin");
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
+        titleLabel.setForeground(Color.YELLOW);
+
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.setBackground(Color.DARK_GRAY);
+
+        // Create buttons
+        JButton startButton = new JButton("Start");
+        startButton.addActionListener(cHandler);
+        startButton.setActionCommand("goLoginScreen");
+        JButton exitButton = new JButton("Exit");
+
+        // Add buttons to the panel
+        buttonPanel.add(startButton);
+        buttonPanel.add(exitButton);
+
+        // Set background for the title area
+        titlePanel.setBackground(Color.BLUE);
+        titlePanel.add(titleLabel);
+
+        // Add the title label and button panel to the window
+        titleWindow.add(titlePanel, BorderLayout.NORTH);
+        titleWindow.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Center the window on screen
+        titleWindow.setLocationRelativeTo(null);
+        titleWindow.setVisible(true);
+        // Make the window visible
+
+        exitButton.addActionListener(e -> System.exit(0));
+    }
 
 
     // All functions that display screens in ABC order
-    
-    
-    public void displayCustomScreen()
-    {
-    	customFoodWindow.setVisible(true);
-    }
-
-    public void removeCustomScreen()
-    {
-    	customFoodWindow.setVisible(false);
-    }
-    
     public void displayAlterUserDataScreen()
     {
         alterUserDataWindow.setVisible(true);
     }
-
-    private void displayCatalogFoodIntakeScreen()
-    {
+    public void displayCatalogFoodIntakeScreen() {
         LinkedList<Food> retrievedFoodCatalog = currentUser.getFoodCatalog();
         StringBuilder finalOutput = new StringBuilder();
         for(Food foodEntry : retrievedFoodCatalog)
@@ -1118,37 +1085,34 @@ public class GUI
         foodsConsumedField.setText(finalOutput.toString());
         catalogFoodIntakeWindow.setVisible(true);
     }
-
     public void displayCreateScreen()
     {
         createWindow.setVisible(true);
     }
-
+    public void displayCustomScreen()
+    {
+        customFoodWindow.setVisible(true);
+    }
     public void displayMainScreen()
     {
         mainWindow.setVisible(true);
     }
-
     public void displayLoginScreen()
     {
         loginWindow.setVisible(true);
     }
-
     public void displaySearchScreen()
     {
         searchWindow.setVisible(true);
     }
-
     public void displaySetGoalsScreen()
     {
         setGoalsWindow.setVisible(true);
     }
-
     public void displayStatusGoalsScreen()
     {
         statusWindow.setVisible(true);
     }
-
     public void displayTitleScreen()
     {
         titleWindow.setVisible(true);
@@ -1159,50 +1123,45 @@ public class GUI
     {
         alterUserDataWindow.setVisible(false);
     }
-
     public void removeCatalogFoodIntakeScreen()
     {
         catalogFoodIntakeWindow.setVisible(false);
     }
-
     public void removeCreateScreen()
     {
         createWindow.setVisible(false);
     }
-
+    public void removeCustomScreen()
+    {
+        customFoodWindow.setVisible(false);
+    }
     public void removeLoginScreen()
     {
         loginWindow.setVisible(false);
     }
-
     public void removeMainScreen()
     {
         mainWindow.setVisible(false);
     }
-
     public void removeSearchScreen()
     {
         searchWindow.setVisible(false);
     }
-
     public void removeSetGoalsScreen()
     {
         setGoalsWindow.setVisible(false);
     }
-
     public void removeStatusGoalsScreen()
     {
         statusWindow.setVisible(false);
     }
-
     public void removeTitleScreen()
     {
         titleWindow.setVisible(false);
     }
 
     // All class helper functions in ABC order
-    private boolean checkCredentials(String username, String password)
-    {
+    public boolean checkCredentials(String username, String password) {
         ResultSet resultSet;
         String query = "SELECT password, userId FROM users WHERE username = ?";
         String retrievedPassword = "";
@@ -1234,9 +1193,7 @@ public class GUI
 
         return false; // Error occurred
     }
-
-    public class ChoiceHandler implements ActionListener
-    {
+    public class ChoiceHandler implements ActionListener {
 
         private JTextField usernameField;
         private JPasswordField passwordField;
@@ -1259,7 +1216,6 @@ public class GUI
                 case "goLoginScreen":
                     removeTitleScreen();
                     displayLoginScreen();
-
                     break;
 
                 case "tryToLogin":
@@ -1291,6 +1247,7 @@ public class GUI
                     displayLoginScreen();
                     removeCreateScreen();
                     break;
+
                 case "tryToCreate":
                     String createUsername = createUsernameField.getText();
                     char[] createPassword = createPasswordField.getPassword();
@@ -1308,10 +1265,12 @@ public class GUI
                         JOptionPane.showMessageDialog(null, "ERROR: User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
+
                 case "searchforfooditem":
                     displaySearchScreen();
                     removeMainScreen();
                     break;
+
                 case "goMainScreen":
                     removeSearchScreen();
                     removeSetGoalsScreen();
@@ -1321,36 +1280,45 @@ public class GUI
                     removeCustomScreen();
                     displayMainScreen();
                     break;
+
                 case "searchForFood":
                     searchItem = searchField.getText();
                     session.getFoodInput(searchItem);
                     break;
+
                 case "addItem":
                     searchItem = searchField.getText();
                     session.addFoodItem(searchItem);
                     break;
+
                 case "setnutritiongoals":
                     displaySetGoalsScreen();
                     removeMainScreen();
                     break;
+
                 case "exit":
                     removeMainScreen();
                     displayLoginScreen();
                     break;
+
                 case "displaystatusofgoals":
                     session.showGoals();
                     removeMainScreen();
                     displayStatusGoalsScreen();
                     break;
+
                 case "alteruserdata":
                     removeMainScreen();
                     displayAlterUserDataScreen();
                     break;
+
                 case "makecustomfooditem":
                 	removeMainScreen();
                 	displayCustomScreen();
                 	break;
+
                 // case "viewadvancedstatistics"
+
                 case "catalogfoodintake":
                     removeMainScreen();
                     displayCatalogFoodIntakeScreen();
@@ -1359,10 +1327,8 @@ public class GUI
         }
 
     }
-
-    private boolean createAccount(String username, String password)
-    {
-        String query = "INSERT INTO users (username, password, weight, height, sex, exercise) VALUES(?, ?, ?, ?, ?, ?)";
+    public boolean createAccount(String username, String password) {
+        String query = "INSERT IGNORE INTO users (username, password, weight, height, sex, exercise) VALUES(?, ?, ?, ?, ?, ?)";
         try
         {
             PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query); // Using prepared statements as good practice against SQL injections
@@ -1518,26 +1484,21 @@ public class GUI
             return false;
         }
     }
-
-    private void createSession()
-    {
-        User newUser = new User(retrievedUserId, connectionToMySQL);
+    public void createSession() {
+        User newUser = new User(retrievedUserId);
         this.currentUser = newUser;
         currentUser.updateAllFromDatabase();
         System.out.println("current user is set to: " + currentUser.getUserId());
         System.out.println("current user's food diary is: " + currentUser.getDailyFoodsConsumed());
-        Session newSession = new Session(newUser, this, connectionToMySQL);
+        Session newSession = new Session(newUser, this);
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
     }
-
     public void setSession(Session session)
     {
         this.session = session;
     }
-
-    private void showInputDialog(String nutrient)
-    {
+    public void showInputDialog(String nutrient) {
         String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + " in grams:", "Set Goal", JOptionPane.PLAIN_MESSAGE);
         if(input != null && !input.trim().isEmpty())
         {
@@ -1545,5 +1506,10 @@ public class GUI
             session.changeGoals(nutrient, input);
         }
     }
-
+    public User getCurrentUser() {
+        return currentUser;
+    }
+    public Session getSession() {
+        return session;
+    }
 }
