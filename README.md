@@ -11,22 +11,23 @@ metrics so that a user has a "one-stop shop" for all their nutritional needs.
 
 Features:
 
-Thus far in our engineering, our software will allow a user to perform the following tasks:
-
-- Input what foods and drinks have been consumed throughout the day, this is done through the use of the USDA API. This will save all sorts of nutrition consumption information to your profile.
-- Edit profile details such as sex, height, weight, and average daily exercise in order to
-estimate daily caloric and nutritional needs.
-- Set caloric or nutritional goals to be reached.
--take a look at a status update comparing your consumption to your goals.
+This application allows the user to perform the following tasks:
+- Search for food items to add to the user's food diary via the use of the USDA API.
+- Input custom foods and their nutritional data and save these custom foods to their profile.
+- Create a health profile and edit personal details such as sex, height, weight, and average daily exercise level in order to estimate proper caloric and nutritional needs.
+- Set personal caloric and nutritional goals to be reached.
+- View current status updates regarding the user's uniquely tailored daily nutrition goals.
 
 Build and Run Instructions:
 1. Clone the nutritionTracker repository using a Git-enabled terminal via the command: "git clone https://github.com/jlor87/nutritionTracker.git"
-2. Using a Java IDE of your choice, configure the nutrionTracker folder as the project root directory.
-3. Install dependencies and include them in your class path. This includes JUnit version 5 and GSON. (The GSON .jar file is in the /jar folder.)
+2. Using a Java IDE of your choice, configure the nutritionTracker folder as the project's root directory.
+3. Install dependencies and include them in your class path. This includes JUnit version 5, GSON v2.11, and the MySQL Connector v9.1.0.
 4. Using your IDE, go into the Main.java class and run main(). Alternatively, using the command line, navigate inside the /src folder and type "javac Main.java" to compile, and then "java Main" to start.
 
 
 Design Choice Discussion:
 
-We chose to go for a modular approach, with several different classes that are split up to handle specific tasks. This is not near the last iteration of our project however, and classes are subject to much potential updating
-and refactoring. For the main menu of our code, we are using a do/while loop in the session class. This class gets called at execution by Main. Main's only purpose is to start the program. 
+Using a modular approach, application functions were split into different classes, each designed to handle a set of related tasks by their name (Main, GUI, Session, API, UserSettings, etc.).
+It was decided that Main's responsibility was to simply load the application, while the bulk of responsibility for app navigation was offloaded to the GUI class. This was due to the increased advantage of having increased cohesion in the GUI class, where all screen creation, displaying, and navigation-related tasks were more easily accessible within the same class without the need of external calls to it.
+To offload application functionality off of the GUI class, the Session class (uniquely created for each user that logs on) serves as a "manager," calling upon other functional classes only when needed (such as API, Print, UserSettings, etc.). While not containing much code in itself, the Session class does always know which class to delegate important tasks to.
+Every other class serves their functional purpose, simplifying application maintainability. As a result, the Nutrition Tracker strategically seeks to be an easy-to-follow, scalable, and maintainable application with enormous potential.
