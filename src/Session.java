@@ -1,6 +1,5 @@
 import java.sql.Connection;
 import java.util.List;
-import java.util.Scanner;
 
 
 /**
@@ -9,7 +8,6 @@ import java.util.Scanner;
  */
 public class Session {
     private User currentUser;
-    private Scanner scanner;
     private UserSettings userSettings;
     private API api;
     private Print print;
@@ -23,35 +21,27 @@ public class Session {
         this.connectionToMySQL = Main.getConnection();
     }
 
-
-    public void startSession(){
-        // Initialize these utility classes for later usage
-        userSettings = new UserSettings(currentUser, connectionToMySQL);
-        print = new Print(currentUser);
-        scanner = new Scanner(System.in);
-        api = new API(currentUser);
-    }
-    
+    // Class functions
     /**
      * This function is responsible for retrieving the food that the user of the app has consumed or plans to consume
      * @param userInput takes in the name of the food item entered by the user in the Search Food Item option of the menu
      */
+    public void addFoodItem(String userInput) {
+        userSettings.updateUserConsumption(api.getNutrients(), api.getCurrentFoodName());
+        gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", userInput));
+    }
+
+    public void changeGoals(String nutrient, String newVal) {
+
+        userSettings.setGoalData(nutrient, newVal);
+    }
+
     public void getFoodInput(String userInput){
         System.out.print("\nInput food item: ");
         System.out.println("You entered: " + userInput);
         String result = api.sendAPIRequest(userInput); // Calling api with user's food input
         gui.outputArea.append(result + "\n");
         gui.outputArea.append("CLICK THE 'ADD' BUTTON TO ADD THIS FOOD ITEM TO YOUR CONSUMPTION.\n");
-    }
-    
-    public void addFoodItem(String userInput) {
-        userSettings.updateUserConsumption(api.getNutrients(), api.getCurrentFoodName());
-    	gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", userInput));
-    }
-    
-    public void changeGoals(String nutrient, String newVal) {
-
-    	userSettings.setGoalData(nutrient, newVal);
     }
     
     public void showGoals() {
@@ -64,20 +54,36 @@ public class Session {
          gui.mineralsField.setText(mineralsProgress);
     }
 
+    public void startSession(){
+        // Initialize these utility classes for later usage
+        userSettings = new UserSettings(currentUser);
+        print = new Print(currentUser);
+        api = new API(currentUser);
+    }
+
     // Getters
-    public User getCurrentUser(){
-        return currentUser;
-    }
-    public Scanner getScanner(){
-        return scanner;
-    }
-    public UserSettings getUserSettings(){
-        return userSettings;
-    }
     public API getApi() {
         return api;
     }
+
+    public Connection getConnectionToMySQL() {
+        return connectionToMySQL;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public GUI getGui() {
+        return gui;
+    }
+
     public Print getPrint() {
         return print;
     }
+
+    public UserSettings getUserSettings() {
+        return userSettings;
+    }
+
 }

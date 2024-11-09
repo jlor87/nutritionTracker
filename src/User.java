@@ -19,114 +19,7 @@ public class User {
     private int userHeight = 0; //inches
     private char userSex = '0'; //m or f
     private String exerciseLevel = "not set"; //none, light, moderate, hard, extreme (different levels to be defined in readME)
-
     private Connection connectionToMySQL;
-
-    // Updates goals and current consumption in one function. Useful for outputting the most recent info
-    public void updateAllFromDatabase() {
-        System.out.println("Attempting to update user values from the database...");
-        String selectQuery1 = "SELECT * FROM currentConsumption WHERE userId = ?";
-        String selectQuery2 = "SELECT * FROM nutrientGoals WHERE userId = ?";
-
-        ResultSet resultSet;
-
-        try {
-            // Update current consumption values
-            PreparedStatement preparedStatement1 = connectionToMySQL.prepareStatement(selectQuery1);
-            preparedStatement1.setInt(1, userId);
-            resultSet = preparedStatement1.executeQuery();
-
-            if (resultSet.next()) {
-                water[1] = resultSet.getDouble("water");
-                energy[1] = resultSet.getDouble("energy");
-                carbohydrate[1] = resultSet.getDouble("carbohydrate");
-                monounsaturatedFat[1] = resultSet.getDouble("monounsaturatedFat");
-                saturatedFat[1] = resultSet.getDouble("saturatedFat");
-                polyunsaturatedFat[1] = resultSet.getDouble("polyunsaturatedFat");
-                protein[1] = resultSet.getDouble("protein");
-                fiber[1] = resultSet.getDouble("fiber");
-                vitaminA[1] = resultSet.getDouble("vitaminA");
-                vitaminB1Thiamine[1] = resultSet.getDouble("vitaminB1Thiamine");
-                vitaminB2Riboflavin[1] = resultSet.getDouble("vitaminB2Riboflavin");
-                vitaminB3Niacin[1] = resultSet.getDouble("vitaminB3Niacin");
-                vitaminB5PantothenicAcid[1] = resultSet.getDouble("vitaminB5PantothenicAcid");
-                vitaminB6Pyridoxine[1] = resultSet.getDouble("vitaminB6Pyridoxine");
-                vitaminB7Biotin[1] = resultSet.getDouble("vitaminB7Biotin");
-                vitaminB9Folate[1] = resultSet.getDouble("vitaminB9Folate");
-                vitaminB12Cyanocobalamin[1] = resultSet.getDouble("vitaminB12Cyanocobalamin");
-                vitaminC[1] = resultSet.getDouble("vitaminC");
-                vitaminD[1] = resultSet.getDouble("vitaminD");
-                vitaminE[1] = resultSet.getDouble("vitaminE");
-                vitaminK[1] = resultSet.getDouble("vitaminK");
-                choline[1] = resultSet.getDouble("choline");
-                calcium[1] = resultSet.getDouble("calcium");
-                chloride[1] = resultSet.getDouble("chloride");
-                chromium[1] = resultSet.getDouble("chromium");
-                copper[1] = resultSet.getDouble("copper");
-                fluoride[1] = resultSet.getDouble("fluoride");
-                iodine[1] = resultSet.getDouble("iodine");
-                iron[1] = resultSet.getDouble("iron");
-                magnesium[1] = resultSet.getDouble("magnesium");
-                manganese[1] = resultSet.getDouble("manganese");
-                molybdenum[1] = resultSet.getDouble("molybdenum");
-                phosphorus[1] = resultSet.getDouble("phosphorus");
-                potassium[1] = resultSet.getDouble("potassium");
-                selenium[1] = resultSet.getDouble("selenium");
-                sodium[1] = resultSet.getDouble("sodium");
-                zinc[1] = resultSet.getDouble("zinc");
-                System.out.println("Updated current user's consumption values from the database.");
-            }
-
-            // Update nutrient goals
-            PreparedStatement preparedStatement2 = connectionToMySQL.prepareStatement(selectQuery2);
-            preparedStatement2.setInt(1, userId);
-            resultSet = preparedStatement2.executeQuery();
-
-            if (resultSet.next()) {
-                water[0] = resultSet.getDouble("water");
-                energy[0] = resultSet.getDouble("energy");
-                carbohydrate[0] = resultSet.getDouble("carbohydrate");
-                monounsaturatedFat[0] = resultSet.getDouble("monounsaturatedFat");
-                saturatedFat[0] = resultSet.getDouble("saturatedFat");
-                polyunsaturatedFat[0] = resultSet.getDouble("polyunsaturatedFat");
-                protein[0] = resultSet.getDouble("protein");
-                fiber[0] = resultSet.getDouble("fiber");
-                vitaminA[0] = resultSet.getDouble("vitaminA");
-                vitaminB1Thiamine[0] = resultSet.getDouble("vitaminB1Thiamine");
-                vitaminB2Riboflavin[0] = resultSet.getDouble("vitaminB2Riboflavin");
-                vitaminB3Niacin[0] = resultSet.getDouble("vitaminB3Niacin");
-                vitaminB5PantothenicAcid[0] = resultSet.getDouble("vitaminB5PantothenicAcid");
-                vitaminB6Pyridoxine[0] = resultSet.getDouble("vitaminB6Pyridoxine");
-                vitaminB7Biotin[0] = resultSet.getDouble("vitaminB7Biotin");
-                vitaminB9Folate[0] = resultSet.getDouble("vitaminB9Folate");
-                vitaminB12Cyanocobalamin[0] = resultSet.getDouble("vitaminB12Cyanocobalamin");
-                vitaminC[0] = resultSet.getDouble("vitaminC");
-                vitaminD[0] = resultSet.getDouble("vitaminD");
-                vitaminE[0] = resultSet.getDouble("vitaminE");
-                vitaminK[0] = resultSet.getDouble("vitaminK");
-                choline[0] = resultSet.getDouble("choline");
-                calcium[0] = resultSet.getDouble("calcium");
-                chloride[0] = resultSet.getDouble("chloride");
-                chromium[0] = resultSet.getDouble("chromium");
-                copper[0] = resultSet.getDouble("copper");
-                fluoride[0] = resultSet.getDouble("fluoride");
-                iodine[0] = resultSet.getDouble("iodine");
-                iron[0] = resultSet.getDouble("iron");
-                magnesium[0] = resultSet.getDouble("magnesium");
-                manganese[0] = resultSet.getDouble("manganese");
-                molybdenum[0] = resultSet.getDouble("molybdenum");
-                phosphorus[0] = resultSet.getDouble("phosphorus");
-                potassium[0] = resultSet.getDouble("potassium");
-                selenium[0] = resultSet.getDouble("selenium");
-                sodium[0] = resultSet.getDouble("sodium");
-                zinc[0] = resultSet.getDouble("zinc");
-                System.out.println("Updated current user's nutrient goals from the database.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     // Index 0 refers to the user's dietary goal. Index 1 refers to the amount consumed for the day.
 
@@ -291,20 +184,6 @@ public class User {
     }
     public void exerciseSetter(String exercise) {
     	this.exerciseLevel = exercise;
-    }
-    public void addFood(Food food){
-        foodCatalog.add(food);
-
-        StringBuilder foodsConsumedThisDay = new StringBuilder();
-        for(Food foodEntry : foodCatalog){
-            foodsConsumedThisDay.append(foodEntry.getName()).append(" ");
-        }
-
-        // The food diary is a single long string
-        dailyFoodsConsumed = foodsConsumedThisDay.toString();
-    }
-    public String getDailyFoodsConsumed(){
-        return dailyFoodsConsumed;
     }
 
     // One getter and setter for every vitamin/nutrient.
@@ -706,6 +585,134 @@ public class User {
             chloride[option] = value;
         } else if (option == 1) { // Update amount consumed
             chloride[option] += value;
+        }
+    }
+
+    // Helper Functions
+    public void addFood(Food food){
+        foodCatalog.add(food);
+
+        StringBuilder foodsConsumedThisDay = new StringBuilder();
+        for(Food foodEntry : foodCatalog){
+            foodsConsumedThisDay.append(foodEntry.getName()).append(" ");
+        }
+
+        // The food diary is a single long string
+        dailyFoodsConsumed = foodsConsumedThisDay.toString();
+    }
+    public String getDailyFoodsConsumed(){
+        return dailyFoodsConsumed;
+    }
+    // Updates goals and current consumption in one function. Useful for outputting the most recent info
+    public boolean updateAllFromDatabase() {
+        System.out.println("Attempting to update user values from the database...");
+        String selectQuery1 = "SELECT * FROM currentConsumption WHERE userId = ?";
+        String selectQuery2 = "SELECT * FROM nutrientGoals WHERE userId = ?";
+
+        ResultSet resultSet;
+
+        try {
+            // Update current consumption values
+            PreparedStatement preparedStatement1 = connectionToMySQL.prepareStatement(selectQuery1);
+            preparedStatement1.setInt(1, userId);
+            resultSet = preparedStatement1.executeQuery();
+
+            if (resultSet.next()) {
+                water[1] = resultSet.getDouble("water");
+                energy[1] = resultSet.getDouble("energy");
+                carbohydrate[1] = resultSet.getDouble("carbohydrate");
+                monounsaturatedFat[1] = resultSet.getDouble("monounsaturatedFat");
+                saturatedFat[1] = resultSet.getDouble("saturatedFat");
+                polyunsaturatedFat[1] = resultSet.getDouble("polyunsaturatedFat");
+                protein[1] = resultSet.getDouble("protein");
+                fiber[1] = resultSet.getDouble("fiber");
+                vitaminA[1] = resultSet.getDouble("vitaminA");
+                vitaminB1Thiamine[1] = resultSet.getDouble("vitaminB1Thiamine");
+                vitaminB2Riboflavin[1] = resultSet.getDouble("vitaminB2Riboflavin");
+                vitaminB3Niacin[1] = resultSet.getDouble("vitaminB3Niacin");
+                vitaminB5PantothenicAcid[1] = resultSet.getDouble("vitaminB5PantothenicAcid");
+                vitaminB6Pyridoxine[1] = resultSet.getDouble("vitaminB6Pyridoxine");
+                vitaminB7Biotin[1] = resultSet.getDouble("vitaminB7Biotin");
+                vitaminB9Folate[1] = resultSet.getDouble("vitaminB9Folate");
+                vitaminB12Cyanocobalamin[1] = resultSet.getDouble("vitaminB12Cyanocobalamin");
+                vitaminC[1] = resultSet.getDouble("vitaminC");
+                vitaminD[1] = resultSet.getDouble("vitaminD");
+                vitaminE[1] = resultSet.getDouble("vitaminE");
+                vitaminK[1] = resultSet.getDouble("vitaminK");
+                choline[1] = resultSet.getDouble("choline");
+                calcium[1] = resultSet.getDouble("calcium");
+                chloride[1] = resultSet.getDouble("chloride");
+                chromium[1] = resultSet.getDouble("chromium");
+                copper[1] = resultSet.getDouble("copper");
+                fluoride[1] = resultSet.getDouble("fluoride");
+                iodine[1] = resultSet.getDouble("iodine");
+                iron[1] = resultSet.getDouble("iron");
+                magnesium[1] = resultSet.getDouble("magnesium");
+                manganese[1] = resultSet.getDouble("manganese");
+                molybdenum[1] = resultSet.getDouble("molybdenum");
+                phosphorus[1] = resultSet.getDouble("phosphorus");
+                potassium[1] = resultSet.getDouble("potassium");
+                selenium[1] = resultSet.getDouble("selenium");
+                sodium[1] = resultSet.getDouble("sodium");
+                zinc[1] = resultSet.getDouble("zinc");
+                System.out.println("Updated current user's consumption values from the database.");
+            }
+            else{
+                return false;
+            }
+
+            // Update nutrient goals
+            PreparedStatement preparedStatement2 = connectionToMySQL.prepareStatement(selectQuery2);
+            preparedStatement2.setInt(1, userId);
+            resultSet = preparedStatement2.executeQuery();
+
+            if (resultSet.next()) {
+                water[0] = resultSet.getDouble("water");
+                energy[0] = resultSet.getDouble("energy");
+                carbohydrate[0] = resultSet.getDouble("carbohydrate");
+                monounsaturatedFat[0] = resultSet.getDouble("monounsaturatedFat");
+                saturatedFat[0] = resultSet.getDouble("saturatedFat");
+                polyunsaturatedFat[0] = resultSet.getDouble("polyunsaturatedFat");
+                protein[0] = resultSet.getDouble("protein");
+                fiber[0] = resultSet.getDouble("fiber");
+                vitaminA[0] = resultSet.getDouble("vitaminA");
+                vitaminB1Thiamine[0] = resultSet.getDouble("vitaminB1Thiamine");
+                vitaminB2Riboflavin[0] = resultSet.getDouble("vitaminB2Riboflavin");
+                vitaminB3Niacin[0] = resultSet.getDouble("vitaminB3Niacin");
+                vitaminB5PantothenicAcid[0] = resultSet.getDouble("vitaminB5PantothenicAcid");
+                vitaminB6Pyridoxine[0] = resultSet.getDouble("vitaminB6Pyridoxine");
+                vitaminB7Biotin[0] = resultSet.getDouble("vitaminB7Biotin");
+                vitaminB9Folate[0] = resultSet.getDouble("vitaminB9Folate");
+                vitaminB12Cyanocobalamin[0] = resultSet.getDouble("vitaminB12Cyanocobalamin");
+                vitaminC[0] = resultSet.getDouble("vitaminC");
+                vitaminD[0] = resultSet.getDouble("vitaminD");
+                vitaminE[0] = resultSet.getDouble("vitaminE");
+                vitaminK[0] = resultSet.getDouble("vitaminK");
+                choline[0] = resultSet.getDouble("choline");
+                calcium[0] = resultSet.getDouble("calcium");
+                chloride[0] = resultSet.getDouble("chloride");
+                chromium[0] = resultSet.getDouble("chromium");
+                copper[0] = resultSet.getDouble("copper");
+                fluoride[0] = resultSet.getDouble("fluoride");
+                iodine[0] = resultSet.getDouble("iodine");
+                iron[0] = resultSet.getDouble("iron");
+                magnesium[0] = resultSet.getDouble("magnesium");
+                manganese[0] = resultSet.getDouble("manganese");
+                molybdenum[0] = resultSet.getDouble("molybdenum");
+                phosphorus[0] = resultSet.getDouble("phosphorus");
+                potassium[0] = resultSet.getDouble("potassium");
+                selenium[0] = resultSet.getDouble("selenium");
+                sodium[0] = resultSet.getDouble("sodium");
+                zinc[0] = resultSet.getDouble("zinc");
+                System.out.println("Updated current user's nutrient goals from the database.");
+                return true;
+            }
+            else{
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

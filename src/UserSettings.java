@@ -1,14 +1,11 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import javax.swing.*;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.function.Consumer;
 import java.sql.*;
 
@@ -18,132 +15,20 @@ import java.sql.*;
  */
 public class UserSettings {
     private Method[] userMethods;
-
     private Method[] foodMethods;
     private User currentUser;
-    private double weight;
-    private int height;
-    private char sex;
-    private String exercise;
     private Connection connectionToMySQL;
 
     /**
      * Constructor
      * @param user the user who's settings will be altered
      */
-    public UserSettings(User user, Connection connectionToMySQL){
+    public UserSettings(User user){
         this.currentUser = user;
-        this.connectionToMySQL = connectionToMySQL;
+        this.connectionToMySQL = Main.getConnection();
     }
 
     // Class functions
-    
-    /**
-     * User wants to change profile info. 
-     * This method will print to the console the current values set to the user and give the user a list of which value to change if any.
-     * @param scanner 
-     */
-    public void alterUserData(Scanner scanner){
-        String userChoice = "";
-
-        // Loop until the user chooses to exit (option 5)
-        do {
-            // Get current user data
-            weight = currentUser.weightGetter();
-            height = currentUser.heightGetter();
-            sex = currentUser.sexGetter();
-            exercise = currentUser.exerciseGetter();
-
-            // Display current metrics
-            System.out.println("\nYour data is set as follows:");
-            System.out.printf("Weight: %.2f lbs\n", weight);
-            System.out.printf("Height: %d inches\n", height);
-            System.out.printf("Sex: %c\n", sex);
-            System.out.printf("Exercise Level: %s\n", exercise);
-
-            // Ask which metric to update
-            System.out.printf("\nWhich of the user data metrics would you like to update?\n"
-                    + "1. Weight\n"
-                    + "2. Height\n"
-                    + "3. Sex\n"
-                    + "4. Exercise level\n"
-                    + "5. Exit menu\n");
-
-            userChoice = scanner.nextLine();
-
-
-            switch (userChoice) {
-                case "1":
-                    // Update weight
-                    System.out.print("Enter your new weight (lbs): ");
-                    weight = Double.parseDouble(scanner.nextLine());
-                    currentUser.weightSetter(weight);
-                    System.out.println("Weight updated successfully.");
-                    break;
-
-                case "2":
-                    // Update height
-                    System.out.print("Enter your new height (inches): ");
-                    height = Integer.parseInt(scanner.nextLine());
-                    currentUser.heightSetter(height);
-                    System.out.println("Height updated successfully.");
-                    break;
-
-                case "3":
-                    // Update sex
-                    System.out.print("Enter your sex (M/F): ");
-                    sex = scanner.nextLine().charAt(0); // get first character
-                    currentUser.sexSetter(sex);
-                    System.out.println("Sex updated successfully.");
-                    break;
-
-                case "4":
-                    // Update exercise level based on numeric options
-                    System.out.println("Select your new exercise level:");
-                    System.out.println("1. NONE");
-                    System.out.println("2. LIGHT");
-                    System.out.println("3. MODERATE");
-                    System.out.println("4. HARD");
-                    System.out.println("5. EXTREME");
-
-                    String exerciseChoice = scanner.nextLine();
-                    switch (exerciseChoice) {
-                        case "1":
-                            exercise = "NONE";
-                            break;
-                        case "2":
-                            exercise = "LIGHT";
-                            break;
-                        case "3":
-                            exercise = "MODERATE";
-                            break;
-                        case "4":
-                            exercise = "HARD";
-                            break;
-                        case "5":
-                            exercise = "EXTREME";
-                            break;
-                        default:
-                            System.out.println("Invalid choice. Defaulting to NONE.");
-                            exercise = "NONE";
-                            break;
-                    }
-                    currentUser.exerciseSetter(exercise);
-                    System.out.println("Exercise level updated to " + exercise + " successfully.");
-                    break;
-
-                case "5":
-                    // Exit the menu
-                    System.out.println("Exiting the menu...");
-                    break;
-
-                default:
-                    System.out.println("Invalid option. Please select a valid number (1-5).");
-                    break;
-            }
-        } while (!userChoice.equals("5"));  // Loop until the user chooses to exit
-    }
-    
     /**
      * Set the user's preferred caloric/nutritional goals for the day
      */
@@ -211,7 +96,7 @@ public class UserSettings {
         }
     }
 
-    public void updateFoodDiary(String foodsConsumedThisDay){
+    public boolean updateFoodDiary(String foodsConsumedThisDay){
         int userId = currentUser.getUserId();
 
         LocalDate currentDate = LocalDate.now();
@@ -262,15 +147,18 @@ public class UserSettings {
                 if(rowsAffected > 0)
                 {
                     System.out.println("Food diary updated successfully!");
+                    return true;
                 }
                 else
                 {
                     System.out.println("Failed to update food diary!");
+                    return false;
                 }
             }
             catch(SQLException e)
             {
                 e.printStackTrace();
+                return false;
             }
         }
         else{
@@ -289,20 +177,23 @@ public class UserSettings {
                 if(rowsAffected > 0)
                 {
                     System.out.println("Food diary inserted successfully!");
+                    return true;
                 }
                 else
                 {
                     System.out.println("Failed to insert food diary!");
+                    return false;
                 }
             }
             catch(SQLException e)
             {
                 e.printStackTrace();
+                return false;
             }
         }
     }
 
-    public void updateUserConsumption(JsonArray nutrients, String foodName){
+    public boolean updateUserConsumption(JsonArray nutrients, String foodName){
         userMethods = Utility.getMethods();
         foodMethods = Utility.getFoodMethods();
         int length = userMethods.length;
@@ -368,6 +259,7 @@ public class UserSettings {
                             int rowsAffected = preparedStatement.executeUpdate();
                             if (rowsAffected > 0) {
                                 System.out.println("User nutrient updated!");
+                                return true;
                             } else {
                                 System.out.println("Failed to update consumption!");
                             }
@@ -380,8 +272,16 @@ public class UserSettings {
                     }
                 }
             }
-
-
         }
+        return false;
+    }
+
+    // Getters
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public Connection getConnectionToMySQL() {
+        return connectionToMySQL;
     }
 }
