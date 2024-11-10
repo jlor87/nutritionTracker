@@ -14,6 +14,7 @@ public class User {
     // Assigning new user with dummy values
     private LinkedList<Food> foodCatalog = new LinkedList<>();
     private String dailyFoodsConsumed = "";
+    private String username = "";
     private int userId = 0;
     private double userWeight = 0.00; //lbs
     private int userHeight = 0; //inches
@@ -114,44 +115,8 @@ public class User {
             e.printStackTrace();
         }
 
-        // Default daily goals are set for an 18-30 year old male **???**
-        setWater(0, 3.7);
-        setEnergy(0, 2000);
-        setCarbohyrate(0, 130);
-        setFiber(0, 38);
-        setMonounsaturatedFat(0, 22);
-        setSaturatedFat(0, 22);
-        setPolyunsaturatedFat(0, 17);
-        setProtein(0, 56);
-        setVitaminA(0, 900);
-        setVitaminB1Thiamine(0, 1.2);
-        setVitaminB2Riboflavin(0, 1.3);
-        setVitaminB3Niacin(0, 16);
-        setVitaminB5PantothenicAcid(0, 5);
-        setVitaminB6Pyridoxine(0, 1.3);
-        setVitaminB7Biotin(0, 30);
-        setVitaminB9Folate(0, 400);
-        setVitaminB12Cyanocobalamin(0, 2.4);
-        setVitaminC(0, 90);
-        setVitaminD(0, 15);
-        setVitaminE(0, 15);
-        setVitaminK(0, 120);
-        setCalcium(0, 1000);
-        setChloride(0, 2.3);
-        setCholine(0, 550);
-        setChromium(0, 35);
-        setCopper(0, 900);
-        setFluoride(0, 4);
-        setIodine(0, 150);
-        setIron(0, 8);
-        setMagnesium(0, 400);
-        setManganese(0, 2.3);
-        setMolybdenum(0, 45);
-        setPhosphorus(0, 700);
-        setPotassium(0, 3400);
-        setSelenium(0, 55);
-        setSodium(0, 1500);
-        setZinc(0, 11);
+        // Every user object will already have the database ready for user info retrieval
+        updateAllFromDatabase();
     }
 
     // Getters and setters for user data (weight, height, sex, exercise level)
@@ -184,6 +149,14 @@ public class User {
     }
     public void exerciseSetter(String exercise) {
     	this.exerciseLevel = exercise;
+    }
+
+    public void nameSetter(String name){
+        this.username = name;
+    }
+
+    public String nameGetter(){
+        return this.username;
     }
 
     // One getter and setter for every vitamin/nutrient.
@@ -608,6 +581,7 @@ public class User {
         System.out.println("Attempting to update user values from the database...");
         String selectQuery1 = "SELECT * FROM currentConsumption WHERE userId = ?";
         String selectQuery2 = "SELECT * FROM nutrientGoals WHERE userId = ?";
+        String selectQuery3 = "SELECT * FROM users WHERE userId = ?";
 
         ResultSet resultSet;
 
@@ -705,6 +679,23 @@ public class User {
                 sodium[0] = resultSet.getDouble("sodium");
                 zinc[0] = resultSet.getDouble("zinc");
                 System.out.println("Updated current user's nutrient goals from the database.");
+            }
+            else{
+                return false;
+            }
+
+            // Update user information
+            PreparedStatement preparedStatement3 = connectionToMySQL.prepareStatement(selectQuery3);
+            preparedStatement3.setInt(1, userId);
+            resultSet = preparedStatement3.executeQuery();
+
+            if (resultSet.next()) {
+                username = resultSet.getString("username");
+                weightSetter(resultSet.getDouble("weight"));
+                heightSetter(resultSet.getInt("height"));
+                sexSetter(resultSet.getString("sex").charAt(0));
+                exerciseSetter(resultSet.getString("exercise"));
+                System.out.println("Updated current user's profile information from the database.");
                 return true;
             }
             else{

@@ -194,6 +194,8 @@ public class UserSettings {
     }
 
     public boolean updateUserConsumption(JsonArray nutrients, String foodName){
+        System.out.println("amount of nutrients to be added: " + nutrients.size());
+
         userMethods = Utility.getMethods();
         foodMethods = Utility.getFoodMethods();
         int length = userMethods.length;
@@ -208,11 +210,12 @@ public class UserSettings {
         updateFoodDiary(currentUser.getDailyFoodsConsumed());
 
         // Deal with each nutrient one by one
-        for (int i = 0; i < length2; i++) {
+        int i;
+        for (i = 0; i < length2; i++) {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
             nutrientName = nutrient.get("nutrientName").getAsString();
             nutrientName = nutrientName.replaceAll(" ", "").toLowerCase();
-            // System.out.println("nutrientName (before): " + nutrientName);
+            System.out.println("nutrientName (before): " + nutrientName);
 
             // Handles parsing the special case of fatty acids
             if(nutrientName.startsWith("fattyacids")){
@@ -223,9 +226,13 @@ public class UserSettings {
             if(commaIndex != -1){
                 nutrientName = nutrientName.substring(0, commaIndex);
             }
-            // System.out.println("nutrientName: " + nutrientName); // Test statement
+            if(nutrientName.equals("saturated")){
+                nutrientName = "saturatedfat";
+            }
+            System.out.println("nutrientName (after): " + nutrientName); // Test statement
 
             amount = nutrient.get("value").getAsDouble();
+            System.out.println("Retrieved amount is: " + amount);
 
             // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
             for (int j = 0; j < length; j++) {
@@ -235,7 +242,8 @@ public class UserSettings {
                     try {
                         // Update user's consumed nutrients
                         userMethods[j].invoke(currentUser, 1, amount);
-                        foodMethods[j].invoke(newFood, 1, amount);
+                        System.out.println("User's " + nutrientName + " is set to " + amount);
+                        // foodMethods[j].invoke(newFood, 1, amount);
 
                         // Retrieve the updated value using the getter method
                         double newAmount = 0.00;
@@ -259,21 +267,22 @@ public class UserSettings {
                             int rowsAffected = preparedStatement.executeUpdate();
                             if (rowsAffected > 0) {
                                 System.out.println("User nutrient updated!");
-                                return true;
                             } else {
                                 System.out.println("Failed to update consumption!");
                             }
                             preparedStatement.close();
                         } catch (SQLException e) {
                             e.printStackTrace();
+                            return false;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
     // Getters

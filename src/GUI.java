@@ -52,6 +52,7 @@ public class GUI
     JFrame alterUserDataWindow = new JFrame();
     JFrame catalogFoodIntakeWindow = new JFrame();
     JFrame customFoodWindow = new JFrame();
+    JTextArea informationField = new JTextArea();
 
     //these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
     private final Connection connectionToMySQL;
@@ -896,8 +897,8 @@ public class GUI
         macronutrientsPanel.setBorder(BorderFactory.createTitledBorder("Macronutrients"));
         String[] macronutrients =
         {
-            "water", "Calories", "carbohydrate", "protein", "monounsaturatedFat",
-            "polyunsaturatedFat", "saturatedFat", "fiber"
+            "Water", "Calories", "Carbohydrate", "Protein", "Monounsaturated Fat",
+            "Polyunsaturated Fat", "Saturated Fat", "Fiber"
         };
         for(String item : macronutrients)
         {
@@ -911,8 +912,8 @@ public class GUI
         vitaminsPanel.setBorder(BorderFactory.createTitledBorder("Vitamins"));
         String[] vitamins =
         {
-            "vitaminA", "vitaminB1Thiamine", "vitaminB2Riboflavin", "vitaminB3Niacin", "vitaminB5PantothenicAcid", "vitaminB6Pyridoxine",
-            "vitaminB7Biotin", "vitaminB9Folate", "vitaminB12Cyanocobalamin", "vitaminC", "vitaminD", "vitaminE", "vitaminK"
+            "Vitamin A", "Vitamin B1 Thiamine", "Vitamin B2 Riboflavin", "Vitamin B3 Niacin", "Vitamin B5 Pantothenic Acid", "Vitamin B6 Pyridoxine",
+            "Vitamin B7 Biotin", "Vitamin B9 Folate", "Vitamin B12 Cyanocobalamin", "Vitamin C", "Vitamin D", "vitaminE", "Vitamin K"
         };
         for(String item : vitamins)
         {
@@ -926,8 +927,8 @@ public class GUI
         mineralsPanel.setBorder(BorderFactory.createTitledBorder("Minerals"));
         String[] minerals =
         {
-            "calcium", "chloride", "choline", "chromium", "copper", "fluoride", "iodine",
-            "iron", "magnesium", "manganese", "molybdenum", "phosphorus", "potassium", "selenium", "sodium", "zinc"
+            "Calcium", "Chloride", "Choline", "Chromium", "Copper", "Fluoride", "Iodine",
+            "Iron", "Magnesium", "Manganese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc"
         };
         for(String item : minerals)
         {
@@ -969,46 +970,72 @@ public class GUI
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         statusWindow.add(titleLabel, BorderLayout.NORTH);
 
-        // Center panel for sections
+        // Main panel for all content
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(6, 1, 0, 10)); // Adjust for labels and text areas with scroll panes
+        centerPanel.setLayout(new BorderLayout(10, 10));
+
+        // Information panel
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        informationField = new JTextArea();
+        informationField.setEditable(false);
+        informationField.setLineWrap(true);
+        informationField.setWrapStyleWord(true);
+        JScrollPane informationScrollPane = new JScrollPane(informationField);
+        infoPanel.add(informationScrollPane, BorderLayout.CENTER);
+        centerPanel.add(infoPanel, BorderLayout.NORTH);
+
+        // Panel for the 3 sections in a horizontal row
+        JPanel horizontalPanel = new JPanel();
+        horizontalPanel.setLayout(new GridLayout(1, 3, 10, 0)); // 1 row, 3 columns, spacing between columns
 
         // Macronutrients section
+        JPanel macronutrientsPanel = new JPanel(new BorderLayout());
         JLabel macronutrientsLabel = new JLabel("Macronutrients Progress", JLabel.CENTER);
         macronutrientsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(macronutrientsLabel);
+        macronutrientsPanel.add(macronutrientsLabel, BorderLayout.NORTH);
 
         macronutrientsField = new JTextArea();
         macronutrientsField.setEditable(false);
         macronutrientsField.setLineWrap(true);
         macronutrientsField.setWrapStyleWord(true);
         JScrollPane macronutrientsScrollPane = new JScrollPane(macronutrientsField);
-        centerPanel.add(macronutrientsScrollPane);
+        macronutrientsPanel.add(macronutrientsScrollPane, BorderLayout.CENTER);
 
         // Vitamins section
+        JPanel vitaminsPanel = new JPanel(new BorderLayout());
         JLabel vitaminsLabel = new JLabel("Vitamins Progress", JLabel.CENTER);
         vitaminsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(vitaminsLabel);
+        vitaminsPanel.add(vitaminsLabel, BorderLayout.NORTH);
 
         vitaminsField = new JTextArea();
         vitaminsField.setEditable(false);
         vitaminsField.setLineWrap(true);
         vitaminsField.setWrapStyleWord(true);
         JScrollPane vitaminsScrollPane = new JScrollPane(vitaminsField);
-        centerPanel.add(vitaminsScrollPane);
+        vitaminsPanel.add(vitaminsScrollPane, BorderLayout.CENTER);
 
         // Minerals section
+        JPanel mineralsPanel = new JPanel(new BorderLayout());
         JLabel mineralsLabel = new JLabel("Minerals Progress", JLabel.CENTER);
         mineralsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(mineralsLabel);
+        mineralsPanel.add(mineralsLabel, BorderLayout.NORTH);
 
         mineralsField = new JTextArea();
         mineralsField.setEditable(false);
         mineralsField.setLineWrap(true);
         mineralsField.setWrapStyleWord(true);
         JScrollPane mineralsScrollPane = new JScrollPane(mineralsField);
-        centerPanel.add(mineralsScrollPane);
+        mineralsPanel.add(mineralsScrollPane, BorderLayout.CENTER);
 
+        // Add each section panel to the horizontal panel
+        horizontalPanel.add(macronutrientsPanel);
+        horizontalPanel.add(vitaminsPanel);
+        horizontalPanel.add(mineralsPanel);
+
+        // Add the horizontal panel to the center panel
+        centerPanel.add(horizontalPanel, BorderLayout.CENTER);
+
+        // Add center panel to the main frame
         statusWindow.add(centerPanel, BorderLayout.CENTER);
 
         // Exit button centered at the bottom
@@ -1085,7 +1112,6 @@ public class GUI
         foodsConsumedField.setText(finalOutput.toString());
         catalogFoodIntakeWindow.setVisible(true);
     }
-    
     public void displayCreateScreen()
     {
         createWindow.setVisible(true);
@@ -1110,8 +1136,15 @@ public class GUI
     {
         setGoalsWindow.setVisible(true);
     }
-    public void displayStatusGoalsScreen()
-    {
+    public void displayStatusGoalsScreen() {
+        currentUser.updateAllFromDatabase();
+        StringBuilder userSb = new StringBuilder();
+        userSb.append("Name: ").append(currentUser.nameGetter()).append("\n");
+        userSb.append("Weight: ").append(currentUser.weightGetter()).append("\n");
+        userSb.append("Height: ").append(currentUser.heightGetter()).append("\n");
+        userSb.append("Sex: ").append(currentUser.sexGetter()).append("\n");
+        userSb.append("Exercise Level: ").append(currentUser.exerciseGetter()).append("\n");
+        informationField.setText(userSb.toString());
         statusWindow.setVisible(true);
     }
     public void displayTitleScreen()
@@ -1488,7 +1521,6 @@ public class GUI
     public void createSession() {
         User newUser = new User(retrievedUserId);
         this.currentUser = newUser;
-        currentUser.updateAllFromDatabase();
         System.out.println("current user is set to: " + currentUser.getUserId());
         System.out.println("current user's food diary is: " + currentUser.getDailyFoodsConsumed());
         Session newSession = new Session(newUser, this);
@@ -1507,10 +1539,15 @@ public class GUI
             System.out.println("Goal for " + nutrient + ": " + input); // Example of handling the input
             session.changeGoals(nutrient, input);
         }
-        
-        //this is wher I should put the updated info...
-        
-        String query = "UPDATE nutritionTracker.nutrientGoals SET " + nutrient + " = " + input + " WHERE userId = " + currentUser.getUserId() + ";";
+
+        if(nutrient.equals("Calories")){
+            nutrient = "energy";
+        }
+        String revisedNutrient = nutrient.replace(" ", "").toLowerCase();
+
+        // This is where I should put the updated info...
+
+        String query = "UPDATE nutritionTracker.nutrientGoals SET " + revisedNutrient + " = " + input + " WHERE userId = " + currentUser.getUserId() + ";";
         System.out.println(query);
 
         try
@@ -1523,10 +1560,12 @@ public class GUI
             if(rowsAffected > 0)
             {
                 System.out.println("Updated successfully");
+                JOptionPane.showMessageDialog(null, "Goal for " + nutrient + " successfully set to " + input + "!");
             }
             else
             {
                 System.out.println("Failed to update info");// make a popup
+                JOptionPane.showMessageDialog(null, "Failed to update information.");
             }
         }
         catch(Exception ex)
