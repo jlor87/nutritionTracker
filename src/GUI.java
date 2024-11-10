@@ -896,8 +896,8 @@ public class GUI
         macronutrientsPanel.setBorder(BorderFactory.createTitledBorder("Macronutrients"));
         String[] macronutrients =
         {
-            "Water", "Calories", "Carbohydrates", "Protein", "Monounsaturated Fat",
-            "Polyunsaturated Fat", "Saturated Fat", "Fiber"
+            "water", "Calories", "carbohydrate", "protein", "monounsaturatedFat",
+            "polyunsaturatedFat", "saturatedFat", "fiber"
         };
         for(String item : macronutrients)
         {
@@ -911,8 +911,8 @@ public class GUI
         vitaminsPanel.setBorder(BorderFactory.createTitledBorder("Vitamins"));
         String[] vitamins =
         {
-            "Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B3", "Vitamin B5", "Vitamin B6",
-            "Vitamin B7", "Vitamin B9", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K"
+            "vitaminA", "vitaminB1Thiamine", "vitaminB2Riboflavin", "vitaminB3Niacin", "vitaminB5PantothenicAcid", "vitaminB6Pyridoxine",
+            "vitaminB7Biotin", "vitaminB9Folate", "vitaminB12Cyanocobalamin", "vitaminC", "vitaminD", "vitaminE", "vitaminK"
         };
         for(String item : vitamins)
         {
@@ -926,8 +926,8 @@ public class GUI
         mineralsPanel.setBorder(BorderFactory.createTitledBorder("Minerals"));
         String[] minerals =
         {
-            "Calcium", "Chloride", "Choline", "Chromium", "Copper", "Fluoride", "Iodine",
-            "Iron", "Magnesium", "Manganese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc"
+            "calcium", "chloride", "choline", "chromium", "copper", "fluoride", "iodine",
+            "iron", "magnesium", "manganese", "molybdenum", "phosphorus", "potassium", "selenium", "sodium", "zinc"
         };
         for(String item : minerals)
         {
@@ -1085,6 +1085,7 @@ public class GUI
         foodsConsumedField.setText(finalOutput.toString());
         catalogFoodIntakeWindow.setVisible(true);
     }
+    
     public void displayCreateScreen()
     {
         createWindow.setVisible(true);
@@ -1500,10 +1501,37 @@ public class GUI
     }
     public void showInputDialog(String nutrient) {
         String input = JOptionPane.showInputDialog(setGoalsWindow, "Enter your goal for " + nutrient + " in grams:", "Set Goal", JOptionPane.PLAIN_MESSAGE);
+        
         if(input != null && !input.trim().isEmpty())
         {
             System.out.println("Goal for " + nutrient + ": " + input); // Example of handling the input
             session.changeGoals(nutrient, input);
+        }
+        
+        //this is wher I should put the updated info...
+        
+        String query = "UPDATE nutritionTracker.nutrientGoals SET " + nutrient + " = " + input + " WHERE userId = " + currentUser.getUserId() + ";";
+        System.out.println(query);
+
+        try
+        {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+            // Execute and retrieve result
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+
+            if(rowsAffected > 0)
+            {
+                System.out.println("Updated successfully");
+            }
+            else
+            {
+                System.out.println("Failed to update info");// make a popup
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
         }
     }
     public User getCurrentUser() {
