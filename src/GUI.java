@@ -52,7 +52,6 @@ public class GUI
     JFrame alterUserDataWindow = new JFrame();
     JFrame catalogFoodIntakeWindow = new JFrame();
     JFrame customFoodWindow = new JFrame();
-    String tempSex = "UNCHANGED";
 
     //these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
     private final Connection connectionToMySQL;
@@ -172,8 +171,33 @@ public class GUI
         });
         centerPanel.add(heightButton);
         
-        // Button for Sex
-        JButton sexButton = new JButton("Sex: " + tempSex);
+        String sex = "UNCHANGED";
+        String exercise = "UNCHANGED";
+        
+        String userInfoQuery = "SELECT sex, exercise FROM nutritionTracker.users WHERE userId = ?;";
+        ResultSet userInfo;
+        
+        try 
+        {
+            // Update current consumption values
+            PreparedStatement preparedStatement1 = connectionToMySQL.prepareStatement(userInfoQuery);
+            preparedStatement1.setInt(1, retrievedUserId);
+            
+            userInfo = preparedStatement1.executeQuery();
+            
+            if(userInfo.next())
+            {
+                sex = userInfo.getString("sex");
+                exercise = userInfo.getString("exercise");
+            }
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Something went wrong getting info");
+        }
+        
+        // Button for Sex        
+        JButton sexButton = new JButton("Sex: " + sex);
         
         sexButton.addActionListener(new ActionListener()
         {
@@ -207,7 +231,7 @@ public class GUI
         centerPanel.add(sexButton);
 
         // Button for Exercise Level
-        JButton exerciseLevelButton = new JButton("Exercise Level: None"); // Default to "None"
+        JButton exerciseLevelButton = new JButton("Exercise Level: " + exercise); // Default to "None"
         exerciseLevelButton.addActionListener(new ActionListener()
         {
             private String[] levels =
@@ -503,6 +527,13 @@ public class GUI
         // Display the main window
         mainWindow.setLocationRelativeTo(null);  // Center window on screen
         mainWindow.setVisible(false);
+        
+        this.makeSearchItemScreen();
+        this.makeSetGoalsScreen();
+        this.makeStatusGoalsScreen();
+        this.makeCatalogFoodIntakeScreen();
+        this.makeAlterUserDataScreen();
+        this.makeCustomFoodItemScreen();
     }
 
     public void makeSearchItemScreen()
@@ -1216,6 +1247,8 @@ public class GUI
                 this.retrievedUserId = resultSet.getInt("userId");
                 System.out.println("the retrieved userId is: " + retrievedUserId);
             }
+            
+            this.makeMainScreen();
 
             return retrievedPassword.equals(password);
         }
@@ -1269,8 +1302,6 @@ public class GUI
                         removeLoginScreen();
                         displayMainScreen();
                         createSession();
-                        
-                        tempSex = currentUser.getSex();
                     }
                     else
                     {
@@ -1515,40 +1546,15 @@ public class GUI
         }
     }
 
-    private String createSession()
+    private void createSession()
     {
         this.currentUser = new User(retrievedUserId, connectionToMySQL);
         currentUser.updateAllFromDatabase();
-        
-        String userInfoQuery = "SELECT sex, exercise FROM nutritionTracker.users WHERE userId = ?;";
-        ResultSet userInfo;
-
-        try 
-        {
-            // Update current consumption values
-            PreparedStatement preparedStatement1 = connectionToMySQL.prepareStatement(userInfoQuery);
-            preparedStatement1.setInt(1, this.currentUser.getUserId());
-            
-            userInfo = preparedStatement1.executeQuery();
-            
-            if(userInfo.next())
-            {
-                currentUser.setSex(userInfo.getString("sex"));
-                currentUser.setExercise(userInfo.getString("exercise"));
-            }
-        }
-        catch(Exception ex)
-        {
-            System.out.println("Something went wrong getting info");
-        }
-
         System.out.println("current user is set to: " + currentUser.getUserId());
         System.out.println("current user's food diary is: " + currentUser.getDailyFoodsConsumed());
         Session newSession = new Session(this.currentUser, this, connectionToMySQL);
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
-        
-        return currentUser.getSex();
     }
 
     public void setSession(Session session)
