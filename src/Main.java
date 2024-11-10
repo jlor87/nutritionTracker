@@ -1,31 +1,38 @@
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
  * This class is where the whole application is instantiated
- * 
+ *
  */
-
-public class Main {
+public class Main
+{
 
     private static Connection connectionToMySQL;
     private static GUI gui;
 
-
     // Getters
-    public static GUI getGui(){
+    public static GUI getGui()
+    {
         return gui;
     }
+
     // Utility methods
-    public static Connection getConnection() {
-        if (connectionToMySQL == null) {
-            try {
+    public static Connection getConnection()
+    {
+        if(connectionToMySQL == null)
+        {
+            try
+            {
                 connectionToMySQL = DriverManager.getConnection(
                         "jdbc:mysql://34.227.86.98:3306/nutritionTracker?user=publicuser&password=iamnotroot"
                 );
                 System.out.println("Connection to database successful.");
-            } catch (SQLException ex) {
+            }
+            catch(SQLException ex)
+            {
                 System.out.println("SQLException: " + ex.getMessage());
                 System.out.println("SQLState: " + ex.getSQLState());
                 System.out.println("VendorError: " + ex.getErrorCode());
@@ -35,7 +42,8 @@ public class Main {
     }
 
     // The Main class is only responsible for starting the application
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         // Establish connection to the MySQL database for the whole session
         connectionToMySQL = getConnection();
 
@@ -57,5 +65,3 @@ public class Main {
         gui.displayTitleScreen();
     }
 }
-
-
