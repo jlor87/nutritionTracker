@@ -63,6 +63,20 @@ public class GUI
     public GUI(Connection connectionToMySQL)
     {
         this.connectionToMySQL = connectionToMySQL;
+        
+        // Construct the GUI screens
+        this.makeTitleScreen();
+        this.makeLoginScreen();
+        this.makeCreateScreen();
+        this.makeMainScreen();
+        this.makeSearchItemScreen();
+        this.makeSetGoalsScreen();
+        this.makeStatusGoalsScreen();
+        this.makeCatalogFoodIntakeScreen();
+        this.makeCustomFoodItemScreen();
+        
+        // Display the initial screen
+        this.displayTitleScreen();
     }
 
     // All functions that make screens in ABC order
@@ -173,7 +187,8 @@ public class GUI
         centerPanel.add(heightButton);
 
         // Button for Sex
-        JButton sexButton = new JButton("Sex: M"); // Default to "M"
+        JButton sexButton = new JButton("Sex: " + this.currentUser.sexGetter()); // Default to "M"
+        
         sexButton.addActionListener(new ActionListener()
         {
             private String sex = "M";
@@ -213,7 +228,7 @@ public class GUI
         centerPanel.add(sexButton);
 
         // Button for Exercise Level
-        JButton exerciseLevelButton = new JButton("Exercise Level: None"); // Default to "None"
+        JButton exerciseLevelButton = new JButton("Exercise Level: " + this.currentUser.exerciseGetter()); // Default to "None"
         exerciseLevelButton.addActionListener(new ActionListener()
         {
             private String[] levels =
@@ -1529,6 +1544,10 @@ public class GUI
         Session newSession = new Session(newUser, this, connectionToMySQL);
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
+        
+        System.out.println("current user is set to: " + currentUser.getUserId());
+        
+        this.makeAlterUserDataScreen();
     }
 
     public void setSession(Session session)
