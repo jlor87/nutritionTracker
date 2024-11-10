@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.LinkedList;
 
 public class GUI
@@ -34,6 +35,10 @@ public class GUI
     JFrame catalogFoodIntakeWindow = new JFrame();
     JFrame customFoodWindow = new JFrame();
     JTextArea informationField = new JTextArea();
+    JButton weightButton;
+    JButton heightButton;
+    JButton sexButton;
+    JButton exerciseLevelButton;
 
     //these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
     private final Connection connectionToMySQL;
@@ -50,9 +55,8 @@ public class GUI
     // All functions that make screens in ABC order
     public void makeAlterUserDataScreen() {
         // Frame setup
-        alterUserDataWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         alterUserDataWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        alterUserDataWindow.setSize(400, 300);
+        alterUserDataWindow.setSize(600, 350);
         alterUserDataWindow.setLayout(new BorderLayout(10, 10));
 
         // Title at the top
@@ -62,10 +66,11 @@ public class GUI
 
         // Center panel for buttons
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(2, 2, 10, 10)); // 2x2 grid for the buttons
+        centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         // Button for Weight
-        JButton weightButton = new JButton("Weight");
+        weightButton = new JButton("Weight");
+        weightButton.setPreferredSize(new Dimension(200, 75));
         weightButton.addActionListener(e ->
         {
             String weightInput = JOptionPane.showInputDialog(alterUserDataWindow, "Enter your weight in pounds:");
@@ -88,11 +93,14 @@ public class GUI
 
                         if(rowsAffected > 0)
                         {
-                            System.out.println("User created successfully!");
+                            System.out.println("Weight updated successfully!");
+                            JOptionPane.showMessageDialog(null, "Weight updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                            weightButton.setText("Weight: " + weight);
                         }
                         else
                         {
-                            System.out.println("Failed to create user!");// make a popup
+                            System.out.println("Error occurred!");
+                            JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                         }
                     }
                     catch(SQLException ex)
@@ -110,7 +118,8 @@ public class GUI
         centerPanel.add(weightButton);
 
         // Button for Height
-        JButton heightButton = new JButton("Height");
+        heightButton = new JButton("Height");
+        heightButton.setPreferredSize(new Dimension(200, 75));
         heightButton.addActionListener(e ->
         {
             String heightInput = JOptionPane.showInputDialog(alterUserDataWindow, "Enter your height in inches:");
@@ -133,11 +142,14 @@ public class GUI
 
                         if(rowsAffected > 0)
                         {
-                            System.out.println("User created successfully!");
+                            System.out.println("Height updated successfully!");
+                            JOptionPane.showMessageDialog(null, "Height updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                            weightButton.setText("Height: " + height);
                         }
                         else
                         {
-                            System.out.println("Failed to create user!");// make a popup
+                            System.out.println("Error occurred!");
+                            JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                         }
                     }
                     catch(SQLException ex)
@@ -154,7 +166,8 @@ public class GUI
         centerPanel.add(heightButton);
 
         // Button for Sex
-        JButton sexButton = new JButton("Sex: M"); // Default to "M"
+        sexButton = new JButton("Sex");
+        sexButton.setPreferredSize(new Dimension(200, 75));
         sexButton.addActionListener(new ActionListener()
         {
             private String sex = "M";
@@ -178,11 +191,14 @@ public class GUI
 
                     if(rowsAffected > 0)
                     {
-                        System.out.println("User created successfully!");
+                        System.out.println("Sex updated successfully!");
+                        JOptionPane.showMessageDialog(null, "Sex updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                        weightButton.setText("Sex: " + sex);
                     }
                     else
                     {
-                        System.out.println("Failed to create user!");// make a popup
+                        System.out.println("Error occurred!");
+                        JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
                 catch(SQLException ex)
@@ -194,7 +210,8 @@ public class GUI
         centerPanel.add(sexButton);
 
         // Button for Exercise Level
-        JButton exerciseLevelButton = new JButton("Exercise Level: None"); // Default to "None"
+        exerciseLevelButton = new JButton("Exercise Level");
+        exerciseLevelButton.setPreferredSize(new Dimension(200, 75));
         exerciseLevelButton.addActionListener(new ActionListener()
         {
             private String[] levels =
@@ -223,11 +240,14 @@ public class GUI
 
                     if(rowsAffected > 0)
                     {
-                        System.out.println("User created successfully!");
+                        System.out.println("Exercise level updated successfully!");
+                        JOptionPane.showMessageDialog(null, "Exercise level successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                        weightButton.setText("Exercise level: " + level);
                     }
                     else
                     {
-                        System.out.println("Failed to create user!");// make a popup
+                        System.out.println("Error occurred!");
+                        JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
                 catch(SQLException ex)
@@ -249,12 +269,15 @@ public class GUI
         buttonPanel.add(exitButton);
         alterUserDataWindow.add(buttonPanel, BorderLayout.SOUTH);
 
+        // Center this window
+        alterUserDataWindow.setLocationRelativeTo(null);
+
         // Set frame visibility to true
         alterUserDataWindow.setVisible(false);
     }
     public void makeCatalogFoodIntakeScreen() {
         // Create the main frame
-        catalogFoodIntakeWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        catalogFoodIntakeWindow.setSize(450, 650);
         catalogFoodIntakeWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         catalogFoodIntakeWindow.setLayout(new BorderLayout(10, 10));
 
@@ -265,33 +288,56 @@ public class GUI
 
         // Center panel for sections
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(6, 1, 0, 10)); // Adjust for labels and text areas with scroll panes
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS)); // Stacks components vertically
 
-        // Foods consumed section
-        JLabel foodsConsumedLabel = new JLabel("Foods Consumed:", JLabel.CENTER);
-        foodsConsumedLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(foodsConsumedLabel);
+        // Foods consumed section label
+        LocalDate currentDate = LocalDate.now();
+        int day = currentDate.getDayOfMonth();
+        int month = currentDate.getMonthValue();
+        int year = currentDate.getYear();
 
+        JLabel foodsConsumedLabel = new JLabel("Foods Consumed Today (" + month + "/" + day + "/" + year + "):", JLabel.CENTER);
+        foodsConsumedLabel.setFont(new Font("Arial", Font.BOLD, 14));
+
+        // Panel for the foods consumed section to control its width
+        JPanel foodsConsumedPanel = new JPanel();
+        foodsConsumedPanel.setLayout(new BorderLayout());
+        foodsConsumedPanel.setMaximumSize(new Dimension(300, 500)); // Limit the maximum size of the panel
+
+        foodsConsumedPanel.add(foodsConsumedLabel, BorderLayout.NORTH);
+
+        // Foods consumed field configuration
         foodsConsumedField = new JTextArea();
         foodsConsumedField.setEditable(false);
         foodsConsumedField.setLineWrap(true);
         foodsConsumedField.setWrapStyleWord(true);
-        JScrollPane foodsConsumedScrollPane = new JScrollPane(foodsConsumedField);
-        centerPanel.add(foodsConsumedScrollPane);
+        foodsConsumedField.setPreferredSize(new Dimension(250, 400)); // Set width and height to make it look like a list
 
+        JScrollPane foodsConsumedScrollPane = new JScrollPane(foodsConsumedField);
+        foodsConsumedPanel.add(foodsConsumedScrollPane, BorderLayout.CENTER);
+
+        // Add the foods consumed panel to the center panel
+        centerPanel.add(foodsConsumedPanel);
+
+        // Add the center panel to the main window
         catalogFoodIntakeWindow.add(centerPanel, BorderLayout.CENTER);
 
         // Exit button centered at the bottom
         JPanel buttonPanel = new JPanel();
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Back");
         exitButton.addActionListener(cHandler);
         exitButton.setActionCommand("goMainScreen");
         buttonPanel.add(exitButton);
         catalogFoodIntakeWindow.add(buttonPanel, BorderLayout.SOUTH);
 
+        // Center the window on the screen
+        catalogFoodIntakeWindow.setLocationRelativeTo(null);
+
         // Set frame visibility to true
         catalogFoodIntakeWindow.setVisible(false);
     }
+
+
     public void makeCreateScreen() {
 
         JPanel createPanel = new JPanel();
@@ -845,9 +891,8 @@ public class GUI
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Search panel for "Search:" label, text field, and button
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel searchLabel = new JLabel("Search:");
-
         JButton searchButton = new JButton("Search");
         searchButton.addActionListener(cHandler);
         searchButton.setActionCommand("searchForFood");
@@ -982,7 +1027,11 @@ public class GUI
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BorderLayout(10, 10));
 
-        // Information panel
+        // Information panel (with a fixed width and centered)
+        JPanel infoWrapperPanel = new JPanel();
+        infoWrapperPanel.setLayout(new BoxLayout(infoWrapperPanel, BoxLayout.Y_AXIS));
+        infoWrapperPanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+
         JPanel infoPanel = new JPanel(new BorderLayout());
         informationField = new JTextArea();
         informationField.setEditable(false);
@@ -990,7 +1039,17 @@ public class GUI
         informationField.setWrapStyleWord(true);
         JScrollPane informationScrollPane = new JScrollPane(informationField);
         infoPanel.add(informationScrollPane, BorderLayout.CENTER);
-        centerPanel.add(infoPanel, BorderLayout.NORTH);
+
+        // Set the preferred size for the infoPanel to make it skinnier
+        infoPanel.setMaximumSize(new Dimension(600, 150)); // Adjust width and height as needed
+
+        // Center the infoPanel within the wrapper panel
+        infoWrapperPanel.add(Box.createVerticalGlue()); // Adds space above for centering
+        infoWrapperPanel.add(infoPanel);
+        infoWrapperPanel.add(Box.createVerticalGlue()); // Adds space below for centering
+
+        // Add the infoWrapperPanel to the centerPanel
+        centerPanel.add(infoWrapperPanel, BorderLayout.NORTH);
 
         // Panel for the 3 sections in a horizontal row
         JPanel horizontalPanel = new JPanel();
@@ -1109,6 +1168,10 @@ public class GUI
 
     // All functions that display screens in ABC order
     public void displayAlterUserDataScreen() {
+        weightButton.setText("Weight: " + currentUser.weightGetter());
+        heightButton.setText("Height: " + currentUser.heightGetter());
+        sexButton.setText("Sex: " + currentUser.sexGetter());
+        exerciseLevelButton.setText("Exercise Level: " + currentUser.exerciseGetter());
         alterUserDataWindow.setVisible(true);
     }
     public void displayCatalogFoodIntakeScreen() {
@@ -1151,8 +1214,8 @@ public class GUI
         currentUser.updateAllFromDatabase();
         StringBuilder userSb = new StringBuilder();
         userSb.append("Name: ").append(currentUser.nameGetter()).append("\n");
-        userSb.append("Weight: ").append(currentUser.weightGetter()).append("\n");
-        userSb.append("Height: ").append(currentUser.heightGetter()).append("\n");
+        userSb.append("Weight: ").append(currentUser.weightGetter()).append(" lbs").append("\n");
+        userSb.append("Height: ").append(currentUser.heightGetter()).append(" inches").append("\n");
         userSb.append("Sex: ").append(currentUser.sexGetter()).append("\n");
         userSb.append("Exercise Level: ").append(currentUser.exerciseGetter()).append("\n");
         informationField.setText(userSb.toString());
