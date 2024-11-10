@@ -1,27 +1,8 @@
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -698,14 +679,13 @@ public class GUI
         customFoodWindow.setVisible(false);
     }
     public void makeLoginScreen() {
-
         JPanel loginPanel = new JPanel();
         JLabel loginTitleLabel = new JLabel();
 
         loginWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginWindow.setSize(800, 600);
+        loginWindow.setSize(700, 500);
         loginWindow.setLayout(new BorderLayout());
-        loginWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        loginWindow.getContentPane().setBackground(new Color(142, 241, 142));
 
         loginPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -730,39 +710,51 @@ public class GUI
         gbc.gridx = 1;
         loginPanel.add(loginPasswordField, gbc);
 
-        // Login button
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
+        // Panel for buttons with BoxLayout to center them horizontally
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
-        JButton loginButton = new JButton();
-        loginButton.setText("Login");
+        // Add space to center the buttons in the panel
+        buttonPanel.add(Box.createHorizontalGlue());
+
+        // Login button
+        JButton loginButton = new JButton("Login");
         loginButton.addActionListener(cHandler);
         loginButton.setActionCommand("tryToLogin");
-        loginPanel.add(loginButton, gbc);
+        buttonPanel.add(loginButton);
 
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.WEST;
+        // Add space between the buttons
+        buttonPanel.add(Box.createRigidArea(new Dimension(10, 0))); // 10px horizontal space
 
-        JButton createButton = new JButton();
-        createButton.setText("Create");
+        // Create account button
+        JButton createButton = new JButton("Create");
         createButton.addActionListener(cHandler);
         createButton.setActionCommand("createAccount");
-        loginPanel.add(createButton, gbc);
+        buttonPanel.add(createButton);
 
-        loginTitleLabel.setText("Login or Create Account");
+        // Add space to the right to ensure centering
+        buttonPanel.add(Box.createHorizontalGlue());
+
+        // Add button panel to the main panel
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2; // Span across two columns
+        gbc.anchor = GridBagConstraints.CENTER;
+        loginPanel.add(buttonPanel, gbc);
+
+        // Title label setup
+        loginTitleLabel.setText("<html><br><br><div style='text-align: center;'>Login or Create Account</div></html>");
         loginTitleLabel.setHorizontalAlignment(JLabel.CENTER);
         loginTitleLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
-        loginTitleLabel.setForeground(Color.BLUE);
+        loginTitleLabel.setForeground(new Color(25, 102, 0));
+
+        loginPanel.setBackground(new Color(142, 241, 142));
+        buttonPanel.setBackground(new Color(142, 241, 142));
 
         loginWindow.add(loginTitleLabel, BorderLayout.NORTH);
         loginWindow.add(loginPanel, BorderLayout.CENTER);
 
-        loginPanel.setVisible(true);
-        loginTitleLabel.setVisible(true);
+        loginWindow.setLocationRelativeTo(null); // Center the window on screen
         loginWindow.setVisible(false);
     }
     public void makeMainScreen() {
@@ -772,48 +764,64 @@ public class GUI
         mainWindow.setLayout(new BorderLayout());
         mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        // Set the background color of the entire content pane
+        mainWindow.getContentPane().setBackground(new Color(142, 241, 142));
+
+        // Title panel to hold the label and add spacing
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
+        titlePanel.setBackground(new Color(142, 241, 142));
+
         // Title label at the top
         JLabel mainLabel = new JLabel("Main Navigation");
         mainLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
         mainLabel.setHorizontalAlignment(JLabel.CENTER);
-        mainWindow.add(mainLabel, BorderLayout.NORTH);
+        mainLabel.setOpaque(true);
+        mainLabel.setBackground(new Color(142, 241, 142));
 
-        // Panel for buttons with GridLayout
-        JPanel mainbuttonPanel = new JPanel();
-        mainbuttonPanel.setLayout(new GridLayout(8, 1, 10, 10));  // 8 rows, 1 column, spacing of 10px
+        titlePanel.add(mainLabel, BorderLayout.CENTER);
+        mainWindow.add(titlePanel, BorderLayout.NORTH);
+
+        // Panel for buttons with BoxLayout
+        JPanel mainButtonPanel = new JPanel();
+        mainButtonPanel.setLayout(new BoxLayout(mainButtonPanel, BoxLayout.Y_AXIS));
+        mainButtonPanel.setBackground(new Color(142, 241, 142));
 
         // Create and add buttons to the panel
-        String[] buttonLabels =
-        {
-            "Exit",
-            "Search for Food Item",
-            "Set Nutrition Goals",
-            "Alter User Data",
-            "Display Status of Goals",
-            "Make Custom Food Item",
-            "View Advanced Statistics",
-            "Catalog Food Intake"
+        String[] buttonLabels = {
+                "Exit",
+                "Search for Food Item",
+                "Set Nutrition Goals",
+                "Alter User Data",
+                "Display Status of Goals",
+                "Make Custom Food Item",
+                "View Advanced Statistics",
+                "Catalog Food Intake"
         };
 
-        for(String label : buttonLabels)
-        {
+        for (String label : buttonLabels) {
             JButton button = new JButton(label);
-            button.setFont(new Font("Arial", Font.PLAIN, 18));
+            button.setMaximumSize(new Dimension(450, 75));
+            button.setAlignmentX(JButton.CENTER_ALIGNMENT);
+            button.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 
             // Set ActionListener and ActionCommand for each button
             button.addActionListener(cHandler);
             button.setActionCommand(label.replace(" ", "").toLowerCase());
 
-            mainbuttonPanel.add(button);
+            mainButtonPanel.add(button);
+            mainButtonPanel.add(Box.createVerticalStrut(15)); // Adds space between buttons
         }
 
+        // Wrapper panel for vertical centering
         JPanel wrapperPanel = new JPanel();
         wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));
+        wrapperPanel.setBackground(new Color(142, 241, 142)); // Set background for wrapper panel
         wrapperPanel.add(Box.createVerticalGlue());  // Adds flexible space above
-        wrapperPanel.add(mainbuttonPanel);
+        wrapperPanel.add(mainButtonPanel);
         wrapperPanel.add(Box.createVerticalGlue());  // Adds flexible space below
 
-        // Add the button panel to the center of the main window
+        // Add the wrapper panel to the center of the main window
         mainWindow.add(wrapperPanel, BorderLayout.CENTER);
 
         // Display the main window
@@ -1055,18 +1063,18 @@ public class GUI
         JPanel buttonPanel = new JPanel();
 
         titleWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        titleWindow.setSize(800, 600);
+        titleWindow.setSize(600, 400);
         titleWindow.setLayout(new BorderLayout());
-        titleWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         JLabel titleLabel = new JLabel();
-        titleLabel.setText("Nutrition Tracker  CEN4010  Josh Lor, Sam Gray, Haivan Benjamin");
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
-        titleLabel.setForeground(Color.YELLOW);
+        titleLabel.setText("<html><div style='text-align: center;'>The Nutrition Tracker<br>CEN4010<br><br>By Joshua Lor<br>Sam Gray<br>Haivan Benjamin</div></html>");
+        titleLabel.setHorizontalAlignment(JLabel.CENTER); // Horizontally centers the text
+        titleLabel.setVerticalAlignment(JLabel.TOP); // Aligns the label to the top of the container
+        titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
+        titleLabel.setForeground(new Color(240, 240, 0));
 
         buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.setBackground(new Color(132, 231, 132));
 
         // Create buttons
         JButton startButton = new JButton("Start");
@@ -1079,11 +1087,16 @@ public class GUI
         buttonPanel.add(exitButton);
 
         // Set background for the title area
-        titlePanel.setBackground(Color.BLUE);
+        titlePanel.setBackground(new Color(132, 231, 132));
         titlePanel.add(titleLabel);
+
+        // Fill in the center area with color
+        JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(titlePanel.getBackground()); // Match the background color or set your own color
 
         // Add the title label and button panel to the window
         titleWindow.add(titlePanel, BorderLayout.NORTH);
+        titleWindow.add(centerPanel, BorderLayout.CENTER);
         titleWindow.add(buttonPanel, BorderLayout.SOUTH);
 
         // Center the window on screen
@@ -1094,10 +1107,8 @@ public class GUI
         exitButton.addActionListener(e -> System.exit(0));
     }
 
-
     // All functions that display screens in ABC order
-    public void displayAlterUserDataScreen()
-    {
+    public void displayAlterUserDataScreen() {
         alterUserDataWindow.setVisible(true);
     }
     public void displayCatalogFoodIntakeScreen() {
