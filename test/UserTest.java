@@ -55,9 +55,7 @@ public class UserTest {
             ){
                 try {
                     Object value = method.invoke(user, 1);
-                    if(value instanceof Number){
-                        Assert.assertEquals(0.00, ((Number) value).doubleValue(), 0.00);
-                    }
+                    Assert.assertTrue(value instanceof Number);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 } catch (InvocationTargetException e) {

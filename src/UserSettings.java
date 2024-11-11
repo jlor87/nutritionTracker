@@ -229,6 +229,12 @@ public class UserSettings {
             if(nutrientName.equals("saturated")){
                 nutrientName = "saturatedfat";
             }
+            else if(nutrientName.equals("monounsaturated")){
+                nutrientName = "monounsaturatedFat";
+            }
+            else if(nutrientName.equals("polyunsaturated")){
+                nutrientName = "polyunsaturatedFat";
+            }
             System.out.println("nutrientName (after): " + nutrientName); // Test statement
 
             amount = nutrient.get("value").getAsDouble();
