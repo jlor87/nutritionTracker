@@ -227,6 +227,25 @@ public class UserSettings {
         }
     }
 
+    public boolean updateNutrientGoal(String revisedNutrient, String input ){
+        String query = "UPDATE nutritionTracker.nutrientGoals SET " + revisedNutrient + " = " + input + " WHERE userId = " + currentUser.getUserId() + ";";
+
+        try
+        {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+            // Execute and retrieve result
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+
+            return rowsAffected > 0;
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean updateSex(String sex){
         String query = "UPDATE nutritionTracker.users SET sex = '" + sex + "' WHERE userId = " + currentUser.getUserId();
 

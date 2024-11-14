@@ -1358,33 +1358,17 @@ public class GUI
         }
         String revisedNutrient = nutrient.replace(" ", "").toLowerCase();
 
-        // This is where I should put the updated info...
-
-        String query = "UPDATE nutritionTracker.nutrientGoals SET " + revisedNutrient + " = " + input + " WHERE userId = " + currentUser.getUserId() + ";";
-        System.out.println(query);
-
-        try
-        {
-            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
-            // Execute and retrieve result
-            int rowsAffected = preparedStatement.executeUpdate();
-            preparedStatement.close();
-
-            if(rowsAffected > 0)
-            {
-                System.out.println("Updated successfully");
-                JOptionPane.showMessageDialog(null, "Goal for " + nutrient + " successfully set to " + input + "!");
-            }
-            else
-            {
-                System.out.println("Failed to update info");// make a popup
-                JOptionPane.showMessageDialog(null, "Failed to update information.");
-            }
+        boolean success = userSettings.updateNutrientGoal(revisedNutrient, input);
+        if(success){
+            System.out.println("Nutrient goal updated successfully");
+            JOptionPane.showMessageDialog(null, "Goal for " + nutrient + " successfully set to " + input + "!");
         }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
+        else{
+            System.out.println("Failed to update info");// make a popup
+            JOptionPane.showMessageDialog(null, "Failed to update information.");
         }
+
+
     }
     public User getCurrentUser() {
         return currentUser;
