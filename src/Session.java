@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -26,9 +27,9 @@ public class Session {
      * This function is responsible for retrieving the food that the user of the app has consumed or plans to consume
      * @param userInput takes in the name of the food item entered by the user in the Search Food Item option of the menu
      */
-    public void addFoodItem(String userInput) {
-        userSettings.updateUserConsumption(api.getNutrients(), api.getCurrentFoodName());
-        gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", userInput));
+    public void addFoodItem(String foodName) {
+        userSettings.updateUserConsumption(api.getNutrients(foodName), foodName);
+        gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", foodName));
     }
 
     public void changeGoals(String nutrient, String newVal) {
@@ -39,9 +40,8 @@ public class Session {
     public void getFoodInput(String userInput){
         System.out.print("\nInput food item: ");
         System.out.println("You entered: " + userInput);
-        String result = api.sendAPIRequest(userInput); // Calling api with user's food input
-        gui.outputArea.append(result + "\n");
-        gui.outputArea.append("CLICK THE 'ADD' BUTTON TO ADD THIS FOOD ITEM TO YOUR CONSUMPTION.\n");
+        LinkedList<String> searchResults = api.sendAPIRequest(userInput); // Calling api with user's food input
+        gui.setSearchResults(searchResults);
     }
     
     public void showGoals() {

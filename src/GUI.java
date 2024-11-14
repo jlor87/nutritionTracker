@@ -4,17 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.time.LocalDate;
+import java.util.LinkedList;
 
 public class GUI
 {
-
     JTextField loginUsernameField = new JTextField(25);
     JPasswordField loginPasswordField = new JPasswordField(25);
     JTextField createUsernameField = new JTextField(25);
     JPasswordField createPasswordField = new JPasswordField(25);
     JTextField searchField = new JTextField(20);
     JTextArea outputArea = new JTextArea(10, 30);
+    JTextArea outputArea2 = new JTextArea(10, 30);
+    JTextArea outputArea3 = new JTextArea(10, 30);
     JScrollPane scrollPane = new JScrollPane(outputArea);
+    JScrollPane scrollPane2 = new JScrollPane(outputArea2);
+    JScrollPane scrollPane3 = new JScrollPane(outputArea3);
     JTextArea macronutrientsField = new JTextArea("Macronutrients: ");
     JTextArea vitaminsField = new JTextArea("Vitamins: ");
     JTextArea mineralsField = new JTextArea("Minerals: ");
@@ -37,12 +41,13 @@ public class GUI
     JButton sexButton;
     JButton exerciseLevelButton;
 
-    //these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
+    // These variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
     private Session session;
     private User currentUser;
-    private int retrievedUserId = -1; // dummy value before user logs in
+    private int retrievedUserId = -1; // A dummy value before user logs in
     private UserSettings userSettings;
-
+    private LinkedList<String> searchResults;
+    private int indexOfMostRecentlyDisplayedResult = 0;
 
     // All functions that make screens in ABC order
     public void makeAlterUserDataScreen() {
@@ -752,7 +757,6 @@ public class GUI
         mainWindow.setVisible(false);
     }
     public void makeSearchItemScreen() {
-
         searchWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         searchWindow.setSize(800, 600);
         searchWindow.setLayout(new BorderLayout());
@@ -762,7 +766,7 @@ public class GUI
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         searchWindow.add(titleLabel, BorderLayout.NORTH);
 
-        // Panel to contain search components and output
+        // Main panel to contain search components and output
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -777,37 +781,78 @@ public class GUI
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
-        // Scrollable output area for food item details
+        // Scrollable output areas for food item details with "Add Item" buttons underneath each
         outputArea.setLineWrap(true);
         outputArea.setWrapStyleWord(true);
         outputArea.setEditable(false);
 
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        outputArea2.setLineWrap(true);
+        outputArea2.setWrapStyleWord(true);
+        outputArea2.setEditable(false);
 
-        // Panel for "Add Item" and "Exit" buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton addItemButton = new JButton("Add Item");
-        addItemButton.addActionListener(cHandler);
-        addItemButton.setActionCommand("addItem");
+        outputArea3.setLineWrap(true);
+        outputArea3.setWrapStyleWord(true);
+        outputArea3.setEditable(false);
+
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        // Create individual panels for each output area with corresponding "Add Item" button
+        JPanel outputPanel1 = new JPanel();
+        outputPanel1.setLayout(new BorderLayout());
+        outputPanel1.add(scrollPane, BorderLayout.CENTER);
+        JButton addItemButton1 = new JButton("Add Item 1");
+        addItemButton1.addActionListener(cHandler);
+        addItemButton1.setActionCommand("addFoodItem1");
+        outputPanel1.add(addItemButton1, BorderLayout.SOUTH);
+
+        JPanel outputPanel2 = new JPanel();
+        outputPanel2.setLayout(new BorderLayout());
+        outputPanel2.add(scrollPane2, BorderLayout.CENTER);
+        JButton addItemButton2 = new JButton("Add Item 2");
+        addItemButton2.addActionListener(cHandler);
+        addItemButton2.setActionCommand("addFoodItem2");
+        outputPanel2.add(addItemButton2, BorderLayout.SOUTH);
+
+        JPanel outputPanel3 = new JPanel();
+        outputPanel3.setLayout(new BorderLayout());
+        outputPanel3.add(scrollPane3, BorderLayout.CENTER);
+        JButton addItemButton3 = new JButton("Add Item 3");
+        addItemButton3.addActionListener(cHandler);
+        addItemButton3.setActionCommand("addFoodItem3");
+        outputPanel3.add(addItemButton3, BorderLayout.SOUTH);
+
+        // Panel to hold the three output panels side by side
+        JPanel outputPanel = new JPanel();
+        outputPanel.setLayout(new GridLayout(1, 3, 10, 0));
+        outputPanel.add(outputPanel1);
+        outputPanel.add(outputPanel2);
+        outputPanel.add(outputPanel3);
+
+        // Panel for "Next" and "Exit" buttons below the output areas
+        JPanel navButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton nextButton = new JButton("Next");
+        nextButton.addActionListener(cHandler);
+        nextButton.setActionCommand("nextFoodItems");
         JButton exitButton = new JButton("Exit");
         exitButton.addActionListener(cHandler);
         exitButton.setActionCommand("goMainScreen");
-        buttonPanel.add(addItemButton);
-        buttonPanel.add(exitButton);
+        navButtonPanel.add(nextButton);
+        navButtonPanel.add(exitButton);
 
         // Add components to the center panel
         centerPanel.add(searchPanel);
         centerPanel.add(Box.createVerticalStrut(10)); // Spacing
-        centerPanel.add(scrollPane);
+        centerPanel.add(outputPanel);                 // Output areas with Add Item buttons
         centerPanel.add(Box.createVerticalStrut(10)); // Spacing
-        centerPanel.add(buttonPanel);
+        centerPanel.add(navButtonPanel);              // Navigation buttons below output areas
 
         // Add centerPanel to the main window's center area
         searchWindow.add(centerPanel, BorderLayout.CENTER);
 
         // Set the window visible
         searchWindow.setVisible(false);
-
     }
     public void makeSetGoalsScreen() {
         setGoalsWindow = new JFrame("Set Nutritional Goals");
@@ -1138,7 +1183,6 @@ public class GUI
     }
 
     // All class helper functions in ABC order
-
     public class ChoiceHandler implements ActionListener {
 
         private JTextField usernameField;
@@ -1218,8 +1262,43 @@ public class GUI
                     break;
 
                 case "searchforfooditem":
-                    displaySearchScreen();
-                    removeMainScreen();
+                    String[] options = {"Search for a New Food Item", "Search through User List of Custom Foods", "Return to Main Menu"};
+
+                    // Show the dialog
+                    int choice = JOptionPane.showOptionDialog(
+                            null,                       // Parent component (null for center of screen)
+                            "Select an option:", // Message to display
+                            "Food Search",            // Title of the dialog
+                            JOptionPane.DEFAULT_OPTION, // Option type
+                            JOptionPane.PLAIN_MESSAGE,  // Message type
+                            null,                       // Icon (null for default)
+                            options,                    // Array of choices
+                            options[2]                  // Default choice
+                    );
+                    System.out.println("User selected option: " + choice);
+                    // Handle the user's choice
+                    switch (choice) {
+                        case 0:
+                            // Search for a new food item via API
+                            displaySearchScreen();
+                            removeMainScreen();
+                            break;
+                        case 1:
+                            // Search for a custom food
+                            // displayCustomFoodListScreen
+                            removeMainScreen();
+                            break;
+                        case 2:
+                            // Return to Main Menu
+                            removeSearchScreen();
+                            removeSetGoalsScreen();
+                            removeStatusGoalsScreen();
+                            removeAlterUserDataScreen();
+                            removeCatalogFoodIntakeScreen();
+                            removeCustomScreen();
+                            displayMainScreen();
+                            break;
+                    }
                     break;
 
                 case "goMainScreen":
@@ -1235,11 +1314,17 @@ public class GUI
                 case "searchForFood":
                     searchItem = searchField.getText();
                     session.getFoodInput(searchItem);
+                    displayNextSetOfSearchResults();
                     break;
 
-                case "addItem":
-                    searchItem = searchField.getText();
-                    session.addFoodItem(searchItem);
+                case "addFoodItem1":
+                    session.addFoodItem(extractFoodName(outputArea.getText()));
+                    break;
+                case "addFoodItem2":
+                    session.addFoodItem(extractFoodName(outputArea2.getText()));
+                    break;
+                case "addFoodItem3":
+                    session.addFoodItem(extractFoodName(outputArea3.getText()));
                     break;
 
                 case "setnutritiongoals":
@@ -1274,11 +1359,14 @@ public class GUI
                     removeMainScreen();
                     displayCatalogFoodIntakeScreen();
                     break;
+
+                case "nextFoodItems":
+                    displayNextSetOfSearchResults();
+                    break;
             }
         }
 
     }
-
     public void createSession() {
         User newUser = new User(retrievedUserId);
         this.currentUser = newUser;
@@ -1288,6 +1376,40 @@ public class GUI
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
         userSettings = newSession.getUserSettings();
+    }
+    public void displayNextSetOfSearchResults(){
+        int i = indexOfMostRecentlyDisplayedResult;
+        int maxSize = searchResults.size();
+        if(i < maxSize){
+            outputArea.setText(searchResults.get(i));
+            indexOfMostRecentlyDisplayedResult++;
+        }
+        if(i + 1 < maxSize){
+            outputArea2.setText(searchResults.get(i + 1));
+            indexOfMostRecentlyDisplayedResult++;
+        }
+        if(i + 2 < maxSize){
+            outputArea3.setText(searchResults.get(i + 2));
+            indexOfMostRecentlyDisplayedResult++;
+        }
+    }
+    public String extractFoodName(String searchResultOutput){
+        String searchString = "Food: ";
+        int startingIndexOfFoodName = searchResultOutput.indexOf(searchString);
+
+        if (startingIndexOfFoodName != -1) {
+            startingIndexOfFoodName += searchString.length();
+
+            // Find the end of the line
+            int endIndex = searchResultOutput.indexOf("\n", startingIndexOfFoodName);
+
+            if (endIndex != -1) {
+                return searchResultOutput.substring(startingIndexOfFoodName, endIndex).trim();
+            } else {
+                return searchResultOutput.substring(startingIndexOfFoodName).trim();
+            }
+        }
+        return null;
     }
     public void setSession(Session session)
     {
@@ -1319,10 +1441,16 @@ public class GUI
 
 
     }
+
+    // Getters and setters
     public User getCurrentUser() {
         return currentUser;
     }
     public Session getSession() {
         return session;
     }
+    public void setSearchResults(LinkedList<String> searchResults) {
+        this.searchResults = searchResults;
+    }
+
 }

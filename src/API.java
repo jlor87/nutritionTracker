@@ -1,16 +1,16 @@
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * This class makes API requests to the USDA's database of food https://api.nal.usda.gov
@@ -19,9 +19,10 @@ import java.sql.SQLException;
  */
 public class API {
 
+
     private User currentUser;
     private JsonArray nutrients = new JsonArray();
-
+    private HashMap<String, JsonArray> allNutrientsFromSearchResult = new HashMap<>();
     private Connection connectionToMySQL;
     private String currentFoodName;
 
@@ -36,7 +37,7 @@ public class API {
     }
 
     // Class functions
-    public String sendAPIRequest(String query) {
+    public LinkedList<String> sendAPIRequest(String query) {
         System.out.printf(".........Retrieving %s nutrition information.........\n", query);
         final String API_KEY = "OUhmaL4b1NLdkO286efEMTYDBHWw7jfj8TIoyxNm"; // API key allows access to the API
         final String BASE_URL = "https://api.nal.usda.gov/fdc/v1/foods/search";
@@ -48,9 +49,8 @@ public class API {
         // Create a GET request with the constructed URL
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
-        // StringBuilder to accumulate the output
-        StringBuilder output = new StringBuilder();
-        output.append(".........Retrieving ").append(query).append(" nutrition information.........\n");
+        LinkedList<String> searchResults = new LinkedList<>();
+        allNutrientsFromSearchResult.clear(); // Reset for each new search result
 
         try {
             // Send the request and get the response
@@ -63,43 +63,60 @@ public class API {
 
             // Check if we have results
             if (foods.size() > 0) {
-                // Extract details of the first food item
-                JsonObject firstFood = foods.get(0).getAsJsonObject();
-                String description = firstFood.get("description").getAsString();
-                this.currentFoodName = description;
-                this.nutrients = firstFood.getAsJsonArray("foodNutrients");
 
-                // Append the food description
-                output.append("Food: ").append(description).append("\n");
+                for(JsonElement currentFoodElement : foods){
+                    // StringBuilder to accumulate the output
+                    StringBuilder output = new StringBuilder();
+                    output.append(".........Retrieving ").append(query).append(" nutrition information.........\n");
 
-                // Loop through and append each nutrient
-                for (int i = 0; i < nutrients.size(); i++) {
-                    JsonObject nutrient = nutrients.get(i).getAsJsonObject();
-                    String nutrientName = nutrient.get("nutrientName").getAsString();
-                    double amount = nutrient.get("value").getAsDouble();
-                    String unitName = nutrient.get("unitName").getAsString();
-                    output.append(nutrientName).append(": ").append(amount).append(" ").append(unitName).append("\n");
+                    // Extract details of the current food item
+                    JsonObject currentFoodJSON = currentFoodElement.getAsJsonObject();
+                    String description = currentFoodJSON.get("description").getAsString();
+                    System.out.println("Food description is: " + description);
+                    this.currentFoodName = description;
+                    this.nutrients = currentFoodJSON.getAsJsonArray("foodNutrients");
+                    if(allNutrientsFromSearchResult.get(currentFoodName) == null) {
+                        allNutrientsFromSearchResult.put(currentFoodName, nutrients);
+
+                        // Append the food description
+                        output.append("Food: ").append(description).append("\n");
+
+                        // Loop through and append each nutrient
+                        for (int i = 0; i < nutrients.size(); i++) {
+                            JsonObject nutrient = nutrients.get(i).getAsJsonObject();
+                            String nutrientName = nutrient.get("nutrientName").getAsString();
+                            double amount = nutrient.get("value").getAsDouble();
+                            String unitName = nutrient.get("unitName").getAsString();
+                            output.append(nutrientName).append(": ").append(amount).append(" ").append(unitName).append("\n");
+                        }
+                        output.append(".........").append(query).append(" nutrition information complete.........\n");
+                        output.append("CLICK THE 'ADD' BUTTON TO ADD THIS FOOD ITEM TO YOUR CONSUMPTION.\n");
+                        searchResults.add(output.toString());
+                    }
                 }
             } else {
-                output.append("No foods found for the query: ").append(query).append("\n");
+                searchResults.add("No foods found for the query: " + query + "\n");
             }
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            output.append("An error occurred while retrieving nutrition information.\n");
+            searchResults.add("An error occurred while retrieving nutrition information.\n");
         }
 
-        output.append(".........").append(query).append(" nutrition information complete.........\n");
-        
         // Return the output as a string
-        return output.toString();
+        return searchResults;
     }
 
     // Getters
-    public String getCurrentFoodName() {
-        return currentFoodName;
-    }
-    public JsonArray getNutrients() {
-        return nutrients;
+    public JsonArray getNutrients(String foodName) {
+        System.out.println("foodName to be retrieved");
+        JsonArray jsonArray = allNutrientsFromSearchResult.get(foodName);
+        if(jsonArray != null) {
+            System.out.println("nutrients for that food to be returned" + jsonArray.toString());
+        }
+        else{
+            System.out.println("Error! Could not find the food and its nutrients!");
+        }
+        return allNutrientsFromSearchResult.get(foodName);
     }
 }
