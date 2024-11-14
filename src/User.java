@@ -576,6 +576,17 @@ public class User {
     public String getDailyFoodsConsumed(){
         return dailyFoodsConsumed;
     }
+
+    public String getFoodCatalogOutput(){
+        StringBuilder finalOutput = new StringBuilder();
+        for(Food foodEntry : foodCatalog)
+        {
+            String foodName = foodEntry.getName();
+            foodName = foodName.replace("-", " ");
+            finalOutput.append(foodName).append("\n");
+        }
+        return finalOutput.toString();
+    }
     // Updates goals and current consumption in one function. Useful for outputting the most recent info
     public boolean updateAllFromDatabase() {
         System.out.println("Attempting to update user values from the database...");

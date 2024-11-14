@@ -1,10 +1,13 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import javax.swing.*;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.sql.*;
@@ -93,6 +96,25 @@ public class UserSettings {
             System.out.println("Goal for " + nutrient + " set to " + newValue);
         } else {
             System.out.println("Invalid nutrient name. Please check and try again.");
+        }
+    }
+
+    public boolean updateExerciseLevel(String level){
+        String query = "UPDATE nutritionTracker.users SET exercise = '" + level + "' WHERE userId = " + currentUser.getUserId();
+
+        try
+        {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+            // Execute and retrieve result
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+
+            return rowsAffected > 0;
+        }
+        catch(SQLException ex)
+        {
+            ex.printStackTrace();
+            return false;
         }
     }
 
@@ -193,6 +215,37 @@ public class UserSettings {
         }
     }
 
+    public boolean updateHeight(int userId, int height) {
+        String query = "UPDATE nutritionTracker.users SET height = ? WHERE userId = ?";
+        try (PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query)) {
+            preparedStatement.setInt(1, height);
+            preparedStatement.setInt(2, userId);
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateSex(String sex){
+        String query = "UPDATE nutritionTracker.users SET sex = '" + sex + "' WHERE userId = " + currentUser.getUserId();
+
+        try
+        {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+            // Execute and retrieve result
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+
+            return rowsAffected > 0;
+        }
+        catch(SQLException ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean updateUserConsumption(JsonArray nutrients, String foodName){
         System.out.println("amount of nutrients to be added: " + nutrients.size());
 
@@ -290,6 +343,19 @@ public class UserSettings {
         }
         return true;
     }
+
+    public boolean updateWeight(int userId, int weight) {
+        String query = "UPDATE nutritionTracker.users SET weight = ? WHERE userId = ?";
+        try (PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query)) {
+            preparedStatement.setInt(1, weight);
+            preparedStatement.setInt(2, userId);
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
 
     // Getters
     public User getCurrentUser() {

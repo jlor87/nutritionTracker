@@ -6,7 +6,6 @@ import javax.swing.*;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.LinkedList;
 
 public class GUI
 {
@@ -45,6 +44,7 @@ public class GUI
     private Session session;
     private User currentUser;
     private int retrievedUserId = -1; // dummy value before user logs in
+    private UserSettings userSettings;
 
     // Constructor
     public GUI(Connection connectionToMySQL)
@@ -78,36 +78,17 @@ public class GUI
             {
                 try
                 {
-                    double weight = Double.parseDouble(weightInput);
-                    // Save weight to a variable
-                    System.out.println("Weight saved: " + weight);
-
-                    String query = "UPDATE nutritionTracker.users SET weight = " + weight + " WHERE userId = " + currentUser.getUserId();
-
-                    try
-                    {
-                        PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
-                        // Execute and retrieve result
-                        int rowsAffected = preparedStatement.executeUpdate();
-                        preparedStatement.close();
-
-                        if(rowsAffected > 0)
-                        {
-                            System.out.println("Weight updated successfully!");
-                            JOptionPane.showMessageDialog(null, "Weight updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                            weightButton.setText("Weight: " + weight);
-                        }
-                        else
-                        {
-                            System.out.println("Error occurred!");
-                            JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                        }
+                    int weight = Integer.parseInt(weightInput);
+                    boolean success = userSettings.updateWeight(currentUser.getUserId(), weight);
+                    if(success){
+                        System.out.println("Weight updated successfully!");
+                        JOptionPane.showMessageDialog(null, "Weight updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                        weightButton.setText("Weight: " + weight);
                     }
-                    catch(SQLException ex)
-                    {
-                        ex.printStackTrace();
+                    else {
+                        System.out.println("Error occurred!");
+                        JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                     }
-
                 }
                 catch(NumberFormatException ex)
                 {
@@ -127,34 +108,16 @@ public class GUI
             {
                 try
                 {
-                    double height = Double.parseDouble(heightInput);
-                    // Save height to a variable
-                    System.out.println("Height saved: " + height);
-
-                    String query = "UPDATE nutritionTracker.users SET height = " + height + " WHERE userId = " + currentUser.getUserId();
-
-                    try
-                    {
-                        PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
-                        // Execute and retrieve result
-                        int rowsAffected = preparedStatement.executeUpdate();
-                        preparedStatement.close();
-
-                        if(rowsAffected > 0)
-                        {
-                            System.out.println("Height updated successfully!");
-                            JOptionPane.showMessageDialog(null, "Height updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                            weightButton.setText("Height: " + height);
-                        }
-                        else
-                        {
-                            System.out.println("Error occurred!");
-                            JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                        }
+                    int height = Integer.parseInt(heightInput);
+                    boolean success = userSettings.updateHeight(currentUser.getUserId(), height);
+                    if(success){
+                        System.out.println("Height updated successfully!");
+                        JOptionPane.showMessageDialog(null, "Height updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                        heightButton.setText("Height: " + height);
                     }
-                    catch(SQLException ex)
-                    {
-                        ex.printStackTrace();
+                    else {
+                        System.out.println("Error occurred!");
+                        JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
                 catch(NumberFormatException ex)
@@ -177,33 +140,16 @@ public class GUI
             {
                 sex = sex.equals("M") ? "F" : "M";
                 sexButton.setText("Sex: " + sex);
-                // Save sex to a variable
-                System.out.println("Sex saved: " + sex);
 
-                String query = "UPDATE nutritionTracker.users SET sex = '" + sex + "' WHERE userId = " + currentUser.getUserId();
-
-                try
-                {
-                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
-                    // Execute and retrieve result
-                    int rowsAffected = preparedStatement.executeUpdate();
-                    preparedStatement.close();
-
-                    if(rowsAffected > 0)
-                    {
-                        System.out.println("Sex updated successfully!");
-                        JOptionPane.showMessageDialog(null, "Sex updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                        weightButton.setText("Sex: " + sex);
-                    }
-                    else
-                    {
-                        System.out.println("Error occurred!");
-                        JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                    }
+                boolean success = userSettings.updateSex(sex);
+                if(success){
+                    System.out.println("Sex updated successfully!");
+                    JOptionPane.showMessageDialog(null, "Sex updated successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                    sexButton.setText("Sex: " + sex);
                 }
-                catch(SQLException ex)
-                {
-                    ex.printStackTrace();
+                else{
+                    System.out.println("Error occurred!");
+                    JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                 }
             }
         });
@@ -225,35 +171,19 @@ public class GUI
             {
                 levelIndex = (levelIndex + 1) % levels.length;
                 String level = levels[levelIndex];
-                exerciseLevelButton.setText("Exercise Level: " + level);
-                // Save exercise level to a variable
-                System.out.println("Exercise Level saved: " + level);
 
-                String query = "UPDATE nutritionTracker.users SET exercise = '" + level + "' WHERE userId = " + currentUser.getUserId();
-
-                try
-                {
-                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
-                    // Execute and retrieve result
-                    int rowsAffected = preparedStatement.executeUpdate();
-                    preparedStatement.close();
-
-                    if(rowsAffected > 0)
-                    {
-                        System.out.println("Exercise level updated successfully!");
-                        JOptionPane.showMessageDialog(null, "Exercise level successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                        weightButton.setText("Exercise level: " + level);
-                    }
-                    else
-                    {
-                        System.out.println("Error occurred!");
-                        JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
-                    }
+                boolean success = userSettings.updateExerciseLevel(level);
+                if(success){
+                    System.out.println("Exercise level updated successfully!");
+                    JOptionPane.showMessageDialog(null, "Exercise level successfully!", "Plain", JOptionPane.PLAIN_MESSAGE);
+                    exerciseLevelButton.setText("Exercise level: " + level);
                 }
-                catch(SQLException ex)
-                {
-                    ex.printStackTrace();
+                else{
+                    System.out.println("Error occurred!");
+                    JOptionPane.showMessageDialog(null, "An error occurred while trying to update!", "Plain", JOptionPane.PLAIN_MESSAGE);
                 }
+
+
             }
         });
         centerPanel.add(exerciseLevelButton);
@@ -336,8 +266,6 @@ public class GUI
         // Set frame visibility to true
         catalogFoodIntakeWindow.setVisible(false);
     }
-
-
     public void makeCreateScreen() {
 
         JPanel createPanel = new JPanel();
@@ -1175,15 +1103,7 @@ public class GUI
         alterUserDataWindow.setVisible(true);
     }
     public void displayCatalogFoodIntakeScreen() {
-        LinkedList<Food> retrievedFoodCatalog = currentUser.getFoodCatalog();
-        StringBuilder finalOutput = new StringBuilder();
-        for(Food foodEntry : retrievedFoodCatalog)
-        {
-            String foodName = foodEntry.getName();
-            foodName = foodName.replace("-", " ");
-            finalOutput.append(foodName).append("\n");
-        }
-        foodsConsumedField.setText(finalOutput.toString());
+        foodsConsumedField.setText(currentUser.getFoodCatalogOutput());
         catalogFoodIntakeWindow.setVisible(true);
     }
     public void displayCreateScreen()
@@ -1269,38 +1189,7 @@ public class GUI
     }
 
     // All class helper functions in ABC order
-    public boolean checkCredentials(String username, String password) {
-        ResultSet resultSet;
-        String query = "SELECT password, userId FROM users WHERE username = ?";
-        String retrievedPassword = "";
 
-        try
-        {
-            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query); // Using prepared statements as good practice against SQL injections
-            preparedStatement.setString(1, username);
-
-            // Execute SQL query and retrieve the result
-            resultSet = preparedStatement.executeQuery();
-
-            // Process the result
-            while(resultSet.next())
-            {
-                retrievedPassword = resultSet.getString("password");
-                this.retrievedUserId = resultSet.getInt("userId");
-                System.out.println("the retrieved userId is: " + retrievedUserId);
-            }
-
-            return retrievedPassword.equals(password);
-        }
-        catch(Exception e)
-        {
-            JOptionPane.showMessageDialog(loginWindow, "Connection to database failed", "Error", JOptionPane.ERROR_MESSAGE);
-
-            e.printStackTrace();
-        }
-
-        return false; // Error occurred
-    }
     public class ChoiceHandler implements ActionListener {
 
         private JTextField usernameField;
@@ -1331,18 +1220,20 @@ public class GUI
                     String username = usernameField.getText().strip();
                     char[] password = passwordField.getPassword();
                     String loginPasswordString = new String(password);
+                    retrievedUserId = Accounts.checkCredentials(username, loginPasswordString);
 
-                    if(checkCredentials(username, loginPasswordString))
-                    {
+                    if(retrievedUserId == -1) {
+                        JOptionPane.showMessageDialog(null, "Please check your username and password and then try again.");
+                    }
+                    else if(retrievedUserId == -2){
+                        JOptionPane.showMessageDialog(null, "An error occurred while attempting to log in!");
+                    }
+                    else{
                         System.out.println("Login successful.");
 
                         removeLoginScreen();
                         displayMainScreen();
                         createSession();
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null, "Please check your username and password and then try again.");
                     }
                     break;
 
@@ -1360,17 +1251,20 @@ public class GUI
                     String createUsername = createUsernameField.getText();
                     char[] createPassword = createPasswordField.getPassword();
                     String passwordString = new String(createPassword);
-                    if(createAccount(createUsername, passwordString))
-                    {
+                    retrievedUserId = Accounts.createAccount(createUsername, passwordString);
+                    if(retrievedUserId == -1){
+                        System.out.println("An error occurred when trying to register!");
+                        JOptionPane.showMessageDialog(null, "An error occured when trying to register!", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if(retrievedUserId == -2){
+                        System.out.println("Username already exists!");
+                        JOptionPane.showMessageDialog(null, "ERROR: User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else{
                         System.out.println("Account created successfully.");
                         JOptionPane.showMessageDialog(null, "Account created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         displayLoginScreen();
                         removeCreateScreen();
-                    }
-                    else
-                    {
-                        System.out.println("Username already exists!");
-                        JOptionPane.showMessageDialog(null, "ERROR: User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
 
@@ -1435,163 +1329,7 @@ public class GUI
         }
 
     }
-    public boolean createAccount(String username, String password) {
-        String query = "INSERT IGNORE INTO users (username, password, weight, height, sex, exercise) VALUES(?, ?, ?, ?, ?, ?)";
-        try
-        {
-            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query); // Using prepared statements as good practice against SQL injections
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-            preparedStatement.setInt(3, 150);
-            preparedStatement.setInt(4, 69);
-            preparedStatement.setString(5, "M");
-            preparedStatement.setString(6, "average");
 
-            // Execute and retrieve result
-            int rowsAffected = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            if(rowsAffected > 0)
-            {
-                System.out.println("User created successfully!");
-            }
-            else
-            {
-                System.out.println("Failed to create user!");
-                return false;
-            }
-        }
-        catch(SQLException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-
-        // Need to retrieve the userId of the newly created user to set up initial goals and daily consumption
-        String query2 = "SELECT userId FROM users WHERE username = ? AND password = ?";
-        try
-        {
-            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query2); // Using prepared statements as good practice against SQL injections
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-
-            // Execute and retrieve result
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next())
-            {
-                retrievedUserId = resultSet.getInt("userId");
-                // Continue processing with userId
-                System.out.println("Created userId: " + retrievedUserId);
-            }
-            else
-            {
-                System.out.println("Error retrieving userId.");
-                return false;
-            }
-            resultSet.close();
-            preparedStatement.close();
-        }
-        catch(SQLException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-
-        // Set nutrient goals to initial values
-        String query3 = "INSERT INTO nutrientGoals (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try
-        {
-            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query3); // Using prepared statements as good practice against SQL injections
-            preparedStatement.setDouble(1, retrievedUserId); // userId
-            preparedStatement.setDouble(2, 3.7);             // water
-            preparedStatement.setDouble(3, 2000);            // energy
-            preparedStatement.setDouble(4, 130);             // carbohydrate
-            preparedStatement.setDouble(5, 22);              // monounsaturatedFat
-            preparedStatement.setDouble(6, 22);              // saturatedFat
-            preparedStatement.setDouble(7, 17);              // polyunsaturatedFat
-            preparedStatement.setDouble(8, 56);              // protein
-            preparedStatement.setDouble(9, 38);              // fiber
-            preparedStatement.setDouble(10, 900);            // vitaminA
-            preparedStatement.setDouble(11, 1.2);            // vitaminB1Thiamine
-            preparedStatement.setDouble(12, 1.3);            // vitaminB2Riboflavin
-            preparedStatement.setDouble(13, 16);             // vitaminB3Niacin
-            preparedStatement.setDouble(14, 5);              // vitaminB5PantothenicAcid
-            preparedStatement.setDouble(15, 1.3);            // vitaminB6Pyridoxine
-            preparedStatement.setDouble(16, 30);             // vitaminB7Biotin
-            preparedStatement.setDouble(17, 400);            // vitaminB9Folate
-            preparedStatement.setDouble(18, 2.4);            // vitaminB12Cyanocobalamin
-            preparedStatement.setDouble(19, 90);             // vitaminC
-            preparedStatement.setDouble(20, 15);             // vitaminD
-            preparedStatement.setDouble(21, 15);             // vitaminE
-            preparedStatement.setDouble(22, 120);            // vitaminK
-            preparedStatement.setDouble(23, 550);            // choline
-            preparedStatement.setDouble(24, 1000);           // calcium
-            preparedStatement.setDouble(25, 2.3);            // chloride
-            preparedStatement.setDouble(26, 35);             // chromium
-            preparedStatement.setDouble(27, 900);            // copper
-            preparedStatement.setDouble(28, 4);              // fluoride
-            preparedStatement.setDouble(29, 150);            // iodine
-            preparedStatement.setDouble(30, 8);              // iron
-            preparedStatement.setDouble(31, 400);            // magnesium
-            preparedStatement.setDouble(32, 2.3);            // manganese
-            preparedStatement.setDouble(33, 45);             // molybdenum
-            preparedStatement.setDouble(34, 700);            // phosphorus
-            preparedStatement.setDouble(35, 3400);           // potassium
-            preparedStatement.setDouble(36, 55);             // selenium
-            preparedStatement.setDouble(37, 1500);           // sodium
-            preparedStatement.setDouble(38, 11);             // zinc
-
-            // Execute and retrieve result
-            int rowsAffected = preparedStatement.executeUpdate();
-            if(rowsAffected > 0)
-            {
-                System.out.println("Initial nutrient goals set successfully!");
-            }
-            else
-            {
-                System.out.println("Failed to initialize nutrient goals!");
-                return false;
-            }
-        }
-        catch(SQLException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-
-        // Set daily consumption to 0
-        String query4 = "INSERT INTO currentConsumption (userId, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try
-        {
-            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query4); // Using prepared statements as good practice against SQL injections
-            preparedStatement.setDouble(1, retrievedUserId);
-            for(int i = 2; i <= 38; i++)
-            {
-                preparedStatement.setDouble(i, 0.00);
-            }
-
-            // Execute and retrieve result
-            int rowsAffected = preparedStatement.executeUpdate();
-            preparedStatement.close();
-
-            if(rowsAffected > 0)
-            {
-                System.out.println("Current consumption set successfully!");
-                return true;
-            }
-            else
-            {
-                System.out.println("Failed to set current consumption to 0!");
-                return false;
-            }
-        }
-        catch(SQLException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-    }
     public void createSession() {
         User newUser = new User(retrievedUserId);
         this.currentUser = newUser;
@@ -1600,6 +1338,7 @@ public class GUI
         Session newSession = new Session(newUser, this);
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
+        userSettings = newSession.getUserSettings();
     }
     public void setSession(Session session)
     {
