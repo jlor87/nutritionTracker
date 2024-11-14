@@ -105,7 +105,7 @@ public class User {
                 String nameOfFood = "";
                 while(st.hasMoreTokens()){
                     nameOfFood = st.nextToken();
-                    Food foodItem = new Food(nameOfFood);
+                    Food foodItem = new Food(nameOfFood, userId);
                     foodCatalog.add(foodItem);
                 }
             }

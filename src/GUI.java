@@ -3,8 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
-import java.sql.*;
 import java.time.LocalDate;
 
 public class GUI
@@ -40,17 +38,11 @@ public class GUI
     JButton exerciseLevelButton;
 
     //these variables are at the class level because they will have to be turned on/off (set visible/non visible) depending on where the user is in the application
-    private final Connection connectionToMySQL;
     private Session session;
     private User currentUser;
     private int retrievedUserId = -1; // dummy value before user logs in
     private UserSettings userSettings;
 
-    // Constructor
-    public GUI(Connection connectionToMySQL)
-    {
-        this.connectionToMySQL = connectionToMySQL;
-    }
 
     // All functions that make screens in ABC order
     public void makeAlterUserDataScreen() {
@@ -502,100 +494,55 @@ public class GUI
             try {
                 // Get all input values from text fields
                 String foodName = nameField.getText();
-                double water = Double.parseDouble(waterField.getText());
-                double energy = Double.parseDouble(energyField.getText());
-                double carbohydrate = Double.parseDouble(carbohydrateField.getText());
-                double monounsaturatedFat = Double.parseDouble(monounsaturatedFatField.getText());
-                double saturatedFat = Double.parseDouble(saturatedFatField.getText());
-                double polyunsaturatedFat = Double.parseDouble(polyunsaturatedFatField.getText());
-                double protein = Double.parseDouble(proteinField.getText());
-                double fiber = Double.parseDouble(fiberField.getText());
 
-                double vitaminA = Double.parseDouble(vitaminAField.getText());
-                double vitaminB1 = Double.parseDouble(vitaminB1Field.getText());
-                double vitaminB2 = Double.parseDouble(vitaminB2Field.getText());
-                double vitaminB3 = Double.parseDouble(vitaminB3Field.getText());
-                double vitaminB5 = Double.parseDouble(vitaminB5Field.getText());
-                double vitaminB6 = Double.parseDouble(vitaminB6Field.getText());
-                double vitaminB7 = Double.parseDouble(vitaminB7Field.getText());
-                double vitaminB9 = Double.parseDouble(vitaminB9Field.getText());
-                double vitaminB12 = Double.parseDouble(vitaminB12Field.getText());
-                double vitaminC = Double.parseDouble(vitaminCField.getText());
-                double vitaminD = Double.parseDouble(vitaminDField.getText());
-                double vitaminE = Double.parseDouble(vitaminEField.getText());
-                double vitaminK = Double.parseDouble(vitaminKField.getText());
+                // Create food class to store all input values
+                Food food = new Food(foodName, currentUser.getUserId());
 
-                double choline = Double.parseDouble(cholineField.getText());
-                double calcium = Double.parseDouble(calciumField.getText());
-                double chloride = Double.parseDouble(chlorideField.getText());
-                double chromium = Double.parseDouble(chromiumField.getText());
-                double copper = Double.parseDouble(copperField.getText());
-                double fluoride = Double.parseDouble(fluorideField.getText());
-                double iodine = Double.parseDouble(iodineField.getText());
-                double iron = Double.parseDouble(ironField.getText());
-                double magnesium = Double.parseDouble(magnesiumField.getText());
-                double manganese = Double.parseDouble(manganeseField.getText());
-                double molybdenum = Double.parseDouble(molybdenumField.getText());
-                double phosphorus = Double.parseDouble(phosphorusField.getText());
-                double potassium = Double.parseDouble(potassiumField.getText());
-                double selenium = Double.parseDouble(seleniumField.getText());
-                double sodium = Double.parseDouble(sodiumField.getText());
-                double zinc = Double.parseDouble(zincField.getText());
+                // Set the nutrient values
+                food.setWater(Double.parseDouble(waterField.getText()));
+                food.setEnergy(Double.parseDouble(energyField.getText()));
+                food.setCarbohydrate(Double.parseDouble(carbohydrateField.getText()));
+                food.setMonounsaturatedFat(Double.parseDouble(monounsaturatedFatField.getText()));
+                food.setSaturatedFat(Double.parseDouble(saturatedFatField.getText()));
+                food.setPolyunsaturatedFat(Double.parseDouble(polyunsaturatedFatField.getText()));
+                food.setProtein(Double.parseDouble(proteinField.getText()));
+                food.setFiber(Double.parseDouble(fiberField.getText()));
 
-                // Insert the data into the database
-                String sql = "INSERT INTO food (foodName, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, " +
-                        "vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, " +
-                        "choline, calcium, chloride, chromium, copper, fluoride, iodine, iron, magnesium, manganese, molybdenum, phosphorus, potassium, selenium, sodium, zinc, userId) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                food.setVitaminA(Double.parseDouble(vitaminAField.getText()));
+                food.setVitaminB1Thiamine(Double.parseDouble(vitaminB1Field.getText()));
+                food.setVitaminB2Riboflavin(Double.parseDouble(vitaminB2Field.getText()));
+                food.setVitaminB3Niacin(Double.parseDouble(vitaminB3Field.getText()));
+                food.setVitaminB5PantothenicAcid(Double.parseDouble(vitaminB5Field.getText()));
+                food.setVitaminB6Pyridoxine(Double.parseDouble(vitaminB6Field.getText()));
+                food.setVitaminB7Biotin(Double.parseDouble(vitaminB7Field.getText()));
+                food.setVitaminB9Folate(Double.parseDouble(vitaminB9Field.getText()));
+                food.setVitaminB12Cyanocobalamin(Double.parseDouble(vitaminB12Field.getText()));
+                food.setVitaminC(Double.parseDouble(vitaminCField.getText()));
+                food.setVitaminD(Double.parseDouble(vitaminDField.getText()));
+                food.setVitaminE(Double.parseDouble(vitaminEField.getText()));
+                food.setVitaminK(Double.parseDouble(vitaminKField.getText()));
 
-                try {
-                    PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(sql);
+                food.setCholine(Double.parseDouble(cholineField.getText()));
+                food.setCalcium(Double.parseDouble(calciumField.getText()));
+                food.setChloride(Double.parseDouble(chlorideField.getText()));
+                food.setChromium(Double.parseDouble(chromiumField.getText()));
+                food.setCopper(Double.parseDouble(copperField.getText()));
+                food.setFluoride(Double.parseDouble(fluorideField.getText()));
+                food.setIodine(Double.parseDouble(iodineField.getText()));
+                food.setIron(Double.parseDouble(ironField.getText()));
+                food.setMagnesium(Double.parseDouble(magnesiumField.getText()));
+                food.setManganese(Double.parseDouble(manganeseField.getText()));
+                food.setMolybdenum(Double.parseDouble(molybdenumField.getText()));
+                food.setPhosphorus(Double.parseDouble(phosphorusField.getText()));
+                food.setPotassium(Double.parseDouble(potassiumField.getText()));
+                food.setSelenium(Double.parseDouble(seleniumField.getText()));
+                food.setSodium(Double.parseDouble(sodiumField.getText()));
+                food.setZinc(Double.parseDouble(zincField.getText()));
 
-                    // Bind parameters (starting from 1 and going up to 37)
-                    preparedStatement.setString(1, foodName);
-                    preparedStatement.setDouble(2, water);
-                    preparedStatement.setDouble(3, energy);
-                    preparedStatement.setDouble(4, carbohydrate);
-                    preparedStatement.setDouble(5, monounsaturatedFat);
-                    preparedStatement.setDouble(6, saturatedFat);
-                    preparedStatement.setDouble(7, polyunsaturatedFat);
-                    preparedStatement.setDouble(8, protein);
-                    preparedStatement.setDouble(9, fiber);
-                    preparedStatement.setDouble(10, vitaminA);
-                    preparedStatement.setDouble(11, vitaminB1);
-                    preparedStatement.setDouble(12, vitaminB2);
-                    preparedStatement.setDouble(13, vitaminB3);
-                    preparedStatement.setDouble(14, vitaminB5);
-                    preparedStatement.setDouble(15, vitaminB6);
-                    preparedStatement.setDouble(16, vitaminB7);
-                    preparedStatement.setDouble(17, vitaminB9);
-                    preparedStatement.setDouble(18, vitaminB12);
-                    preparedStatement.setDouble(19, vitaminC);
-                    preparedStatement.setDouble(20, vitaminD);
-                    preparedStatement.setDouble(21, vitaminE);
-                    preparedStatement.setDouble(22, vitaminK);
-                    preparedStatement.setDouble(23, choline);
-                    preparedStatement.setDouble(24, calcium);
-                    preparedStatement.setDouble(25, chloride);
-                    preparedStatement.setDouble(26, chromium);
-                    preparedStatement.setDouble(27, copper);
-                    preparedStatement.setDouble(28, fluoride);
-                    preparedStatement.setDouble(29, iodine);
-                    preparedStatement.setDouble(30, iron);
-                    preparedStatement.setDouble(31, magnesium);
-                    preparedStatement.setDouble(32, manganese);
-                    preparedStatement.setDouble(33, molybdenum);
-                    preparedStatement.setDouble(34, phosphorus);
-                    preparedStatement.setDouble(35, potassium);
-                    preparedStatement.setDouble(36, selenium);
-                    preparedStatement.setDouble(37, sodium);
-                    preparedStatement.setDouble(38, zinc);
-                    preparedStatement.setInt(39, retrievedUserId);
-
-                    preparedStatement.executeUpdate();
-                    JOptionPane.showMessageDialog(customFoodWindow, "Food item created and added to the database!");
-
-                    // Clear the input fields after successful insertion
+                // User Food class method to store food into the DB
+                boolean success = food.insertFoodIntoDB();
+                if(success){
+                    JOptionPane.showMessageDialog(customFoodWindow, "Food successfully entered into the database!", "Success", JOptionPane.PLAIN_MESSAGE);
                     nameField.setText("");
                     waterField.setText("0");
                     energyField.setText("0");
@@ -605,6 +552,7 @@ public class GUI
                     polyunsaturatedFatField.setText("0");
                     proteinField.setText("0");
                     fiberField.setText("0");
+
                     vitaminAField.setText("0");
                     vitaminB1Field.setText("0");
                     vitaminB2Field.setText("0");
@@ -618,6 +566,7 @@ public class GUI
                     vitaminDField.setText("0");
                     vitaminEField.setText("0");
                     vitaminKField.setText("0");
+
                     cholineField.setText("0");
                     calciumField.setText("0");
                     chlorideField.setText("0");
@@ -634,9 +583,9 @@ public class GUI
                     seleniumField.setText("0");
                     sodiumField.setText("0");
                     zincField.setText("0");
-
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(customFoodWindow, "Error saving to the database: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(customFoodWindow, "An error occurred while entering food into the database.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(customFoodWindow, "Please enter valid numbers for all fields.", "Input Error", JOptionPane.ERROR_MESSAGE);

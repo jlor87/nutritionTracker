@@ -48,7 +48,7 @@ public class Main
         connectionToMySQL = getConnection();
 
         // Set up the GUI
-        gui = new GUI(connectionToMySQL);
+        gui = new GUI();
 
         // Construct the GUI screens
         gui.makeTitleScreen();
