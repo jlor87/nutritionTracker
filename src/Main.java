@@ -61,6 +61,8 @@ public class Main
         gui.makeAlterUserDataScreen();
         gui.makeCatalogFoodIntakeScreen();
         gui.makeCustomFoodItemScreen();
+        gui.makeListOfCustomAndSearchedFoods();
+
         // Display the initial screen
         gui.displayTitleScreen();
     }

@@ -25,11 +25,33 @@ public class Session {
     // Class functions
     /**
      * This function is responsible for retrieving the food that the user of the app has consumed or plans to consume
-     * @param userInput takes in the name of the food item entered by the user in the Search Food Item option of the menu
      */
-    public void addFoodItem(String foodName) {
+    public void addFoodItem(String foodName, int whichOutputArea) {
         userSettings.updateUserConsumption(api.getNutrients(foodName), foodName);
-        gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", foodName));
+        if(whichOutputArea == 1){
+            gui.outputArea.append(String.format("Food Item %s added to daily consumption\n", foodName));
+        }
+        else if(whichOutputArea == 2){
+            gui.outputArea2.append(String.format("Food Item %s added to daily consumption\n", foodName));
+        }
+        else{
+            gui.outputArea3.append(String.format("Food Item %s added to daily consumption\n", foodName));
+        }
+
+    }
+
+    public void addCustomFoodItem(String output, int whichOutputArea) {
+        userSettings.updateCustomFoodUserConsumption(output);
+        if(whichOutputArea == 1){
+            gui.customAndSearchedFoodsOutputArea1.append(String.format("Added to daily consumption!\n"));
+        }
+        else if(whichOutputArea == 2){
+            gui.customAndSearchedFoodsOutputArea2.append(String.format("Added to daily consumption!\n"));
+        }
+        else{
+            gui.customAndSearchedFoodsOutputArea3.append(String.format("Added to daily consumption!\n"));
+        }
+
     }
 
     public void changeGoals(String nutrient, String newVal) {

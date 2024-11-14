@@ -19,6 +19,12 @@ public class GUI
     JScrollPane scrollPane = new JScrollPane(outputArea);
     JScrollPane scrollPane2 = new JScrollPane(outputArea2);
     JScrollPane scrollPane3 = new JScrollPane(outputArea3);
+    JTextArea customAndSearchedFoodsOutputArea1 = new JTextArea(10, 30);
+    JTextArea customAndSearchedFoodsOutputArea2 = new JTextArea(10, 30);
+    JTextArea customAndSearchedFoodsOutputArea3 = new JTextArea(10, 30);
+    JScrollPane scrollPaneForCustomAndSearchedFoods1 = new JScrollPane(customAndSearchedFoodsOutputArea1);
+    JScrollPane scrollPaneForCustomAndSearchedFoods2 = new JScrollPane(customAndSearchedFoodsOutputArea2);
+    JScrollPane scrollPaneForCustomAndSearchedFoods3 = new JScrollPane(customAndSearchedFoodsOutputArea3);
     JTextArea macronutrientsField = new JTextArea("Macronutrients: ");
     JTextArea vitaminsField = new JTextArea("Vitamins: ");
     JTextArea mineralsField = new JTextArea("Minerals: ");
@@ -30,6 +36,7 @@ public class GUI
     JFrame createWindow = new JFrame();
     JFrame mainWindow = new JFrame();
     JFrame searchWindow = new JFrame();
+    JFrame customAndSearchedFoodsBrowseWindow = new JFrame();
     JFrame setGoalsWindow = new JFrame();
     JFrame statusWindow = new JFrame();
     JFrame alterUserDataWindow = new JFrame();
@@ -48,6 +55,8 @@ public class GUI
     private UserSettings userSettings;
     private LinkedList<String> searchResults;
     private int indexOfMostRecentlyDisplayedResult = 0;
+    private LinkedList<String> customFoods;
+    private int indexOfMostRecentlyDisplayedCustomItem = 0;
 
     // All functions that make screens in ABC order
     public void makeAlterUserDataScreen() {
@@ -606,6 +615,92 @@ public class GUI
         customFoodWindow.setSize(800, 600);
         customFoodWindow.setVisible(false);
     }
+    public void makeListOfCustomAndSearchedFoods(){
+        customAndSearchedFoodsBrowseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        customAndSearchedFoodsBrowseWindow.setSize(800, 600);
+        customAndSearchedFoodsBrowseWindow.setLayout(new BorderLayout());
+        customAndSearchedFoodsBrowseWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel titleLabel = new JLabel("Custom and Searched Food Items", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        customAndSearchedFoodsBrowseWindow.add(titleLabel, BorderLayout.NORTH);
+
+        // Main panel to contain search components and output
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Scrollable output areas for food item details with "Add Item" buttons underneath each
+        customAndSearchedFoodsOutputArea1.setLineWrap(true);
+        customAndSearchedFoodsOutputArea1.setWrapStyleWord(true);
+        customAndSearchedFoodsOutputArea1.setEditable(false);
+
+        customAndSearchedFoodsOutputArea2.setLineWrap(true);
+        customAndSearchedFoodsOutputArea2.setWrapStyleWord(true);
+        customAndSearchedFoodsOutputArea2.setEditable(false);
+
+        customAndSearchedFoodsOutputArea3.setLineWrap(true);
+        customAndSearchedFoodsOutputArea3.setWrapStyleWord(true);
+        customAndSearchedFoodsOutputArea3.setEditable(false);
+
+        scrollPaneForCustomAndSearchedFoods1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneForCustomAndSearchedFoods2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneForCustomAndSearchedFoods3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        // Create individual panels for each output area with corresponding "Add Item" button
+        JPanel outputPanel1 = new JPanel();
+        outputPanel1.setLayout(new BorderLayout());
+        outputPanel1.add(scrollPaneForCustomAndSearchedFoods1, BorderLayout.CENTER);
+        JButton addItemButton1 = new JButton("Add Item 1");
+        addItemButton1.addActionListener(cHandler);
+        addItemButton1.setActionCommand("addCustomFoodItem1");
+        outputPanel1.add(addItemButton1, BorderLayout.SOUTH);
+
+        JPanel outputPanel2 = new JPanel();
+        outputPanel2.setLayout(new BorderLayout());
+        outputPanel2.add(scrollPaneForCustomAndSearchedFoods2, BorderLayout.CENTER);
+        JButton addItemButton2 = new JButton("Add Item 2");
+        addItemButton2.addActionListener(cHandler);
+        addItemButton2.setActionCommand("addCustomFoodItem2");
+        outputPanel2.add(addItemButton2, BorderLayout.SOUTH);
+
+        JPanel outputPanel3 = new JPanel();
+        outputPanel3.setLayout(new BorderLayout());
+        outputPanel3.add(scrollPaneForCustomAndSearchedFoods3, BorderLayout.CENTER);
+        JButton addItemButton3 = new JButton("Add Item 3");
+        addItemButton3.addActionListener(cHandler);
+        addItemButton3.setActionCommand("addCustomFoodItem3");
+        outputPanel3.add(addItemButton3, BorderLayout.SOUTH);
+
+        // Panel to hold the three output panels side by side
+        JPanel outputPanel = new JPanel();
+        outputPanel.setLayout(new GridLayout(1, 3, 10, 0));
+        outputPanel.add(outputPanel1);
+        outputPanel.add(outputPanel2);
+        outputPanel.add(outputPanel3);
+
+        // Panel for "Next" and "Exit" buttons below the output areas
+        JPanel navButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton nextButton = new JButton("Next");
+        nextButton.addActionListener(cHandler);
+        nextButton.setActionCommand("nextCustomFoodItems");
+        JButton exitButton = new JButton("Exit");
+        exitButton.addActionListener(cHandler);
+        exitButton.setActionCommand("goMainScreen");
+        navButtonPanel.add(nextButton);
+        navButtonPanel.add(exitButton);
+
+        // Add components to the center panel
+        centerPanel.add(outputPanel);                 // Output areas with Add Item buttons
+        centerPanel.add(Box.createVerticalStrut(10)); // Spacing
+        centerPanel.add(navButtonPanel);              // Navigation buttons below output areas
+
+        // Add centerPanel to the main window's center area
+        customAndSearchedFoodsBrowseWindow.add(centerPanel, BorderLayout.CENTER);
+
+        // Set the window visible
+        customAndSearchedFoodsBrowseWindow.setVisible(false);
+    }
     public void makeLoginScreen() {
         JPanel loginPanel = new JPanel();
         JLabel loginTitleLabel = new JLabel();
@@ -1116,6 +1211,11 @@ public class GUI
     {
         loginWindow.setVisible(true);
     }
+    public void displayListOfCustomAndSearchedFoods(){
+        currentUser.retrieveCustomFoodsFromDB();
+        customFoods = currentUser.getAllCustomAndSearchedFoods();
+        customAndSearchedFoodsBrowseWindow.setVisible(true);
+    }
     public void displaySearchScreen()
     {
         searchWindow.setVisible(true);
@@ -1160,6 +1260,9 @@ public class GUI
     public void removeLoginScreen()
     {
         loginWindow.setVisible(false);
+    }
+    public void removeListOfCustomAndSearchedFoods(){
+        customAndSearchedFoodsBrowseWindow.setVisible(false);
     }
     public void removeMainScreen()
     {
@@ -1262,7 +1365,7 @@ public class GUI
                     break;
 
                 case "searchforfooditem":
-                    String[] options = {"Search for a New Food Item", "Search through User List of Custom Foods", "Return to Main Menu"};
+                    String[] options = {"Search for a New Food Item", "Search through User List of Custom and Searched Foods", "Return to Main Menu"};
 
                     // Show the dialog
                     int choice = JOptionPane.showOptionDialog(
@@ -1286,7 +1389,8 @@ public class GUI
                             break;
                         case 1:
                             // Search for a custom food
-                            // displayCustomFoodListScreen
+                            displayListOfCustomAndSearchedFoods();
+                            displayNextSetOfCustomItems();
                             removeMainScreen();
                             break;
                         case 2:
@@ -1303,12 +1407,13 @@ public class GUI
                     break;
 
                 case "goMainScreen":
-                    removeSearchScreen();
-                    removeSetGoalsScreen();
-                    removeStatusGoalsScreen();
                     removeAlterUserDataScreen();
                     removeCatalogFoodIntakeScreen();
                     removeCustomScreen();
+                    removeListOfCustomAndSearchedFoods();
+                    removeSearchScreen();
+                    removeSetGoalsScreen();
+                    removeStatusGoalsScreen();
                     displayMainScreen();
                     break;
 
@@ -1319,13 +1424,23 @@ public class GUI
                     break;
 
                 case "addFoodItem1":
-                    session.addFoodItem(extractFoodName(outputArea.getText()));
+                    session.addFoodItem(extractFoodName(outputArea.getText()), 1);
                     break;
                 case "addFoodItem2":
-                    session.addFoodItem(extractFoodName(outputArea2.getText()));
+                    session.addFoodItem(extractFoodName(outputArea2.getText()), 2);
                     break;
                 case "addFoodItem3":
-                    session.addFoodItem(extractFoodName(outputArea3.getText()));
+                    session.addFoodItem(extractFoodName(outputArea3.getText()), 3);
+                    break;
+
+                case "addCustomFoodItem1":
+                    session.addCustomFoodItem(customAndSearchedFoodsOutputArea1.getText(), 1);
+                    break;
+                case "addCustomFoodItem2":
+                    session.addCustomFoodItem(customAndSearchedFoodsOutputArea2.getText(), 2);
+                    break;
+                case "addCustomFoodItem3":
+                    session.addCustomFoodItem(customAndSearchedFoodsOutputArea3.getText(), 3);
                     break;
 
                 case "setnutritiongoals":
@@ -1364,10 +1479,17 @@ public class GUI
                 case "nextFoodItems":
                     displayNextSetOfSearchResults();
                     break;
+
+                case "nextCustomFoodItems":
+                    displayNextSetOfCustomItems();
+                    break;
             }
         }
 
     }
+
+
+
     public void createSession() {
         User newUser = new User(retrievedUserId);
         this.currentUser = newUser;
@@ -1377,6 +1499,22 @@ public class GUI
         setSession(newSession); // Pass session to GUI
         newSession.startSession(); // Start the session
         userSettings = newSession.getUserSettings();
+    }
+    public void displayNextSetOfCustomItems() {
+        int i = indexOfMostRecentlyDisplayedCustomItem;
+        int maxSize = customFoods.size();
+        if(i < maxSize){
+            customAndSearchedFoodsOutputArea1.setText(customFoods.get(i));
+            indexOfMostRecentlyDisplayedCustomItem++;
+        }
+        if(i + 1 < maxSize){
+            customAndSearchedFoodsOutputArea2.setText(customFoods.get(i + 1));
+            indexOfMostRecentlyDisplayedCustomItem++;
+        }
+        if(i + 2 < maxSize){
+            customAndSearchedFoodsOutputArea3.setText(customFoods.get(i + 2));
+            indexOfMostRecentlyDisplayedCustomItem++;
+        }
     }
     public void displayNextSetOfSearchResults(){
         int i = indexOfMostRecentlyDisplayedResult;

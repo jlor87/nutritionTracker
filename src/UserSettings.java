@@ -1,13 +1,11 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import javax.swing.*;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.sql.*;
@@ -97,6 +95,89 @@ public class UserSettings {
         } else {
             System.out.println("Invalid nutrient name. Please check and try again.");
         }
+    }
+
+    public boolean updateCustomFoodUserConsumption(String output) {
+        System.out.println("Parsing nutrient information from output...");
+
+        userMethods = Utility.getMethods();
+        foodMethods = Utility.getFoodMethods();
+        int length = userMethods.length;
+        int length3 = foodMethods.length;
+
+        // Create a new Food object just to add to the food diary (no need to redundantly store the same food twice in the DB)
+        Food newFood = null;
+
+        // Split output by line to get each nutrient line
+        String[] lines = output.split("\n");
+
+        for (String line : lines) {
+            // Skip the first line with the food name
+            if (line.startsWith("Food: ")) {
+                String foodName = line.substring(line.indexOf(":") + 2).trim();
+                String revisedFoodName = foodName.replace(" ", "-"); // This way, multi-worded food names in the diary log can still be separated by spaces
+                newFood = new Food(revisedFoodName, getCurrentUser().getUserId());
+                getCurrentUser().addFoodToDiary(newFood);
+                updateFoodDiary(currentUser.getDailyFoodsConsumed());
+                continue;
+            }
+
+            // Parse the line to extract nutrient name and amount
+            String[] parts = line.split(": ");
+            if (parts.length != 2) {
+                continue; // Skip lines that don't match "Nutrient: Value" format
+            }
+
+            String nutrientName = parts[0].trim().replaceAll(" ", "").toLowerCase();
+            double amount = Double.parseDouble(parts[1].split(" ")[0]); // Extract the numeric value
+
+            // Normalize certain nutrient names to match method names
+            if (nutrientName.equals("saturated")) nutrientName = "saturatedfat";
+            else if (nutrientName.equals("monounsaturated")) nutrientName = "monounsaturatedfat";
+            else if (nutrientName.equals("polyunsaturated")) nutrientName = "polyunsaturatedfat";
+
+            // Update the user's daily consumption and database
+            for (int j = 0; j < length; j++) {
+                String methodName = userMethods[j].getName().toLowerCase();
+
+                if (methodName.contains("set" + nutrientName)) {
+                    try {
+                        // Update user's nutrient consumption
+                        userMethods[j].invoke(currentUser, 1, amount);
+                        System.out.println("User's " + nutrientName + " is set to " + amount);
+
+                        // Retrieve the updated value using the getter
+                        double newAmount = 0.00;
+                        for (int k = 0; k < length; k++) {
+                            String methodName2 = userMethods[k].getName().toLowerCase();
+                            if (methodName2.contains("get" + nutrientName)) {
+                                newAmount = (double) userMethods[k].invoke(currentUser, 1);
+                                break;
+                            }
+                        }
+
+                        // Update the nutrient value in the database
+                        String updateQuery = "UPDATE currentConsumption SET " + nutrientName + " = ? WHERE userId = ?";
+                        try (PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(updateQuery)) {
+                            preparedStatement.setDouble(1, newAmount);
+                            preparedStatement.setInt(2, currentUser.getUserId());
+
+                            int rowsAffected = preparedStatement.executeUpdate();
+                            if (rowsAffected > 0) {
+                                System.out.println("User consumption updated! Nutrient " + nutrientName + " updated to " + newAmount);
+                            } else {
+                                System.out.println("Failed to update consumption!");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+            }
+        }
+        currentUser.addFoodToDiary(newFood);
+        return true;
     }
 
     public boolean updateExerciseLevel(String level){
@@ -377,9 +458,13 @@ public class UserSettings {
             }
         }
         newFood.insertFoodIntoDB();
-        currentUser.addFood(newFood);
+        currentUser.addFoodToDiary(newFood);
+        currentUser.addFoodToCustomList(newFood);
         return true;
     }
+
+
+
 
     public boolean updateWeight(int userId, int weight) {
         String query = "UPDATE nutritionTracker.users SET weight = ? WHERE userId = ?";

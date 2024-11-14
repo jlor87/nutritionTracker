@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
@@ -12,6 +13,7 @@ import java.util.StringTokenizer;
 public class User {
 
     // Assigning new user with dummy values
+    private LinkedList<Food> customFoodsList = new LinkedList<>();
     private LinkedList<Food> foodCatalog = new LinkedList<>();
     private String dailyFoodsConsumed = "";
     private String username = "";
@@ -562,7 +564,7 @@ public class User {
     }
 
     // Helper Functions
-    public void addFood(Food food){
+    public void addFoodToDiary(Food food){
         foodCatalog.add(food);
 
         StringBuilder foodsConsumedThisDay = new StringBuilder();
@@ -573,8 +575,17 @@ public class User {
         // The food diary is a single long string
         dailyFoodsConsumed = foodsConsumedThisDay.toString();
     }
+
     public String getDailyFoodsConsumed(){
         return dailyFoodsConsumed;
+    }
+
+    public LinkedList<String> getAllCustomAndSearchedFoods(){
+        LinkedList<String> allCustomFoods = new LinkedList<>();
+        for(Food currentFoodItem : customFoodsList){
+            allCustomFoods.add(currentFoodItem.generateOutput());
+        }
+        return allCustomFoods;
     }
 
     public String getFoodCatalogOutput(){
@@ -587,6 +598,77 @@ public class User {
         }
         return finalOutput.toString();
     }
+
+    public void retrieveCustomFoodsFromDB(){
+        String query = "SELECT * from food WHERE userId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connectionToMySQL.prepareStatement(query);
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Go through all the rows and extract the food and nutrient data
+            while (resultSet.next()) {
+                String foodName = resultSet.getString("foodName");
+                Food newFood = new Food(foodName, userId);
+
+                // Set nutrient values
+                newFood.setWater(resultSet.getDouble("water"));
+                newFood.setEnergy(resultSet.getDouble("energy"));
+                newFood.setCarbohydrate(resultSet.getDouble("carbohydrate"));
+                newFood.setMonounsaturatedFat(resultSet.getDouble("monounsaturatedFat"));
+                newFood.setSaturatedFat(resultSet.getDouble("saturatedFat"));
+                newFood.setPolyunsaturatedFat(resultSet.getDouble("polyunsaturatedFat"));
+                newFood.setProtein(resultSet.getDouble("protein"));
+                newFood.setFiber(resultSet.getDouble("fiber"));
+                newFood.setVitaminA(resultSet.getDouble("vitaminA"));
+                newFood.setVitaminB1Thiamine(resultSet.getDouble("vitaminB1Thiamine"));
+                newFood.setVitaminB2Riboflavin(resultSet.getDouble("vitaminB2Riboflavin"));
+                newFood.setVitaminB3Niacin(resultSet.getDouble("vitaminB3Niacin"));
+                newFood.setVitaminB5PantothenicAcid(resultSet.getDouble("vitaminB5PantothenicAcid"));
+                newFood.setVitaminB6Pyridoxine(resultSet.getDouble("vitaminB6Pyridoxine"));
+                newFood.setVitaminB7Biotin(resultSet.getDouble("vitaminB7Biotin"));
+                newFood.setVitaminB9Folate(resultSet.getDouble("vitaminB9Folate"));
+                newFood.setVitaminB12Cyanocobalamin(resultSet.getDouble("vitaminB12Cyanocobalamin"));
+                newFood.setVitaminC(resultSet.getDouble("vitaminC"));
+                newFood.setVitaminD(resultSet.getDouble("vitaminD"));
+                newFood.setVitaminE(resultSet.getDouble("vitaminE"));
+                newFood.setVitaminK(resultSet.getDouble("vitaminK"));
+                newFood.setCholine(resultSet.getDouble("choline"));
+                newFood.setCalcium(resultSet.getDouble("calcium"));
+                newFood.setChloride(resultSet.getDouble("chloride"));
+                newFood.setChromium(resultSet.getDouble("chromium"));
+                newFood.setCopper(resultSet.getDouble("copper"));
+                newFood.setFluoride(resultSet.getDouble("fluoride"));
+                newFood.setIodine(resultSet.getDouble("iodine"));
+                newFood.setIron(resultSet.getDouble("iron"));
+                newFood.setMagnesium(resultSet.getDouble("magnesium"));
+                newFood.setManganese(resultSet.getDouble("manganese"));
+                newFood.setMolybdenum(resultSet.getDouble("molybdenum"));
+                newFood.setPhosphorus(resultSet.getDouble("phosphorus"));
+                newFood.setPotassium(resultSet.getDouble("potassium"));
+                newFood.setSelenium(resultSet.getDouble("selenium"));
+                newFood.setSodium(resultSet.getDouble("sodium"));
+                newFood.setZinc(resultSet.getDouble("zinc"));
+
+                // Add the newly created food object
+                addFoodToCustomList(newFood);
+            }
+
+            // Close
+            resultSet.close();
+            preparedStatement.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addFoodToCustomList(Food newFood) {
+        customFoodsList.add(newFood);
+    }
+
     // Updates goals and current consumption in one function. Useful for outputting the most recent info
     public boolean updateAllFromDatabase() {
         System.out.println("Attempting to update user values from the database...");

@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 /**
  * All user data (dietary goals, preferences, user info, etc.) is stored here **? separate class for preferences?**
@@ -385,6 +386,56 @@ public class Food {
 
 
     // Helper Functions
+    public String generateOutput() {
+        StringBuilder finalOutput = new StringBuilder();
+        finalOutput.append("Food: ").append(name).append("\n");
+
+        if (water != 0) finalOutput.append("Water: ").append(water).append(" L\n");
+        if (energy != 0) finalOutput.append("Energy: ").append(energy).append(" kCal\n");
+        if (carbohydrate != 0) finalOutput.append("Carbohydrate: ").append(carbohydrate).append(" g\n");
+        if (monounsaturatedFat != 0) finalOutput.append("Monounsaturated Fat: ").append(monounsaturatedFat).append(" g\n");
+        if (saturatedFat != 0) finalOutput.append("Saturated Fat: ").append(saturatedFat).append(" g\n");
+        if (polyunsaturatedFat != 0) finalOutput.append("Polyunsaturated Fat: ").append(polyunsaturatedFat).append(" g\n");
+        if (protein != 0) finalOutput.append("Protein: ").append(protein).append(" g\n");
+        if (fiber != 0) finalOutput.append("Fiber: ").append(fiber).append(" g\n");
+
+        // Vitamins
+        if (vitaminA != 0) finalOutput.append("Vitamin A: ").append(vitaminA).append(" µg\n");
+        if (vitaminB1Thiamine != 0) finalOutput.append("Vitamin B1 (Thiamine): ").append(vitaminB1Thiamine).append(" mg\n");
+        if (vitaminB2Riboflavin != 0) finalOutput.append("Vitamin B2 (Riboflavin): ").append(vitaminB2Riboflavin).append(" mg\n");
+        if (vitaminB3Niacin != 0) finalOutput.append("Vitamin B3 (Niacin): ").append(vitaminB3Niacin).append(" mg\n");
+        if (vitaminB5PantothenicAcid != 0) finalOutput.append("Vitamin B5 (Pantothenic Acid): ").append(vitaminB5PantothenicAcid).append(" mg\n");
+        if (vitaminB6Pyridoxine != 0) finalOutput.append("Vitamin B6 (Pyridoxine): ").append(vitaminB6Pyridoxine).append(" mg\n");
+        if (vitaminB7Biotin != 0) finalOutput.append("Vitamin B7 (Biotin): ").append(vitaminB7Biotin).append(" µg\n");
+        if (vitaminB9Folate != 0) finalOutput.append("Vitamin B9 (Folate): ").append(vitaminB9Folate).append(" µg\n");
+        if (vitaminB12Cyanocobalamin != 0) finalOutput.append("Vitamin B12 (Cyanocobalamin): ").append(vitaminB12Cyanocobalamin).append(" µg\n");
+        if (vitaminC != 0) finalOutput.append("Vitamin C: ").append(vitaminC).append(" mg\n");
+        if (vitaminD != 0) finalOutput.append("Vitamin D: ").append(vitaminD).append(" µg\n");
+        if (vitaminE != 0) finalOutput.append("Vitamin E: ").append(vitaminE).append(" mg\n");
+        if (vitaminK != 0) finalOutput.append("Vitamin K: ").append(vitaminK).append(" µg\n");
+
+        // Minerals
+        if (choline != 0) finalOutput.append("Choline: ").append(choline).append(" mg\n");
+        if (calcium != 0) finalOutput.append("Calcium: ").append(calcium).append(" mg\n");
+        if (chloride != 0) finalOutput.append("Chloride: ").append(chloride).append(" g\n");
+        if (chromium != 0) finalOutput.append("Chromium: ").append(chromium).append(" µg\n");
+        if (copper != 0) finalOutput.append("Copper: ").append(copper).append(" µg\n");
+        if (fluoride != 0) finalOutput.append("Fluoride: ").append(fluoride).append(" mg\n");
+        if (iodine != 0) finalOutput.append("Iodine: ").append(iodine).append(" µg\n");
+        if (iron != 0) finalOutput.append("Iron: ").append(iron).append(" mg\n");
+        if (magnesium != 0) finalOutput.append("Magnesium: ").append(magnesium).append(" mg\n");
+        if (manganese != 0) finalOutput.append("Manganese: ").append(manganese).append(" mg\n");
+        if (molybdenum != 0) finalOutput.append("Molybdenum: ").append(molybdenum).append(" µg\n");
+        if (phosphorus != 0) finalOutput.append("Phosphorus: ").append(phosphorus).append(" mg\n");
+        if (potassium != 0) finalOutput.append("Potassium: ").append(potassium).append(" mg\n");
+        if (selenium != 0) finalOutput.append("Selenium: ").append(selenium).append(" µg\n");
+        if (sodium != 0) finalOutput.append("Sodium: ").append(sodium).append(" mg\n");
+        if (zinc != 0) finalOutput.append("Zinc: ").append(zinc).append(" mg\n");
+
+        return finalOutput.toString();
+    }
+
+
     public boolean insertFoodIntoDB(){
         String sql = "INSERT IGNORE INTO food (foodName, water, energy, carbohydrate, monounsaturatedFat, saturatedFat, polyunsaturatedFat, protein, fiber, " +
                 "vitaminA, vitaminB1Thiamine, vitaminB2Riboflavin, vitaminB3Niacin, vitaminB5PantothenicAcid, vitaminB6Pyridoxine, vitaminB7Biotin, vitaminB9Folate, vitaminB12Cyanocobalamin, vitaminC, vitaminD, vitaminE, vitaminK, " +
