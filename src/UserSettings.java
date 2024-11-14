@@ -272,16 +272,16 @@ public class UserSettings {
         foodMethods = Utility.getFoodMethods();
         int length = userMethods.length;
         int length2 = nutrients.size();
+        int length3 = foodMethods.length;
         String nutrientName = "";
         double amount = 0.00;
 
         // Add the food's name to the user's daily food diary
-        String revisedFoodName = foodName.replace(" ", "-");
+        String revisedFoodName = foodName.replace(" ", "-"); // This way, multi-worded food names in the diary log can still be separated by spaces
         Food newFood = new Food(revisedFoodName, currentUser.getUserId());
-        currentUser.addFood(newFood);
         updateFoodDiary(currentUser.getDailyFoodsConsumed());
 
-        // Deal with each nutrient one by one
+        // Deal with each nutrient one by one. We need update user consumption AND create the new Food class
         int i;
         for (i = 0; i < length2; i++) {
             JsonObject nutrient = nutrients.get(i).getAsJsonObject();
@@ -312,7 +312,8 @@ public class UserSettings {
             amount = nutrient.get("value").getAsDouble();
             System.out.println("Retrieved amount is: " + amount);
 
-            // Use the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
+            // For each nutrient, update the user's daily consumption amount for that nutrient and store it in the DB.
+            // We do this by using the nutrientName to call the correct setter in the User class, i.e. "Vitamin A" should call "setVitaminA"
             for (int j = 0; j < length; j++) {
                 String methodName = userMethods[j].getName().toLowerCase();
 
@@ -321,7 +322,6 @@ public class UserSettings {
                         // Update user's consumed nutrients
                         userMethods[j].invoke(currentUser, 1, amount);
                         System.out.println("User's " + nutrientName + " is set to " + amount);
-                        // foodMethods[j].invoke(newFood, 1, amount);
 
                         // Retrieve the updated value using the getter method
                         double newAmount = 0.00;
@@ -359,7 +359,25 @@ public class UserSettings {
                     }
                 }
             }
+
+            // Now we need to put correct nutrient values in the new Food object and store that Food object in the DB
+            for(int k = 0; k < length3; k++){
+                String methodName = foodMethods[k].getName().toLowerCase();
+
+                if (methodName.contains("set" + nutrientName)) {
+                    try {
+                        // Update user's consumed nutrients
+                        foodMethods[k].invoke(newFood, amount);
+                        System.out.println("Food's " + nutrientName + " value is set to " + amount);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+            }
         }
+        newFood.insertFoodIntoDB();
+        currentUser.addFood(newFood);
         return true;
     }
 

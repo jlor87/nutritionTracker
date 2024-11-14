@@ -1280,6 +1280,7 @@ public class GUI
                     switch (choice) {
                         case 0:
                             // Search for a new food item via API
+                            indexOfMostRecentlyDisplayedResult = 0; // Resets with every new search
                             displaySearchScreen();
                             removeMainScreen();
                             break;
