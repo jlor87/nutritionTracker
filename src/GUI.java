@@ -5,9 +5,15 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
-
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+import java.util.Map;
 public class GUI
+
 {
+	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     JTextField loginUsernameField = new JTextField(25);
     JPasswordField loginPasswordField = new JPasswordField(25);
     JTextField createUsernameField = new JTextField(25);
@@ -42,6 +48,7 @@ public class GUI
     JFrame alterUserDataWindow = new JFrame();
     JFrame catalogFoodIntakeWindow = new JFrame();
     JFrame customFoodWindow = new JFrame();
+    JFrame advancedStatsFrame = new JFrame("Advanced Statistics");
     JTextArea informationField = new JTextArea();
     JButton weightButton;
     JButton heightButton;
@@ -1183,6 +1190,91 @@ public class GUI
         exitButton.addActionListener(e -> System.exit(0));
     }
 
+    
+    public void makeAdvancedStatisticsScreen() {
+        // Create a new JFrame for the advanced statistics screen
+    	advancedStatsFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        advancedStatsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        advancedStatsFrame.setSize(800, 600);
+        advancedStatsFrame.setLayout(new BorderLayout());
+
+        // Create the dataset for the bar graph
+        
+
+        
+
+        // Create the bar chart
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Daily Nutrient Consumption vs Goals",
+                "Nutrients",
+                "Amount",
+                dataset
+        );
+
+        // Create a ChartPanel to display the chart
+        ChartPanel chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new Dimension(800, 500));
+
+        // Add chart panel to the frame
+        advancedStatsFrame.add(chartPanel, BorderLayout.CENTER);
+
+        // Create a button panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        // Add an "Exit" button to close the screen
+        JButton exitButton = new JButton("Exit");
+        exitButton.addActionListener(cHandler);
+        exitButton.setActionCommand("goMainScreen");
+        buttonPanel.add(exitButton);
+
+        // Add button panel to the frame
+        advancedStatsFrame.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Make the frame visible
+        advancedStatsFrame.setVisible(false);
+    }
+    
+    
+    public void displayAdvancedStatisticsScreen() {
+    	
+    	     // Clear previous components
+    	dataset.clear();
+    	    // Create the dataset for the bar graph
+    	    
+
+    	    // Add data for each category: goals and current consumption
+    	    dataset.addValue(currentUser.getWater(0), "Goal", "Water"); // Goal
+    	    dataset.addValue(currentUser.getWater(1), "Consumed", "Water"); // Consumed
+
+    	    dataset.addValue(currentUser.getEnergy(0), "Goal", "Calories"); // Goal
+    	    dataset.addValue(currentUser.getEnergy(1), "Consumed", "Calories"); // Consumed
+
+    	    dataset.addValue(currentUser.getProtein(0), "Goal", "Protein"); // Goal
+    	    dataset.addValue(currentUser.getProtein(1), "Consumed", "Protein"); // Consumed
+
+    	    dataset.addValue(currentUser.getCarbohydrate(0), "Goal", "Carbohydrates"); // Goal
+    	    dataset.addValue(currentUser.getCarbohydrate(1), "Consumed", "Carbohydrates"); // Consumed
+
+    	    dataset.addValue(currentUser.getMonounsaturatedFat(0), "Goal", "Monounsaturated Fat"); // Goal
+    	    dataset.addValue(currentUser.getMonounsaturatedFat(1), "Consumed", "Monounsaturated Fat"); // Consumed
+
+    	    dataset.addValue(currentUser.getPolyunsaturatedFat(0), "Goal", "Polyunsaturated Fat"); // Goal
+    	    dataset.addValue(currentUser.getPolyunsaturatedFat(1), "Consumed", "Polyunsaturated Fat"); // Consumed
+
+    	    dataset.addValue(currentUser.getSaturatedFat(0), "Goal", "Saturated Fat"); // Goal
+    	    dataset.addValue(currentUser.getSaturatedFat(1), "Consumed", "Saturated Fat"); // Consumed
+
+    	    dataset.addValue(currentUser.getFiber(0), "Goal", "Fiber"); // Goal
+    	    dataset.addValue(currentUser.getFiber(1), "Consumed", "Fiber"); // Consumed
+    	advancedStatsFrame.setVisible(true);
+    }
+    
+    public void removeAdvancedStatisticsScreen() {
+    	
+    	advancedStatsFrame.setVisible(false);
+    }
+    
     // All functions that display screens in ABC order
     public void displayAlterUserDataScreen() {
         weightButton.setText("Weight: " + currentUser.weightGetter());
@@ -1342,7 +1434,10 @@ public class GUI
                     displayLoginScreen();
                     removeCreateScreen();
                     break;
-
+                case "viewadvancedstatistics":
+                	removeMainScreen();
+                	displayAdvancedStatisticsScreen();
+                	break;
                 case "tryToCreate":
                     String createUsername = createUsernameField.getText();
                     char[] createPassword = createPasswordField.getPassword();
@@ -1414,6 +1509,7 @@ public class GUI
                     removeSearchScreen();
                     removeSetGoalsScreen();
                     removeStatusGoalsScreen();
+                    removeAdvancedStatisticsScreen();
                     displayMainScreen();
                     break;
 
@@ -1469,8 +1565,7 @@ public class GUI
                 	displayCustomScreen();
                 	break;
 
-                // case "viewadvancedstatistics"
-
+                
                 case "catalogfoodintake":
                     removeMainScreen();
                     displayCatalogFoodIntakeScreen();

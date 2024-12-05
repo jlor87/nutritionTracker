@@ -2,6 +2,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * This class is where the whole application is instantiated
@@ -62,7 +63,7 @@ public class Main
         gui.makeCatalogFoodIntakeScreen();
         gui.makeCustomFoodItemScreen();
         gui.makeListOfCustomAndSearchedFoods();
-
+        gui.makeAdvancedStatisticsScreen();
         // Display the initial screen
         gui.displayTitleScreen();
     }
