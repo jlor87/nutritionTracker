@@ -7,7 +7,7 @@ public class FoodTest {
 
     @Test
     public void testFoodConstructor(){
-        Food food = new Food("Test");
+        Food food = new Food("Test", -1);
         Assert.assertEquals(food.getName(), "Test");
         for(Method method : methods){
             try {

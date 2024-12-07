@@ -15,7 +15,7 @@ public class GUITest {
     // This test verifies if the helper methods in the class are functioning properly
     @Test
     public void testGUI(){
-        gui = new GUI(connectionToMySQL);
+        gui = Main.getGui();
 
         // Delete test account before creation of a new test account
         String query = "DELETE FROM users WHERE username = ?";

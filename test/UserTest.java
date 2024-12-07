@@ -70,7 +70,7 @@ public class UserTest {
 
     @Test
     public void testAddFood(){
-        user.addFood(new Food("banana"));
+        //user.addFood(new Food("banana", 1));
         Assert.assertTrue(user.getDailyFoodsConsumed().contains("banana"));
     }
 

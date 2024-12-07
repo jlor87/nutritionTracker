@@ -38,7 +38,7 @@ public class SessionTest {
             e.printStackTrace();
         }
         user = new User(retrievedUserId);
-        session = new Session(user, new GUI(Main.getConnection()));
+        session = new Session(user, Main.getGui());
         session.startSession();
     }
 
